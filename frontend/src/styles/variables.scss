@@ -1,0 +1,43 @@
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap");
+
+// initial
+$color-text-normal: #000;
+$color-background: #fff;
+$font-family-default: "Quicksand", sans-serif;
+$color-primary: #3ac5c9;
+
+// primary button
+$color-btn-primary-bg: $color-primary;
+$color-btn-primary-bg-hover: #23b2b7;
+$color-btn-primary-text: #fff;
+
+// default button
+$color-btn-default-bg: #ebf0f5;
+$color-btn-default-text: #000;
+$color-btn-default-border: #ebf0f5;
+$color-btn-default-bg-hover: $color-primary;
+$color-btn-default-text-hover: #fff;
+$color-btn-default-border-hover: $color-primary;
+
+// transparent button
+$color-btn-transparent-bg: transparent;
+$color-btn-transparent-bg-hover: $color-primary;
+$color-btn-transparent-text: $color-primary;
+$color-btn-transparent-text-hover: #fff;
+$color-btn-transparent-border: $color-primary;
+$color-btn-transparent-border-hover: $color-primary;
+
+// black button
+$color-btn-black-bg: #000;
+$color-btn-black-bg-hover: #3b3b3b;
+$color-btn-black-text: #fff;
+
+// white button
+$color-btn-white-bg: #fff;
+$color-btn-white-text: #000;
+$color-btn-white-border: #808080;
+$color-btn-white-border-hover: #000;
+
+// link button
+$color-btn-link-text: $color-primary;
+$color-btn-link-text-hover: #23b2b7;

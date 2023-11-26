@@ -1,0 +1,12 @@
+@use "@/styles/variables" as *;
+
+.home-btn {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    color: $color-primary;
+    margin-left: 10px;
+    font-size: 3rem;
+}
