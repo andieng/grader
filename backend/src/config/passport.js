@@ -1,54 +1,28 @@
-import { Strategy as LocalStrategy } from "passport-local";
-import bcrypt from "bcrypt";
 import { User } from "../models";
-import { ERROR_WRONG_CREDENTIALS } from "../constants";
+import passportJWT from "passport-jwt";
 
 export default passport = (passport) => {
-  passport.serializeUser(function (user, done) {
-    done(null, user.id);
-  });
+  const ExtractJwt = passportJWT.ExtractJwt;
+  const JwtStrategy = passportJWT.Strategy;
+  const jwtOptions = {
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: process.env.ACCESS_TOKEN_SECRET,
+  };
 
-  passport.deserializeUser(function (id, done) {
-    User.findByPk(id)
-      .then(function (user) {
-        done(null, user);
-      })
-      .catch(function (err) {
-        console.error(err);
+  const strategy = new JwtStrategy(jwtOptions, async function (payload, next) {
+    const user = await User.findByPk(payload.id);
+    if (user) {
+      next(null, {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+        name: user.name,
+        emailVerified: user.emailVerified,
       });
+    } else {
+      next(null, false);
+    }
   });
 
-  passport.use(
-    new LocalStrategy(
-      {
-        usernameField: "email",
-        passwordField: "password",
-      },
-      function (email, password, done) {
-        User.findOne({
-          where: {
-            email,
-          },
-        })
-          .then(function (user) {
-            bcrypt.compare(password, user.password, function (err, result) {
-              if (err) {
-                return done(err);
-              }
-              if (!result) {
-                return done(null, false, { message: ERROR_WRONG_CREDENTIALS });
-              }
-              return done(null, {
-                id: user.id,
-                email: user.email,
-                fullname: user.fullname,
-              });
-            });
-          })
-          .catch(function (err) {
-            return done(err);
-          });
-      }
-    )
-  );
+  passport.use(strategy);
 };

@@ -7,13 +7,7 @@ const authRouter = express.Router();
 
 authRouter.use(checkAuthentication);
 
-authRouter.post(
-  "/login",
-  passport.authenticate("local", {
-    successRedirect: "/",
-  })
-);
-
+authRouter.post("/login", login);
 authRouter.post("/signup", signup);
 authRouter.post("/logout", logout);
 

@@ -2,7 +2,6 @@ import "express-async-errors";
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
-import session from "express-session";
 import passport from "passport";
 import authRouter from "./routes/authRoute";
 import userRouter from "./routes/userRoute";
@@ -23,14 +22,13 @@ app.use(
 );
 
 app.use(passport.initialize());
-app.use(passport.session());
 passportConfig(passport);
 
 // Routes
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 
-app.get("/", (req, res) => {
+app.get("/", async (req, res) => {
   res.json({ msg: "Hello world!" });
 });
 
@@ -46,5 +44,4 @@ app.use((err, req, res, next) => {
   });
 });
 
-export { passport };
 export default app;

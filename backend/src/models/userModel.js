@@ -13,17 +13,38 @@ const initUser = (sequelize, DataTypes) => {
         allowNull: false,
         unique: true,
       },
+      emailVerified: {
+        type: DataTypes.BOOLEAN,
+        field: "email_verified",
+        default: false,
+      },
       password: {
         type: DataTypes.TEXT,
         allowNull: false,
       },
-      fullName: {
+      role: {
         type: DataTypes.STRING,
-        allowNull: false,
-        field: "full_name",
+        default: "user",
+      },
+      name: {
+        type: DataTypes.STRING,
       },
       tel: {
         type: DataTypes.STRING,
+      },
+      nickname: {
+        type: DataTypes.STRING,
+      },
+      picture: {
+        type: DataTypes.TEXT,
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: "created_at",
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: "updated_at",
       },
     },
     {

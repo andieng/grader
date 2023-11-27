@@ -21,5 +21,4 @@ sequelize
   });
 
 const User = initUser(sequelize, DataTypes);
-
 export { sequelize, User };

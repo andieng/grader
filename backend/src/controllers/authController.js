@@ -5,14 +5,16 @@ import {
   ERROR_BAD_REQUEST,
 } from "../constants";
 import { User } from "../models";
+import { genAccessToken, genRefreshToken } from "../helpers/authHelper";
 
 const signup = async (req, res) => {};
 
 const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ where: { email } });
-  if (!user || !(await bcrypt.compare(password, user?.password))) {
-    res.status(400);
+  console.log(user, password, await bcrypt.compare(password, user.password));
+  if (!user || !(await bcrypt.compare(password, user.password))) {
+    res.status(401);
     throw new Error(ERROR_WRONG_CREDENTIALS);
   }
 
@@ -24,6 +26,41 @@ const login = async (req, res) => {
     refreshToken: refreshToken,
   });
 };
+
+// const login = async (req, res) => {
+//   const { email, password } = req.body;
+//   const data = {
+//     grant_type: "password",
+//     username: email,
+//     password,
+//     client_id: process.env.AUTH0_CLIENT_ID,
+//     client_secret: process.env.AUTH0_CLIENT_SECRET,
+//   };
+//   const oauthRes = await axios.post(
+//     `https://${process.env.AUTH0_DOMAIN}/oauth/token`,
+//     data,
+//     {
+//       headers: {
+//         "content-type": "application/x-www-form-urlencoded",
+//       },
+//     }
+//   );
+//   console.log(oauthRes.data);
+//   // auth0Client.client.userInfo(oauthRes.data.access_token, function (err, user) {
+//   //   console.log(user);
+//   // });
+//   const userRes = await axios.get(
+//     `https://${process.env.AUTH0_DOMAIN}/userinfo`,
+//     {
+//       params: {
+//         access_token: oauthRes.data.access_token,
+//       },
+//     }
+//   );
+//   console.log(userRes.data);
+
+//   return res.json({ hi: "hi" });
+// };
 
 const logout = (req, res) => {
   req.logout(function (err) {
