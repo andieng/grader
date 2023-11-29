@@ -2,34 +2,28 @@ import "express-async-errors";
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
-import passport from "passport";
+import { auth } from "express-openid-connect";
 import authRouter from "./routes/authRoute";
 import userRouter from "./routes/userRoute";
-import passportConfig from "./config/passport";
+import auth0Config from "./config/auth0";
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-  })
-);
-
-app.use(passport.initialize());
-passportConfig(passport);
+app.use(auth(auth0Config));
 
 // Routes
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 
-app.get("/", async (req, res) => {
-  res.json({ msg: "Hello world!" });
+app.get("/", (req, res) => {
+  if (req.oidc.isAuthenticated()) {
+    res.json({ message: `Hello ${req.oidc.user.name}` });
+  } else {
+    res.json({ message: `Log out` });
+  }
 });
 
 // Custom error handler

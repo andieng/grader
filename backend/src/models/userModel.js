@@ -8,34 +8,20 @@ const initUser = (sequelize, DataTypes) => {
         unique: true,
         primaryKey: true,
       },
+      user_id: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+        unique: true,
+      },
       email: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
       },
-      emailVerified: {
-        type: DataTypes.BOOLEAN,
-        field: "email_verified",
-        default: false,
-      },
-      password: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-      },
-      role: {
-        type: DataTypes.STRING,
-        default: "user",
-      },
       name: {
         type: DataTypes.STRING,
       },
-      tel: {
-        type: DataTypes.STRING,
-      },
-      nickname: {
-        type: DataTypes.STRING,
-      },
-      picture: {
+      avatar: {
         type: DataTypes.TEXT,
       },
       createdAt: {

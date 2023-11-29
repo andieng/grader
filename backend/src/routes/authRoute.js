@@ -1,14 +1,10 @@
 import express from "express";
-import passport from "passport";
-import { signup, login, logout } from "../controllers/authController";
-import checkAuthentication from "../middlewares/checkAuthentication";
+import { requiresAuth } from "express-openid-connect";
+import { login, logout } from "../controllers/authController";
 
 const authRouter = express.Router();
 
-authRouter.use(checkAuthentication);
-
-authRouter.post("/login", login);
-authRouter.post("/signup", signup);
-authRouter.post("/logout", logout);
+authRouter.get("/login", login);
+authRouter.get("/logout", requiresAuth(), logout);
 
 export default authRouter;
