@@ -12,18 +12,11 @@ export default function Header() {
       <nav></nav>
       <div className={cx('auth')}>
         <Button
+          href="/api/auth/login"
           type="transparent"
           className={cx('login-btn')}
-          href="/login"
         >
-          Log in
-        </Button>
-        <Button
-          type="primary"
-          className={cx('signup-btn')}
-          href="/signup"
-        >
-          Sign up
+          Log in/Sign up
         </Button>
       </div>
     </header>
