@@ -2,11 +2,11 @@ import { ERROR_BAD_REQUEST, MSG_LOG_OUT_SUCCESSFULLY } from "../constants";
 
 const login = async (req, res) => {
   if (req.oidc.isAuthenticated()) {
-    return res.redirect("/");
+    return res.redirect("/api/user");
   }
 
   res.oidc.login({
-    returnTo: "/",
+    returnTo: "/api/user",
     authorizationParams: {
       redirect_uri: process.env.CALLBACK_URI,
     },
@@ -14,8 +14,11 @@ const login = async (req, res) => {
 };
 
 const logout = (req, res) => {
-  res.oidc.logout({
-    returnTo: "/",
+  res.oidc.logout(function (err) {
+    if (err) {
+      throw new Error(ERROR_BAD_REQUEST);
+    }
+    return res.json({ message: MSG_LOG_OUT_SUCCESSFULLY });
   });
 };
 
