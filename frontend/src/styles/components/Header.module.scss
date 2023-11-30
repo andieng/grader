@@ -39,6 +39,15 @@
   padding-right: 20px;
 }
 
+.auth {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
 .avatar {
   &:hover {
     cursor: pointer;
@@ -50,4 +59,7 @@
     object-fit: cover;
     margin-right: 8px;
   }
+}
+
+.language {
 }
