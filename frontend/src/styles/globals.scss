@@ -129,3 +129,20 @@ span {
 .ant-input-affix-wrapper .ant-input-prefix {
   margin-inline-end: 8px;
 }
+
+.ant-result > .ant-result-image {
+  margin: 0;
+}
+
+.ant-spin {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  & > .ant-spin-dot {
+    font-size: 60px;
+    margin-bottom: 10vh;
+  }
+}

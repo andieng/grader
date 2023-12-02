@@ -74,7 +74,7 @@ export default function Header({ user }) {
               onClick={(e) => e.preventDefault()}
             >
               <img
-                src={user.picture}
+                src={user.avatar || user.picture}
                 alt="User"
               />
             </a>
