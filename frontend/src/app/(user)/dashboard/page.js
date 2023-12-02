@@ -24,6 +24,9 @@ export default withPageAuthRequired(
     return (
       <div className={cx('wrapper')}>
         <Header user={data.user} />
+        <div className={cx('main')}>
+          <h1 className={cx('title')}>Dashboard</h1>
+        </div>
       </div>
     );
   },

@@ -1,38 +1,50 @@
 import { Button, Dropdown, Space } from 'antd';
-import { LogoutOutlined, DownOutlined, GlobalOutlined } from '@ant-design/icons';
+import { LogoutOutlined, DownOutlined, GlobalOutlined, BellOutlined, TeamOutlined } from '@ant-design/icons';
 import classnames from 'classnames/bind';
 import styles from '@/styles/components/Header.module.scss';
 import HomeButton from '@/components/HomeButton';
+import { FlagUSA, FlagVietnam } from '@/assets/icons';
 
 const cx = classnames.bind(styles);
 
 const userItems = [
   {
-    label: <a>My Classes</a>,
+    label: <a className={cx('user-item')}>My Classes</a>,
     key: '0',
+    icon: <TeamOutlined className={cx('dropdown-icon')} />,
   },
   {
-    label: <a>Notifications</a>,
+    label: <a className={cx('user-item')}>Notifications</a>,
     key: '1',
+    icon: <BellOutlined className={cx('dropdown-icon')} />,
   },
   {
     type: 'divider',
   },
   {
-    label: <a href="/api/auth/logout">Log Out</a>,
+    label: (
+      <a
+        href="/api/auth/logout"
+        className={cx('user-item')}
+      >
+        Log Out
+      </a>
+    ),
     key: '3',
-    icon: <LogoutOutlined />,
+    icon: <LogoutOutlined className={cx('dropdown-icon')} />,
   },
 ];
 
 const languageItems = [
   {
-    label: 'English',
+    label: <p className={cx('language-item')}>English</p>,
     key: '0',
+    icon: <FlagUSA className={cx('dropdown-icon')} />,
   },
   {
-    label: 'Tiếng Việt',
+    label: <p className={cx('language-item')}>Tiếng Việt</p>,
     key: '1',
+    icon: <FlagVietnam className={cx('dropdown-icon')} />,
   },
 ];
 
@@ -85,7 +97,7 @@ export default function Header({ user }) {
             items: languageItems,
           }}
           trigger={['click']}
-          placement="bottom"
+          placement="bottomRight"
         >
           <a
             className={cx('language')}

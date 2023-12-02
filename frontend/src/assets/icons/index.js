@@ -1,2 +1,2 @@
-export { default as Facebook } from './Facebook';
-export { default as Google } from './Google';
+export { default as FlagUSA } from './FlagUSA';
+export { default as FlagVietnam } from './FlagVietnam';

@@ -146,3 +146,11 @@ span {
     margin-bottom: 10vh;
   }
 }
+
+.ant-dropdown > .ant-dropdown-menu {
+  padding: 8px;
+
+  & > .ant-dropdown-menu-item {
+    margin: 2px;
+  }
+}

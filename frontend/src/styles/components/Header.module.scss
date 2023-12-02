@@ -68,3 +68,23 @@
 .language {
   margin-left: 8px;
 }
+
+.user-item {
+  width: 150px;
+}
+
+.language-item {
+  width: 100px;
+}
+
+.user-item, .language-item {
+  display: inline-block;
+  font-weight: 500;
+  font-size: 1.6rem;
+  margin-left: 5px;
+}
+
+.dropdown-icon > svg {
+  width: 16px;
+  height: 16px;
+}

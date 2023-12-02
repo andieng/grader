@@ -1,0 +1,21 @@
+@use '@/styles/variables' as *;
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.main {
+  height: calc(100vh - 72px);
+  width: 100%;
+  background-color: #f6f6f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.title {
+    margin-bottom: 80px;
+  font-size: 6rem;
+}
