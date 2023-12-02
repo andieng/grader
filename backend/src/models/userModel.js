@@ -24,13 +24,11 @@ const initUser = (sequelize, DataTypes) => {
       avatar: {
         type: DataTypes.TEXT,
       },
-      createdAt: {
+      created_at: {
         type: DataTypes.DATE,
-        field: "created_at",
       },
-      updatedAt: {
+      updated_at: {
         type: DataTypes.DATE,
-        field: "updated_at",
       },
     },
     {
