@@ -43,14 +43,24 @@ export default function Header({ user }) {
       <nav></nav>
       <div className={cx('auth')}>
         {!user && (
-          <Button
-            href="/api/auth/login"
-            type="transparent"
-            className={cx('login-btn')}
-          >
-            Log in/Sign up
-          </Button>
+          <>
+            <Button
+              type="transparent"
+              className={cx('login-btn')}
+              href="/api/auth/login"
+            >
+              Log in
+            </Button>
+            <Button
+              type="primary"
+              className={cx('signup-btn')}
+              href="/api/auth/signup"
+            >
+              Sign up
+            </Button>
+          </>
         )}
+
         {user && (
           <Dropdown
             menu={{
@@ -75,6 +85,7 @@ export default function Header({ user }) {
             items: languageItems,
           }}
           trigger={['click']}
+          placement="bottom"
         >
           <a
             className={cx('language')}
@@ -82,7 +93,7 @@ export default function Header({ user }) {
           >
             <Space>
               <GlobalOutlined />
-              Language
+
               <DownOutlined />
             </Space>
           </a>
