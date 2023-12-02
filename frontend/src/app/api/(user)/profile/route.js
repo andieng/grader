@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 export const GET = async function myApiRoute(req) {
   const res = new NextResponse();
   const { accessToken } = await getAccessToken(req, res);
-  const response = await fetch(process.env.API_BASE_URL, {
+  const response = await fetch(`${process.env.API_BASE_URL}/api/user`, {
     headers: {
       authorization: `Bearer ${accessToken}`,
     },
