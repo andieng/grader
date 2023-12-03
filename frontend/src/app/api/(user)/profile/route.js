@@ -15,6 +15,6 @@ export const GET = async function profileGetRoute(req) {
     const data = await response.json();
     return NextResponse.json({ user: data.user });
   } catch (err) {
-    return NextResponse.json({ error: err }, { status: 401 });
+    return NextResponse.json({ error: ERROR_NOT_AUTHENTICATED }, { status: 401 });
   }
 };
