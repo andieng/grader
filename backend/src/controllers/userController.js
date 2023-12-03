@@ -10,7 +10,7 @@ const getProfile = async (req, res) => {
     throw new Error(ERROR_USER_NOT_EXIST);
   }
 
-  return res.json(user);
+  return res.json({ user });
 };
 
 export { getProfile };
