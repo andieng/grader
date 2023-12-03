@@ -20,7 +20,7 @@ export default function Home() {
 
   return (
     <div className={cx('wrapper')}>
-      <Header user={data.user} />
+      <Header user={data?.user} />
       <div className={cx('main')}>
         <h1 className={cx('welcome')}>Welcome to Grader!</h1>
         <h3 className={cx('description')}>Explore our products and services to discover the possibilities.</h3>
