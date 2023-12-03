@@ -16,9 +16,9 @@ const fetcher = async (url) => {
 
 export default function Home() {
   const { user } = useUser();
-  const { data } = useSWR(user ? '/api/profile' : null, fetcher);
+  const { data, isLoading } = useSWR(user ? '/api/profile' : null, fetcher);
 
-  if (!data) return <Spin size="large" />;
+  if (isLoading) return <Spin size="large" />;
 
   return (
     <div className={cx('wrapper')}>
