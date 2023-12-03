@@ -5,4 +5,3 @@ export const ERROR_NOT_AUTHENTICATED = "Not authenticated";
 
 // Claims
 export const CLAIMS_EMAIL = "https://grader.com/claims/email";
-export const CLAIMS_EMAIL_VERIFIED = "https://grader.com/claims/email_verified";
