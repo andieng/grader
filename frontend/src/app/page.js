@@ -16,6 +16,8 @@ const fetcher = async (uri) => {
 export default function Home() {
   const { data, isLoading } = useSWR('/api/profile', fetcher);
 
+  console.log(data);
+
   if (isLoading) return <Spin size="large" />;
 
   return (
