@@ -10,9 +10,13 @@ export const metadata = {
   },
 };
 
-export default function RootLayout({ children }) {
+export async function generateStaticParams() {
+  return [{ lang: 'en' }, { lang: 'vi' }];
+}
+
+export default function RootLayout({ children, params }) {
   return (
-    <html>
+    <html lang={params.lang}>
       <UserProvider>
         <body>
           <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
