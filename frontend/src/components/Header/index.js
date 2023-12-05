@@ -7,34 +7,6 @@ import { FlagUSA, FlagVietnam } from '@/assets/icons';
 
 const cx = classnames.bind(styles);
 
-const userItems = [
-  {
-    label: <a className={cx('user-item')}>My Classes</a>,
-    key: '0',
-    icon: <TeamOutlined className={cx('dropdown-icon')} />,
-  },
-  {
-    label: <a className={cx('user-item')}>Notifications</a>,
-    key: '1',
-    icon: <BellOutlined className={cx('dropdown-icon')} />,
-  },
-  {
-    type: 'divider',
-  },
-  {
-    label: (
-      <a
-        href="/api/auth/logout"
-        className={cx('user-item')}
-      >
-        Log Out
-      </a>
-    ),
-    key: '3',
-    icon: <LogoutOutlined className={cx('dropdown-icon')} />,
-  },
-];
-
 const languageItems = [
   {
     label: <p className={cx('language-item')}>English</p>,
@@ -48,7 +20,35 @@ const languageItems = [
   },
 ];
 
-export default function Header({ user }) {
+export default function Header({ user, dictionary, locale }) {
+  const userItems = [
+    {
+      label: <a className={cx('user-item')}>{dictionary.myClasses}</a>,
+      key: '0',
+      icon: <TeamOutlined className={cx('dropdown-icon')} />,
+    },
+    {
+      label: <a className={cx('user-item')}>{dictionary.notifications}</a>,
+      key: '1',
+      icon: <BellOutlined className={cx('dropdown-icon')} />,
+    },
+    {
+      type: 'divider',
+    },
+    {
+      label: (
+        <a
+          href={`${dictionary.locale}/api/auth/logout`}
+          className={cx('user-item')}
+        >
+          {dictionary.logout}
+        </a>
+      ),
+      key: '3',
+      icon: <LogoutOutlined className={cx('dropdown-icon')} />,
+    },
+  ];
+
   return (
     <header className={cx('header')}>
       <HomeButton />
@@ -59,16 +59,16 @@ export default function Header({ user }) {
             <Button
               type="transparent"
               className={cx('login-btn')}
-              href="/api/auth/login"
+              href={`${locale}/api/auth/login`}
             >
-              Log in
+              {dictionary.login}
             </Button>
             <Button
               type="primary"
               className={cx('signup-btn')}
-              href="/api/auth/signup"
+              href={`${locale}/api/auth/signup`}
             >
-              Sign up
+              {dictionary.signup}
             </Button>
           </>
         )}

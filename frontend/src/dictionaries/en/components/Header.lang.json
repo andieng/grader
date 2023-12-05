@@ -1,7 +1,7 @@
 {
-  "signup": "Đăng ký",
-  "login": "Đăng nhập",
-  "logout": "Đăng xuất",
-  "myClasses": "Lớp học",
-  "notification": "Thông báo"
+  "signup": "Sign Up",
+  "login": "Log In",
+  "logout": "Log Out",
+  "myClasses": "My Classes",
+  "notifications": "Notifications"
 }
