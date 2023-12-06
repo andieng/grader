@@ -44,8 +44,8 @@ export default function Home({ params: { lang } }) {
         locale={dictionary.locale}
       />
       <div className={cx('main')}>
-        <h1 className={cx('welcome')}>Welcome to Grader!</h1>
-        <h3 className={cx('description')}>Explore our products and services to discover the possibilities.</h3>
+        <h1 className={cx('welcome')}>{dictionary.pages.home.welcome}</h1>
+        <h3 className={cx('description')}>{dictionary.pages.home.introduce}</h3>
       </div>
     </div>
   );

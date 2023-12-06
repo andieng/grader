@@ -18,6 +18,11 @@ function getLocale(request) {
 }
 
 export function middleware(request) {
+  const PUBLIC_FILE = /\.(.*)$/;
+  if (PUBLIC_FILE.test(request.nextUrl.pathname)) {
+    return;
+  }
+
   const pathname = request.nextUrl.pathname;
 
   const pathnameIsMissingLocale = i18n.locales.every(
@@ -32,5 +37,5 @@ export function middleware(request) {
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
+  matcher: ['/((?!_next/static|_next/image|favicon.ico)(?!^/api).*)'],
 };

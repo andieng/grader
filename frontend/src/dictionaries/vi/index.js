@@ -1,6 +1,7 @@
 import Header from './components/Header.lang.json';
 // import Footer from './components/Footer.lang.json';
-// import Dashboard from './pages/Dashboard.lang.json';
+import Dashboard from './pages/Dashboard.lang.json';
+import Home from './pages/Home.lang.json';
 
 const vi = {
   components: {
@@ -8,7 +9,8 @@ const vi = {
     // footer: Footer,
   },
   pages: {
-    // dashboard: Dashboard,
+    home: Home,
+    dashboard: Dashboard,
   },
 };
 

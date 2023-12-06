@@ -38,7 +38,7 @@ export default function Header({ user, dictionary, locale }) {
     {
       label: (
         <a
-          href={`${dictionary.locale}/api/auth/logout`}
+          href={`${locale}/api/auth/logout`}
           className={cx('user-item')}
         >
           {dictionary.logout}
