@@ -4,6 +4,7 @@ import classnames from 'classnames/bind';
 import styles from '@/styles/components/Header.module.scss';
 import HomeButton from '@/components/HomeButton';
 import { FlagUSA, FlagVietnam } from '@/assets/icons';
+import { useRouter, usePathname } from 'next/navigation';
 
 const cx = classnames.bind(styles);
 
@@ -48,6 +49,24 @@ export default function Header({ user, dictionary, locale }) {
       icon: <LogoutOutlined className={cx('dropdown-icon')} />,
     },
   ];
+
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const switchLanguagesHandler = (event) => {
+    let updatePathname = '';
+
+    switch (event.key) {
+      case '0': //en
+        updatePathname = pathname.replace(/\/vi(\/|$)/, '/en$1');
+        router.push(updatePathname);
+        break;
+      case '1': //vi
+        updatePathname = pathname.replace(/\/en(\/|$)/, '/vi$1');
+        router.push(updatePathname);
+        break;
+    }
+  };
 
   return (
     <header className={cx('header')}>
@@ -95,6 +114,7 @@ export default function Header({ user, dictionary, locale }) {
         <Dropdown
           menu={{
             items: languageItems,
+            onClick: switchLanguagesHandler,
           }}
           trigger={['click']}
           placement="bottomRight"
