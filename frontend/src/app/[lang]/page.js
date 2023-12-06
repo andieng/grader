@@ -30,11 +30,24 @@ export default function Home({ params: { lang } }) {
   }, [lang]);
 
   const { user } = useUser();
-  const { data, isLoading } = useSWR(user ? '/api/profile' : null, fetcher);
+  const { data, isLoading } = useSWR('/api/profile', fetcher);
+
+  if (data?.error) {
+    return (
+      <div className={cx('wrapper')}>
+        <Header
+          dictionary={dictionary.components.header}
+          locale={dictionary.locale}
+        />
+        <div className={cx('main')}>
+          <h1 className={cx('welcome')}>{dictionary.pages.home.welcome}</h1>
+          <h3 className={cx('description')}>{dictionary.pages.home.introduce}</h3>
+        </div>
+      </div>
+    );
+  }
 
   if (isLoading || dictionary === null) return <Spin size="large" />;
-
-  console.log(dictionary);
 
   return (
     <div className={cx('wrapper')}>
