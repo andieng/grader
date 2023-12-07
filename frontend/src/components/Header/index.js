@@ -1,10 +1,12 @@
 import { Button, Dropdown, Space } from 'antd';
+import { useMemo, useCallback } from 'react';
 import { LogoutOutlined, DownOutlined, GlobalOutlined, BellOutlined, TeamOutlined } from '@ant-design/icons';
 import classnames from 'classnames/bind';
-import styles from '@/styles/components/Header.module.scss';
-import HomeButton from '@/components/HomeButton';
-import { FlagUSA, FlagVietnam } from '@/assets/icons';
 import { useRouter, usePathname } from 'next/navigation';
+import { FlagUSA, FlagVietnam } from '@/assets/icons';
+import getDictionary from '@/utils/language';
+import HomeButton from '@/components/HomeButton';
+import styles from '@/styles/components/Header.module.scss';
 
 const cx = classnames.bind(styles);
 
@@ -21,52 +23,62 @@ const languageItems = [
   },
 ];
 
-export default function Header({ user, dictionary, locale }) {
-  const userItems = [
-    {
-      label: <a className={cx('user-item')}>{dictionary.myClasses}</a>,
-      key: '0',
-      icon: <TeamOutlined className={cx('dropdown-icon')} />,
-    },
-    {
-      label: <a className={cx('user-item')}>{dictionary.notifications}</a>,
-      key: '1',
-      icon: <BellOutlined className={cx('dropdown-icon')} />,
-    },
-    {
-      type: 'divider',
-    },
-    {
-      label: (
-        <a
-          href={`http://localhost:3000/${locale}/api/auth/logout`}
-          className={cx('user-item')}
-        >
-          {dictionary.logout}
-        </a>
-      ),
-      key: '3',
-      icon: <LogoutOutlined className={cx('dropdown-icon')} />,
-    },
-  ];
-
+export default function Header({ user, lang }) {
   const router = useRouter();
   const pathname = usePathname();
 
-  const switchLanguagesHandler = (event) => {
-    let updatePathname = '';
+  const d = useMemo(() => {
+    return getDictionary(lang, 'components/Header');
+  }, [lang]);
 
-    switch (event.key) {
-      case '0': //en
-        updatePathname = pathname.replace(/\/vi(\/|$)/, '/en$1');
-        router.push(updatePathname);
-        break;
-      case '1': //vi
-        updatePathname = pathname.replace(/\/en(\/|$)/, '/vi$1');
-        router.push(updatePathname);
-        break;
-    }
-  };
+  const userItems = useMemo(
+    () => [
+      {
+        label: <a className={cx('user-item')}>{d.my_classes}</a>,
+        key: '0',
+        icon: <TeamOutlined className={cx('dropdown-icon')} />,
+      },
+      {
+        label: <a className={cx('user-item')}>{d.notifications}</a>,
+        key: '1',
+        icon: <BellOutlined className={cx('dropdown-icon')} />,
+      },
+      {
+        type: 'divider',
+      },
+      {
+        label: (
+          <a
+            href={`http://localhost:3000/${lang}/api/auth/logout`}
+            className={cx('user-item')}
+          >
+            {d.logout}
+          </a>
+        ),
+        key: '3',
+        icon: <LogoutOutlined className={cx('dropdown-icon')} />,
+      },
+    ],
+    [d, lang],
+  );
+
+  const switchLanguagesHandler = useCallback(
+    (event) => {
+      let updatePathname = '';
+
+      switch (event.key) {
+        case '0': //en
+          updatePathname = pathname.replace(/\/vi(\/|$)/, '/en$1');
+          router.push(updatePathname);
+          break;
+        case '1': //vi
+          updatePathname = pathname.replace(/\/en(\/|$)/, '/vi$1');
+          router.push(updatePathname);
+          break;
+      }
+    },
+    [pathname, router],
+  );
 
   return (
     <header className={cx('header')}>
@@ -78,16 +90,16 @@ export default function Header({ user, dictionary, locale }) {
             <Button
               type="transparent"
               className={cx('login-btn')}
-              href={`${locale}/api/auth/login`}
+              href={`${lang}/api/auth/login`}
             >
-              {dictionary.login}
+              {d.login}
             </Button>
             <Button
               type="primary"
               className={cx('signup-btn')}
-              href={`${locale}/api/auth/signup`}
+              href={`${lang}/api/auth/signup`}
             >
-              {dictionary.signup}
+              {d.signup}
             </Button>
           </>
         )}
