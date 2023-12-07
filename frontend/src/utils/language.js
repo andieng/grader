@@ -8,8 +8,13 @@ export const i18n = {
 
 export const Locale = i18n.locales;
 
-const dictionaries = {
-  en: () => enDictionary,
-  vi: () => viDictionary,
+const getDictionary = (locale, path) => {
+  switch (locale) {
+    case 'en':
+      return enDictionary(path);
+    case 'vi':
+      return viDictionary(path);
+  }
 };
-export const getDictionary = (locale) => dictionaries[locale]();
+
+export default getDictionary;

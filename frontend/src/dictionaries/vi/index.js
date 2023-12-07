@@ -3,15 +3,15 @@ import Header from './components/Header.lang.json';
 import Dashboard from './pages/Dashboard.lang.json';
 import Home from './pages/Home.lang.json';
 
-const vi = {
-  components: {
-    header: Header,
-    // footer: Footer,
-  },
-  pages: {
-    home: Home,
-    dashboard: Dashboard,
-  },
+const dictionary = {
+  'components/Header': Header,
+
+  'pages/Dashboard': Dashboard,
+  'pages/Home': Home,
 };
 
-export default vi;
+const mappingDictionaryPath = (path) => {
+  return dictionary[path];
+};
+
+export default mappingDictionaryPath;
