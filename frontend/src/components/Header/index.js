@@ -39,7 +39,7 @@ export default function Header({ user, dictionary, locale }) {
     {
       label: (
         <a
-          href={`${locale}/api/auth/logout`}
+          href={`http://localhost:3000/${locale}/api/auth/logout`}
           className={cx('user-item')}
         >
           {dictionary.logout}
@@ -52,6 +52,8 @@ export default function Header({ user, dictionary, locale }) {
 
   const router = useRouter();
   const pathname = usePathname();
+
+  console.log(pathname);
 
   const switchLanguagesHandler = (event) => {
     let updatePathname = '';
