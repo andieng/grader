@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { match as matchLocale } from '@formatjs/intl-localematcher';
 import Negotiator from 'negotiator';
 
-import { i18n } from './i18n-config';
+import { i18n } from '@/utils/language';
 
 function getLocale(request) {
   const negotiatorHeaders = {};

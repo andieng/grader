@@ -1,12 +1,12 @@
 'use client';
 
 import useSWR from 'swr';
-import { useState, useEffect } from 'react';
+import { useMemo } from 'react';
 import { Spin } from 'antd';
 import classnames from 'classnames/bind';
 import Header from '@/components/Header';
 import styles from '@/styles/pages/Home.module.scss';
-import { getDictionary } from '../../get-dictionaries';
+import { getDictionary } from '@/utils/language';
 
 const cx = classnames.bind(styles);
 
@@ -16,16 +16,10 @@ const fetcher = async (url) => {
 };
 
 export default function Home({ params: { lang } }) {
-  const [dictionary, setDictionary] = useState(null);
-
-  useEffect(() => {
-    const fetchDictionary = async () => {
-      const dict = await getDictionary(lang);
-      dict.locale = lang;
-      setDictionary(dict);
-    };
-
-    fetchDictionary();
+  const dictionary = useMemo(() => {
+    let dict = getDictionary(lang);
+    dict.locale = lang;
+    return dict;
   }, [lang]);
 
   const { data, isLoading } = useSWR('/api/profile', fetcher);

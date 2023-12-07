@@ -2,7 +2,7 @@
 
 import useSWR from 'swr';
 import { useState, useEffect } from 'react';
-import { getDictionary } from '../../../../get-dictionaries';
+import { getDictionary } from '../../../../utils/language';
 import { Spin } from 'antd';
 import classnames from 'classnames/bind';
 import Header from '@/components/Header';

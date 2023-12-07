@@ -53,8 +53,6 @@ export default function Header({ user, dictionary, locale }) {
   const router = useRouter();
   const pathname = usePathname();
 
-  console.log(pathname);
-
   const switchLanguagesHandler = (event) => {
     let updatePathname = '';
 
