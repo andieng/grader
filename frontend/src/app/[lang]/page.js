@@ -7,7 +7,6 @@ import classnames from 'classnames/bind';
 import Header from '@/components/Header';
 import styles from '@/styles/pages/Home.module.scss';
 import { getDictionary } from '../../get-dictionaries';
-import chalk from 'chalk';
 
 const cx = classnames.bind(styles);
 

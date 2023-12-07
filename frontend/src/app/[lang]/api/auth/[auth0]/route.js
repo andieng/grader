@@ -1,4 +1,4 @@
-import { handleAuth, handleLogin } from '@auth0/nextjs-auth0';
+import { handleAuth, handleLogin, handleLogout } from '@auth0/nextjs-auth0';
 import URLParse from 'url-parse';
 
 const getLocale = (req) => {
@@ -10,25 +10,38 @@ const getLocale = (req) => {
 };
 
 const login = async (req, res) => {
+  const locale = getLocale(req);
+
   return handleLogin(req, res, {
     authorizationParams: {
-      ui_locales: getLocale(req),
+      ui_locales: locale,
     },
-    returnTo: '/',
+    returnTo: `/${locale}`,
   });
 };
 
 const signup = async (req, res) => {
+  const locale = getLocale(req);
+
   return handleLogin(req, res, {
     authorizationParams: {
       screen_hint: 'signup',
-      ui_locales: getLocale(req),
+      ui_locales: locale,
     },
-    returnTo: '/',
+    returnTo: `/${locale}`,
+  });
+};
+
+const logout = async (req, res) => {
+  const locale = getLocale(req);
+
+  return handleLogout(req, res, {
+    returnTo: `http://localhost:3000/${locale}`,
   });
 };
 
 export const GET = handleAuth({
   login,
   signup,
+  logout,
 });
