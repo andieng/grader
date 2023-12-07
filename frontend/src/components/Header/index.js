@@ -4,36 +4,9 @@ import classnames from 'classnames/bind';
 import styles from '@/styles/components/Header.module.scss';
 import HomeButton from '@/components/HomeButton';
 import { FlagUSA, FlagVietnam } from '@/assets/icons';
+import { useRouter, usePathname } from 'next/navigation';
 
 const cx = classnames.bind(styles);
-
-const userItems = [
-  {
-    label: <a className={cx('user-item')}>My Classes</a>,
-    key: '0',
-    icon: <TeamOutlined className={cx('dropdown-icon')} />,
-  },
-  {
-    label: <a className={cx('user-item')}>Notifications</a>,
-    key: '1',
-    icon: <BellOutlined className={cx('dropdown-icon')} />,
-  },
-  {
-    type: 'divider',
-  },
-  {
-    label: (
-      <a
-        href="/api/auth/logout"
-        className={cx('user-item')}
-      >
-        Log Out
-      </a>
-    ),
-    key: '3',
-    icon: <LogoutOutlined className={cx('dropdown-icon')} />,
-  },
-];
 
 const languageItems = [
   {
@@ -48,7 +21,53 @@ const languageItems = [
   },
 ];
 
-export default function Header({ user }) {
+export default function Header({ user, dictionary, locale }) {
+  const userItems = [
+    {
+      label: <a className={cx('user-item')}>{dictionary.myClasses}</a>,
+      key: '0',
+      icon: <TeamOutlined className={cx('dropdown-icon')} />,
+    },
+    {
+      label: <a className={cx('user-item')}>{dictionary.notifications}</a>,
+      key: '1',
+      icon: <BellOutlined className={cx('dropdown-icon')} />,
+    },
+    {
+      type: 'divider',
+    },
+    {
+      label: (
+        <a
+          href={`http://localhost:3000/${locale}/api/auth/logout`}
+          className={cx('user-item')}
+        >
+          {dictionary.logout}
+        </a>
+      ),
+      key: '3',
+      icon: <LogoutOutlined className={cx('dropdown-icon')} />,
+    },
+  ];
+
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const switchLanguagesHandler = (event) => {
+    let updatePathname = '';
+
+    switch (event.key) {
+      case '0': //en
+        updatePathname = pathname.replace(/\/vi(\/|$)/, '/en$1');
+        router.push(updatePathname);
+        break;
+      case '1': //vi
+        updatePathname = pathname.replace(/\/en(\/|$)/, '/vi$1');
+        router.push(updatePathname);
+        break;
+    }
+  };
+
   return (
     <header className={cx('header')}>
       <HomeButton />
@@ -59,16 +78,16 @@ export default function Header({ user }) {
             <Button
               type="transparent"
               className={cx('login-btn')}
-              href="/api/auth/login"
+              href={`${locale}/api/auth/login`}
             >
-              Log in
+              {dictionary.login}
             </Button>
             <Button
               type="primary"
               className={cx('signup-btn')}
-              href="/api/auth/signup"
+              href={`${locale}/api/auth/signup`}
             >
-              Sign up
+              {dictionary.signup}
             </Button>
           </>
         )}
@@ -95,6 +114,7 @@ export default function Header({ user }) {
         <Dropdown
           menu={{
             items: languageItems,
+            onClick: switchLanguagesHandler,
           }}
           trigger={['click']}
           placement="bottomRight"

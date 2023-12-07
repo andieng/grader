@@ -1,0 +1,57 @@
+'use client';
+
+import useSWR from 'swr';
+import { useMemo } from 'react';
+import { Spin } from 'antd';
+import classnames from 'classnames/bind';
+import Header from '@/components/Header';
+import styles from '@/styles/pages/Home.module.scss';
+import { getDictionary } from '@/utils/language';
+
+const cx = classnames.bind(styles);
+
+const fetcher = async (url) => {
+  const response = await fetch(url);
+  return response.json();
+};
+
+export default function Home({ params: { lang } }) {
+  const dictionary = useMemo(() => {
+    let dict = getDictionary(lang);
+    dict.locale = lang;
+    return dict;
+  }, [lang]);
+
+  const { data, isLoading } = useSWR('/api/profile', fetcher);
+
+  if (isLoading || dictionary === null) return <Spin size="large" />;
+
+  if (data?.error) {
+    return (
+      <div className={cx('wrapper')}>
+        <Header
+          dictionary={dictionary.components.header}
+          locale={dictionary.locale}
+        />
+        <div className={cx('main')}>
+          <h1 className={cx('welcome')}>{dictionary.pages.home.welcome}</h1>
+          <h3 className={cx('description')}>{dictionary.pages.home.introduce}</h3>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className={cx('wrapper')}>
+      <Header
+        user={data?.user}
+        dictionary={dictionary?.components.header}
+        locale={dictionary.locale}
+      />
+      <div className={cx('main')}>
+        <h1 className={cx('welcome')}>{dictionary.pages.home.welcome}</h1>
+        <h3 className={cx('description')}>{dictionary.pages.home.introduce}</h3>
+      </div>
+    </div>
+  );
+}
