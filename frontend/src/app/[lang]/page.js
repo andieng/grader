@@ -3,11 +3,11 @@
 import useSWR from 'swr';
 import { useState, useEffect } from 'react';
 import { Spin } from 'antd';
-import { useUser } from '@auth0/nextjs-auth0/client';
 import classnames from 'classnames/bind';
 import Header from '@/components/Header';
 import styles from '@/styles/pages/Home.module.scss';
 import { getDictionary } from '../../get-dictionaries';
+import chalk from 'chalk';
 
 const cx = classnames.bind(styles);
 
@@ -29,8 +29,9 @@ export default function Home({ params: { lang } }) {
     fetchDictionary();
   }, [lang]);
 
-  const { user } = useUser();
   const { data, isLoading } = useSWR('/api/profile', fetcher);
+
+  if (isLoading || dictionary === null) return <Spin size="large" />;
 
   if (data?.error) {
     return (
@@ -47,13 +48,11 @@ export default function Home({ params: { lang } }) {
     );
   }
 
-  if (isLoading || dictionary === null) return <Spin size="large" />;
-
   return (
     <div className={cx('wrapper')}>
       <Header
         user={data?.user}
-        dictionary={dictionary.components.header}
+        dictionary={dictionary?.components.header}
         locale={dictionary.locale}
       />
       <div className={cx('main')}>
