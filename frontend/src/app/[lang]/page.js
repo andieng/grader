@@ -38,7 +38,10 @@ export default function Home({ params: { lang } }) {
 
   return (
     <div className={cx('wrapper')}>
-      <Header user={data?.user} />
+      <Header
+        user={data?.user}
+        lang={lang}
+      />
       <div className={cx('main')}>
         <h1 className={cx('welcome')}>{d.welcome}</h1>
         <h3 className={cx('description')}>{d.introduce}</h3>

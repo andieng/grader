@@ -15,10 +15,4 @@ const getProfile = async (req, res) => {
   return res.json({ user });
 };
 
-const createClass = async (req, res) => {};
-
-const getClasses = async (req, res) => {};
-
-const getClassDetails = async (req, res) => {};
-
-export { getProfile, createClass, getClasses, getClassDetails };
+export { getProfile };

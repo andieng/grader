@@ -23,6 +23,7 @@
     "@netlify/functions": "^2.3.0",
     "cors": "^2.8.5",
     "express-async-errors": "^3.1.1",
+    "express-oauth2-jwt-bearer": "^1.6.0",
     "pg": "^8.11.3",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.34.0",
