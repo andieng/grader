@@ -1,0 +1,18 @@
+.container {
+  display: flex;
+  flex-direction: row;
+}
+
+.container > :last-child {
+  flex-grow: 1;
+}
+
+.menu {
+  max-height: 100%;
+  overflow: auto;
+  font-size: 16px;
+}
+
+.container > :first-child {
+  max-height: 88vh;
+}

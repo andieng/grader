@@ -29,10 +29,10 @@ export default withPageAuthRequired(
 
     return (
       <div className={cx('wrapper')}>
-        <Header
+        {/* <Header
           user={data?.user}
           lang={lang}
-        />
+        /> */}
         <div className={cx('main')}>
           <h1 className={cx('title')}>{d.dashboard}</h1>
         </div>
