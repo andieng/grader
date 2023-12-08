@@ -2,39 +2,34 @@
 
 import useSWR from 'swr';
 import { useMemo } from 'react';
-import { getSession } from '@auth0/nextjs-auth0';
 import { Spin } from 'antd';
+import { NextResponse } from 'next/server';
 import classnames from 'classnames/bind';
 import Header from '@/components/Header';
 import styles from '@/styles/pages/Home.module.scss';
 import getDictionary from '@/utils/language';
-import { CLAIMS_ROLES } from '@/constants/auth';
+import { ERROR_ROLE_NOT_FOUND } from '@/constants/messages';
 
 const cx = classnames.bind(styles);
 
 const fetcher = async (url) => {
-  const response = await fetch(url);
+  const responseRole = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/role`);
+  const roleData = await responseRole.json();
+  const role = roleData?.role;
+
+  if (!role) {
+    return NextResponse.json({ error: ERROR_ROLE_NOT_FOUND }, { status: 200 });
+  }
+
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/${role}/profile`);
   return response.json();
 };
 
-export async function getServerSideProps({ req, res }) {
-  const session = await getSession(req, res);
-  if (session?.user[CLAIMS_ROLES].includes('admin')) {
-    return { props: { role: 'admin' } };
-  }
-
-  return {
-    props: { role: 'user' },
-  };
-}
-
-export default function Home({ params: { lang }, role }) {
+export default function Home({ params: { lang } }) {
   const d = useMemo(() => {
     return getDictionary(lang, 'pages/Home');
   }, [lang]);
-
-  const { data, isLoading } = useSWR(`/api/${role}/profile`, fetcher);
-
+  const { data, isLoading } = useSWR('/', fetcher);
   if (isLoading || d === null) return <Spin size="large" />;
 
   if (data?.error) {
