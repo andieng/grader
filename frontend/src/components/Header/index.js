@@ -7,6 +7,7 @@ import { FlagUSA, FlagVietnam } from '@/assets/icons';
 import getDictionary from '@/utils/language';
 import HomeButton from '@/components/HomeButton';
 import styles from '@/styles/components/Header.module.scss';
+import Link from 'next/link';
 
 const cx = classnames.bind(styles);
 
@@ -34,7 +35,11 @@ export default function Header({ user, lang }) {
   const userItems = useMemo(
     () => [
       {
-        label: <a className={cx('user-item')}>{d.my_classes}</a>,
+        label: (
+          <Link href="/dashboard">
+            <p className={cx('user-item')}>{d.my_classes}</p>
+          </Link>
+        ),
         key: '0',
         icon: <TeamOutlined className={cx('dropdown-icon')} />,
       },
