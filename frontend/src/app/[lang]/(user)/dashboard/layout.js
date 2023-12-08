@@ -37,7 +37,7 @@ function transformData(data) {
 
 const dummyDataFromServer = {
   teaching: ['classA', 'classB'],
-  enrolled: ['classC', 'classD', 'classE'],
+  enrolled: ['classC', 'classD', 'classE', 'classC', 'classD', 'classE', 'classC', 'classD', 'classE'],
 };
 
 const afterTransforming = transformData(dummyDataFromServer);
