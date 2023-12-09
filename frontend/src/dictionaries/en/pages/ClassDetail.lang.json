@@ -9,5 +9,12 @@
   "seeAll": "See All",
   "addPost": "Announce something to your class",
   "teachers": "Teachers",
-  "students": "Students"
+  "students": "Students",
+  "invite": "Invite",
+  "cancel": "Cancel",
+  "inviteTeachers": "Invite Teachers",
+  "inviteStudents": "Invite Students",
+  "inviteUrl": "Invitation Link",
+  "inviteInput": "Enter name or email",
+  "copied": "Link copied"
 }

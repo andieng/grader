@@ -9,5 +9,12 @@
   "seeAll": "Xem tất cả",
   "addPost": "Thông báo nội dung nào đó cho lớp học của bạn",
   "teachers": "Giáo viên",
-  "students": "Sinh viên"
+  "students": "Học sinh",
+  "invite": "Mời",
+  "cancel": "Hủy",
+  "inviteTeachers": "Mời giáo viên",
+  "inviteStudents": "Mời học viên",
+  "inviteUrl": "Đường liên kết mời",
+  "inviteInput": "Nhập tên hoặc email",
+  "copied": "Đã sao chép đường liên kết"
 }

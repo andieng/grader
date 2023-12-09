@@ -11,6 +11,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-family: 'Quicksand', sans-serif !important;
   & button {
     width: 30px !important;
     height: 30px !important;
@@ -42,9 +43,10 @@
     margin-top: 10px;
   }
   & > p {
-    font-weight: 500;
+    font-weight: 600;
     display: flex;
     align-items: center;
+    font-family: 'Quicksand', sans-serif !important;
   }
 
   & button:last-child {
@@ -55,4 +57,20 @@
 .user-avatar {
   width: 40px;
   height: 40px;
+}
+
+.invitation-modal {
+  font-family: 'Quicksand', sans-serif !important;
+}
+
+.invitation-link {
+  display: flex;
+  align-items: center;
+  & p {
+    color: gray;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  margin-bottom: 15px;
 }

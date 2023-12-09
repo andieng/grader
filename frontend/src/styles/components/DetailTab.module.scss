@@ -21,6 +21,7 @@
   h4 {
     font-size: 4rem;
     color: white;
+    font-family: 'Quicksand', sans-serif !important;
   }
   & h4 {
     font-weight: lighter;
@@ -51,6 +52,7 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     width: 60vw;
+    font-family: 'Quicksand', sans-serif !important;
   }
   & p:last-of-type {
     color: gray;
