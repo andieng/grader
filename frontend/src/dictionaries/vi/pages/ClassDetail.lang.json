@@ -1,0 +1,13 @@
+{
+  "detail": "Chi tiết",
+  "people": "Mọi người",
+  "grades": "Điểm",
+  "classCode": "Mã lớp",
+  "due": "Sắp đến hạn",
+  "dueToday": "Đến hạn hôm nay",
+  "dueTomorrow": "Đến hạn vào ngày mai",
+  "seeAll": "Xem tất cả",
+  "addPost": "Thông báo nội dung nào đó cho lớp học của bạn",
+  "teachers": "Giáo viên",
+  "students": "Sinh viên"
+}

@@ -28,6 +28,11 @@ export default function Header({ user, lang }) {
   const router = useRouter();
   const pathname = usePathname();
 
+  let redirectLocale = '';
+
+  if (pathname.includes('/en')) redirectLocale = '/en/dashboard';
+  else redirectLocale = '/vi/dashboard';
+
   const d = useMemo(() => {
     return getDictionary(lang, 'components/Header');
   }, [lang]);
@@ -36,7 +41,7 @@ export default function Header({ user, lang }) {
     () => [
       {
         label: (
-          <Link href="/dashboard">
+          <Link href={redirectLocale}>
             <p className={cx('user-item')}>{d.my_classes}</p>
           </Link>
         ),

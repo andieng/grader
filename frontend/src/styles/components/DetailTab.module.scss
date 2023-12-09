@@ -1,0 +1,79 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+}
+
+.cover-img {
+  background: linear-gradient(#0000009d, #00000097), url('https://gstatic.com/classroom/themes/img_read.jpg');
+  min-height: 40vh;
+  color: #73736d;
+  font-family: 'Bebas Neue', sans-serif;
+  background-size: cover;
+  background-position: center;
+  margin: 20px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 20px;
+  & h2,
+  h4 {
+    font-size: 4rem;
+    color: white;
+  }
+  & h4 {
+    font-weight: lighter;
+    font-size: 2rem;
+  }
+}
+
+.class-info {
+  margin: 7px 20px 30px 20px;
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+}
+
+.posts {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 30px;
+  width: 100%;
+}
+
+.card-post {
+  border: solid 1px #0000004b;
+  width: 100%;
+  & p {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 60vw;
+  }
+  & p:last-of-type {
+    color: gray;
+    font-weight: normal;
+    display: flex;
+    align-items: center;
+  }
+  &:hover {
+    background-color: #33a8ac2f;
+    cursor: pointer;
+  }
+}
+
+.card-post-info {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+
+  & button {
+    width: 40px !important;
+    height: 40px;
+  }
+  & button:last-child {
+    margin-left: auto;
+  }
+}

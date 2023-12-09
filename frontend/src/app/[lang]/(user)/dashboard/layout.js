@@ -2,12 +2,14 @@
 
 import useSWR from 'swr';
 import { useMemo } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import { AppstoreOutlined, TeamOutlined, ContactsOutlined } from '@ant-design/icons';
 import { Menu, Spin } from 'antd';
 import Header from '@/components/Header';
 import getDictionary from '@/utils/language';
 import classnames from 'classnames/bind';
 import styles from '@/styles/layouts/Dashboard.module.scss';
+import Link from 'next/link';
 
 const cx = classnames.bind(styles);
 
@@ -43,8 +45,17 @@ const dummyDataFromServer = {
 const afterTransforming = transformData(dummyDataFromServer);
 
 export default function DashboardLayout({ children, params: { lang } }) {
-  const sidebarClickHandler = (e) => {
-    console.log('click ', e);
+  const pathname = usePathname();
+  const router = useRouter();
+
+  let redirectLocale = '';
+
+  if (pathname.includes('/en')) redirectLocale = '/en/dashboard';
+  else redirectLocale = '/vi/dashboard';
+
+  const sidebarClickHandler = (event) => {
+    console.log('click ', event);
+    if (event.key != 0) router.push(`${redirectLocale}/d/aDummyClassId`);
   };
 
   const d = useMemo(() => {
@@ -53,7 +64,11 @@ export default function DashboardLayout({ children, params: { lang } }) {
 
   const items = [
     {
-      label: <a className={cx('user-item')}>{d.dashboard}</a>,
+      label: (
+        <Link href={redirectLocale}>
+          <p className={cx('user-item')}>{d.dashboard}</p>
+        </Link>
+      ),
       key: '0',
       icon: <AppstoreOutlined />,
     },
@@ -83,11 +98,8 @@ export default function DashboardLayout({ children, params: { lang } }) {
           <Menu
             className={cx('menu')}
             onClick={sidebarClickHandler}
-            style={{
-              width: 256,
-            }}
-            defaultSelectedKeys={['1']}
-            defaultOpenKeys={['sub1']}
+            defaultSelectedKeys={['0']}
+            // defaultOpenKeys={['sub1']}
             mode="inline"
             items={items}
           />

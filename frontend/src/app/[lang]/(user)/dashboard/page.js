@@ -5,7 +5,6 @@ import { useMemo } from 'react';
 import getDictionary from '@/utils/language';
 import { Spin, Card } from 'antd';
 import classnames from 'classnames/bind';
-import Header from '@/components/Header';
 import styles from '@/styles/pages/Dashboard.module.scss';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0/client';
 

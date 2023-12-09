@@ -1,18 +1,17 @@
 .container {
   display: flex;
   flex-direction: row;
+  height: 88vh;
 }
 
 .container > :last-child {
   flex-grow: 1;
+  min-height: 100%;
 }
 
 .menu {
-  max-height: 100%;
+  height: 100%;
   overflow: auto;
   font-size: 16px;
-}
-
-.container > :first-child {
-  max-height: 88vh;
+  width: 256px;
 }

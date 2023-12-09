@@ -9,7 +9,6 @@
   height: calc(100vh - 72px);
   width: 100%;
   overflow-y: scroll;
-  background-color: #f6f6f6;
   display: flex;
   align-content: flex-start;
   flex-direction: row;
@@ -24,7 +23,7 @@
 }
 
 .card {
-  border: solid 1px #0000008f;
+  border: solid 1px #0000004b;
   margin: 8px;
   cursor: pointer;
   width: 290px;

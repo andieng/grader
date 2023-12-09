@@ -1,0 +1,58 @@
+.container {
+  padding: 20px 70px 30px 70px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  overflow: auto;
+}
+
+.card-title {
+  color: #33a8ac;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  & button {
+    width: 30px !important;
+    height: 30px !important;
+  }
+}
+
+.card {
+  border: solid 1px #0000004b;
+}
+
+.posts {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 30px;
+  width: 100%;
+  & hr {
+    border: solid 1px #c5c4c40c;
+  }
+}
+
+.card-post-info {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  & > * {
+    margin-bottom: 10px;
+    margin-top: 10px;
+  }
+  & > p {
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+  }
+
+  & button:last-child {
+    margin-left: auto;
+  }
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+}
