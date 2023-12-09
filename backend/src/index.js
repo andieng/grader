@@ -5,6 +5,7 @@ import cors from "cors";
 import { auth } from "express-oauth2-jwt-bearer";
 import userRouter from "./routes/userRoute";
 import adminRouter from "./routes/adminRoute";
+import classRouter from "./routes/classRoute";
 
 const jwtCheck = auth({
   audience: process.env.AUTH0_AUDIENCE,
@@ -21,6 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api", jwtCheck);
 app.use("/api/user", userRouter);
 app.use("/api/admin", adminRouter);
+app.use("/api/classes", classRouter);
 
 app.get("/", (req, res) => {
   res.json({ msg: "Hello World!" });

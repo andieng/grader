@@ -1,8 +1,7 @@
-import { CLAIMS_EMAIL } from "../constants";
 import { User } from "../models";
 
 const getProfile = async (req, res) => {
-  const email = req.auth.payload[CLAIMS_EMAIL];
+  const email = req.email;
   const user = await User.findOne({
     where: { email },
   });
