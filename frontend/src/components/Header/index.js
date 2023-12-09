@@ -7,6 +7,7 @@ import { FlagUSA, FlagVietnam } from '@/assets/icons';
 import getDictionary from '@/utils/language';
 import HomeButton from '@/components/HomeButton';
 import styles from '@/styles/components/Header.module.scss';
+import Link from 'next/link';
 
 const cx = classnames.bind(styles);
 
@@ -27,6 +28,11 @@ export default function Header({ user, lang }) {
   const router = useRouter();
   const pathname = usePathname();
 
+  let redirectLocale = '';
+
+  if (pathname.includes('/en')) redirectLocale = '/en/dashboard';
+  else redirectLocale = '/vi/dashboard';
+
   const d = useMemo(() => {
     return getDictionary(lang, 'components/Header');
   }, [lang]);
@@ -34,7 +40,11 @@ export default function Header({ user, lang }) {
   const userItems = useMemo(
     () => [
       {
-        label: <a className={cx('user-item')}>{d.my_classes}</a>,
+        label: (
+          <Link href={redirectLocale}>
+            <p className={cx('user-item')}>{d.my_classes}</p>
+          </Link>
+        ),
         key: '0',
         icon: <TeamOutlined className={cx('dropdown-icon')} />,
       },

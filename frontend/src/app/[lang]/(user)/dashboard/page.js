@@ -3,9 +3,8 @@
 import useSWR from 'swr';
 import { useMemo } from 'react';
 import getDictionary from '@/utils/language';
-import { Spin } from 'antd';
+import { Spin, Card } from 'antd';
 import classnames from 'classnames/bind';
-import Header from '@/components/Header';
 import styles from '@/styles/pages/Dashboard.module.scss';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0/client';
 
@@ -15,6 +14,8 @@ const fetcher = async (uri) => {
   const response = await fetch(uri);
   return response.json();
 };
+
+const DUMMY_CLASSES = ['ClassA', 'ClassB', 'ClassC', 'ClassD', 'ClassE', 'ClassF', 'ClassG'];
 
 export default withPageAuthRequired(
   function Dashboard({ params: { lang } }) {
@@ -29,12 +30,17 @@ export default withPageAuthRequired(
 
     return (
       <div className={cx('wrapper')}>
-        <Header
-          user={data?.user}
-          lang={lang}
-        />
         <div className={cx('main')}>
-          <h1 className={cx('title')}>{d.dashboard}</h1>
+          {DUMMY_CLASSES.map((title, index) => (
+            <Card
+              key={index}
+              className={cx('card')}
+              title={title}
+              bodyStyle={{ backgroundColor: 'white', height: '180px' }}
+            >
+              {/* Nội dung của card */}
+            </Card>
+          ))}
         </div>
       </div>
     );
