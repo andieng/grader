@@ -55,7 +55,8 @@ const PeopleTab = ({ lang }) => {
   const [open, setOpen] = useState(false);
 
   const [messageApi, contextHolder] = message.useMessage();
-  const success = () => {
+  const success = (link) => {
+    navigator.clipboard.writeText(link);
     messageApi.open({
       type: 'success',
       content: `${d.copied}`,
@@ -183,7 +184,7 @@ const PeopleTab = ({ lang }) => {
           <Button
             type="text"
             icon={<CopyOutlined />}
-            onClick={success}
+            onClick={() => success('https://classroom.google.com/c/NjQ1MTM5MTE3NjQ1?cjc=ck5vu6z')}
           ></Button>
         </div>
         <Input placeholder={d.inviteInput} />
