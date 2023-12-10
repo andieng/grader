@@ -21,8 +21,8 @@ const ClassMenu = ({ children, lang }) => {
 
   let redirectLocale = '';
 
-  if (pathname.includes('/en')) redirectLocale = '/en/classes';
-  else redirectLocale = '/vi/classes';
+  if (pathname.includes('/en')) redirectLocale = '/en';
+  else redirectLocale = '/vi';
 
   const topBarClickHandler = (e) => {
     console.log('click ', e);

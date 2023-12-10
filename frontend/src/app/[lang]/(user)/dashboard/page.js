@@ -23,10 +23,11 @@ export default withPageAuthRequired(
       return getDictionary(lang, 'pages/Dashboard');
     }, [lang]);
 
-    const { data, isLoading, error } = useSWR('/api/user/profile', fetcher);
+    // const { data, isLoading, error } = useSWR('/api/user/profile', fetcher);
+    const classes = useSWR('/api/classes', fetcher);
 
-    if (isLoading || d === null) return <Spin size="large" />;
-    if (error) return <div>{error.message}</div>;
+    if (d === null || classes.isLoading) return <Spin size="large" />;
+    if (classes.error) return <div>{error.message}</div>;
 
     return (
       <div className={cx('wrapper')}>

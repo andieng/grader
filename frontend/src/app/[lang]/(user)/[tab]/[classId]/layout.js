@@ -1,11 +1,19 @@
 import ClassMenu from '@/components/ClassMenu';
+import SidebarHeader from '@/components/SidebarHeader';
 
 const ClassDetailLayout = ({ children, params: { lang } }) => {
   return (
-    <ClassMenu
-      lang={lang}
-      children={children}
-    />
+    <>
+      <SidebarHeader
+        lang={lang}
+        children={
+          <ClassMenu
+            lang={lang}
+            children={children}
+          />
+        }
+      />
+    </>
   );
 };
 

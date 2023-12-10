@@ -1,5 +1,5 @@
-import { Button, Dropdown, Space } from 'antd';
-import { useMemo, useCallback } from 'react';
+import { Button, Dropdown, Space, Modal, Input, Form } from 'antd';
+import { useMemo, useCallback, useState } from 'react';
 import { LogoutOutlined, DownOutlined, GlobalOutlined, BellOutlined, TeamOutlined } from '@ant-design/icons';
 import classnames from 'classnames/bind';
 import { useRouter, usePathname } from 'next/navigation';
@@ -24,9 +24,44 @@ const languageItems = [
   },
 ];
 
-export default function Header({ user, lang }) {
+export default function Header({ user, lang, isInDashboard }) {
   const router = useRouter();
   const pathname = usePathname();
+  const [form] = Form.useForm();
+
+  const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  const showModal = () => {
+    setOpen(true);
+  };
+
+  const onFinish = async (values) => {
+    form.resetFields();
+    setLoading(true);
+
+    const response = await fetch('/api/classes/create', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ className: values }),
+    });
+
+    const data = await response.json();
+    console.log(data);
+    setLoading(false);
+    setOpen(false);
+  };
+
+  const onFinishFailed = (errorInfo) => {
+    console.log('Failed:', errorInfo);
+  };
+
+  const handleCancel = () => {
+    setOpen(false);
+    form.resetFields();
+  };
 
   let redirectLocale = '';
 
@@ -114,6 +149,16 @@ export default function Header({ user, lang }) {
           </>
         )}
 
+        {isInDashboard && (
+          <Button
+            className={cx('createClass-btn')}
+            type="primary"
+            onClick={() => showModal()}
+          >
+            {d.createClass}
+          </Button>
+        )}
+
         {user && (
           <Dropdown
             menu={{
@@ -152,6 +197,50 @@ export default function Header({ user, lang }) {
             </Space>
           </a>
         </Dropdown>
+        <Modal
+          className={cx('create-modal')}
+          open={open}
+          title={<h2>{d.createClass}</h2>}
+          onCancel={handleCancel}
+          footer={[]}
+        >
+          <p>{d.className}</p>
+          <Form
+            name="form"
+            form={form}
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+            autoComplete="off"
+          >
+            <Form.Item
+              name="className"
+              rules={[
+                {
+                  required: true,
+                  message: d.classNameRequired,
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item className={cx('modal-btn')}>
+              <Button
+                key="back"
+                onClick={handleCancel}
+              >
+                {d.cancel}
+              </Button>
+              <Button
+                key="submit"
+                htmlType="submit"
+                type="primary"
+                loading={loading}
+              >
+                {d.create}
+              </Button>
+            </Form.Item>
+          </Form>
+        </Modal>
       </div>
     </header>
   );

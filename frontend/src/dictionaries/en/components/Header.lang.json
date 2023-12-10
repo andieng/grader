@@ -3,5 +3,10 @@
   "login": "Log In",
   "logout": "Log Out",
   "my_classes": "My Classes",
-  "notifications": "Notifications"
+  "notifications": "Notifications",
+  "createClass": "Create class",
+  "className": "Class name",
+  "create": "Create",
+  "cancel": "Cancel",
+  "classNameRequired": "Please input your class name!"
 }
