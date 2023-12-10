@@ -90,7 +90,7 @@ export const createClass = async (req, res) => {
   await createdClass.save();
 
   const createdTeacher = await ClassMember.create({
-    classId: userClass.classId,
+    classId: createdClass.classId,
     memberId: req.user.id,
     role: "teacher",
   });
