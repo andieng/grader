@@ -30,7 +30,6 @@ const fetcher = async (uri) => {
 };
 
 function transformData(data) {
-  let keyCounter = 1;
   let transformedData = {};
   if (data)
     Object.keys(data).forEach((key) => {
@@ -41,11 +40,6 @@ function transformData(data) {
     });
   return transformedData;
 }
-
-const dummyDataFromServer = {
-  teaching: ['classA', 'classB'],
-  enrolled: ['classC', 'classD', 'classE', 'classC', 'classD', 'classE', 'classC', 'classD', 'classE'],
-};
 
 const SidebarHeader = ({ children, lang, isInDashboard }) => {
   const pathname = usePathname();
@@ -58,7 +52,7 @@ const SidebarHeader = ({ children, lang, isInDashboard }) => {
 
   const sidebarClickHandler = (event) => {
     console.log('click ', event);
-    if (event.key != 0) router.push(`${redirectLocale}/d/aDummyClassId`);
+    if (event.key != 0) router.push(`${redirectLocale}/d/${event.key}`);
   };
 
   const d = useMemo(() => {

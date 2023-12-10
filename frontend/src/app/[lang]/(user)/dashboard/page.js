@@ -2,6 +2,7 @@
 
 import useSWR from 'swr';
 import { useMemo } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import getDictionary from '@/utils/language';
 import { Spin, Card } from 'antd';
 import classnames from 'classnames/bind';
@@ -21,6 +22,18 @@ export default withPageAuthRequired(
       return getDictionary(lang, 'pages/Dashboard');
     }, [lang]);
 
+    const pathname = usePathname();
+    const router = useRouter();
+
+    let redirectLocale = '';
+
+    if (pathname.includes('/en')) redirectLocale = '/en';
+    else redirectLocale = '/vi';
+
+    const chooseClassHandler = (classId) => {
+      router.push(`${redirectLocale}/d/${classId}`);
+    };
+
     const classes = useSWR('/api/classes', fetcher);
 
     if (d === null || classes.isLoading) return <Spin size="large" />;
@@ -32,10 +45,11 @@ export default withPageAuthRequired(
     return (
       <div className={cx('wrapper')}>
         <div className={cx('main')}>
-          {allClasses.map((classItem, index) => (
+          {allClasses.map((classItem) => (
             <Card
-              key={index}
+              key={classItem.classId}
               className={cx('card')}
+              onClick={() => chooseClassHandler(classItem.classId)}
               title={classItem.className}
               bodyStyle={{ backgroundColor: 'white', height: '180px' }}
             >
