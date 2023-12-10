@@ -100,7 +100,7 @@ export const createClass = async (req, res) => {
     throw new Error(ERROR_CREATE_CLASS_MEMBER);
   }
 
-  return res.json({ class: createdClass, classMember: [createdTeacher] });
+  return res.json({ class: createdClass, classMember: createdTeacher });
 };
 
 export const inviteMember = async (req, res) => {
