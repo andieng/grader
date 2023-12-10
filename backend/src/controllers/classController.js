@@ -1,6 +1,8 @@
 import {
   ERROR_CLASS_NOT_FOUND,
+  ERROR_CREATE_ASSIGNMENT,
   ERROR_CREATE_CLASS,
+  ERROR_CREATE_CLASS_MEMBER,
   ERROR_CREATE_INVITATION,
   ERROR_INVALID_INVITATION,
   MSG_INVITE_SUCCESSFULLY,
@@ -12,16 +14,16 @@ import {
   generateMessage,
 } from "../helpers/invitationMailHelper";
 import { groupBy } from "../helpers/objectHelper";
-import { Class, ClassMember, Invitation } from "../models";
+import { Assignment, Class, ClassMember, Invitation } from "../models";
 import { sendMail } from "../services/nodemailer";
 
 export const addMemberToClass = async (req, res) => {
   const { token } = req.body;
-  const { classId } = req.params;
+  const userClass = req.class;
 
   const findMember = await ClassMember.findOne({
     where: {
-      classId,
+      classId: userClass.classId,
       memberId: req.user.id,
     },
   });
@@ -40,13 +42,13 @@ export const addMemberToClass = async (req, res) => {
   }
 
   const member = await ClassMember.create({
-    classId,
+    classId: userClass.classId,
     memberId: req.user.id,
     role: invitation.role,
   });
   await Invitation.destroy({
     where: {
-      classId,
+      classId: userClass.classId,
       email: req.user.email,
     },
   });
@@ -83,26 +85,31 @@ export const createClass = async (req, res) => {
     throw new Error(ERROR_CREATE_INVITATION);
   }
   const token = createdInvitation.token;
-  const inviteLink = `${url}/invitations?token=${token}`;
+  const inviteLink = `${url}/${createdClass.classId}/invitations?token=${token}`;
   createdClass.classInviteStudentLink = inviteLink;
   await createdClass.save();
 
-  return res.json(createdClass);
+  const createdTeacher = await ClassMember.create({
+    classId: userClass.classId,
+    memberId: req.user.id,
+    role: "teacher",
+  });
+
+  if (!createdTeacher) {
+    res.status(500);
+    throw new Error(ERROR_CREATE_CLASS_MEMBER);
+  }
+
+  return res.json({ class: createdClass, classMember: [createdTeacher] });
 };
 
 export const inviteMember = async (req, res) => {
-  const { classId } = req.params;
   const { url, emails, role, lang } = req.body;
-
-  const findClass = await Class.findByPk(classId);
-  if (!findClass) {
-    res.status(400);
-    throw new Error(ERROR_CLASS_NOT_FOUND);
-  }
+  const userClass = req.class;
 
   emails.forEach(async (email) => {
     const createdInvitation = await Invitation.create({
-      classId,
+      classId: userClass.classId,
       email,
       role,
     });
@@ -114,11 +121,11 @@ export const inviteMember = async (req, res) => {
     const inviteLink = `${url}/invitations?token=${token}`;
 
     const mailContent = {
-      subject: generateSubject(findClass.className, role, lang),
-      className: findClass.className,
+      subject: generateSubject(userClass.className, role, lang),
+      className: userClass.className,
       name: req.user.name,
       avatar: req.user.avatar,
-      description: generateDescription(findClass.className, role, lang),
+      description: generateDescription(userClass.className, role, lang),
       buttonContent: generateButtonContent(lang),
       inviteLink,
       recipient: email,
@@ -182,8 +189,27 @@ export const getClasses = async (req, res) => {
 };
 
 export const getClassMembers = async (req, res) => {
-  const { classId } = req.params;
   const { role } = req.query;
+  const userClass = req.class;
+
+  if (role) {
+    const classMembers = await ClassMember.findAll({
+      classId: userClass.classId,
+      role,
+    });
+
+    return res.json(classMembers);
+  } else {
+    const classMembers = await ClassMember.findAll({
+      classId: userClass.classId,
+    });
+
+    return res.json(classMembers);
+  }
+};
+
+export const saveClass = async (req, res) => {
+  const { classId } = req.params;
 
   const findClass = await Class.findByPk(classId);
   if (!findClass) {
@@ -191,20 +217,25 @@ export const getClassMembers = async (req, res) => {
     throw new Error(ERROR_CLASS_NOT_FOUND);
   }
 
-  if (role) {
-    const classMembers = await ClassMember.findAll({
-      classId,
-      role,
-    });
-
-    return res.json(classMembers);
-  } else {
-    const classMembers = await ClassMember.findAll({
-      classId,
-    });
-
-    return res.json(classMembers);
-  }
+  req.class = findClass;
+  return next();
 };
 
 export const getClassDetails = async (req, res) => {};
+
+export const addAssignment = async (req, res) => {
+  const { assignmentName, assignmentGradeScale } = req.body;
+
+  const createdAssignment = await Assignment.create({
+    classId: req.class.classId,
+    assignmentName,
+    assignmentGradeScale,
+  });
+
+  if (!createdAssignment) {
+    res.status(500);
+    throw new Error(ERROR_CREATE_ASSIGNMENT);
+  }
+
+  return res.json(createdAssignment);
+};

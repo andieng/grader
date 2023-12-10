@@ -147,6 +147,7 @@ export const {
   GradeReview,
   GradeReviewComment,
   Invitation,
+  Assignment,
 } = initModels(sequelize);
 
 export default sequelize;

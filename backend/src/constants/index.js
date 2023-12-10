@@ -4,10 +4,14 @@ export const ERROR_EMAIL_MUST_BE_VERIFIED = "Email must be verified to access";
 export const ERROR_NOT_AUTHENTICATED = "Not authenticated";
 export const ERROR_NOT_AUTHORIZED = "Not authorized to access";
 export const ERROR_USER_NOT_EXIST = "User does not exist";
+export const ERROR_CREATE_ASSIGNMENT =
+  "Something went wrong when creating new assignment";
 export const ERROR_CREATE_CLASS =
   "Something went wrong when creating new class";
 export const ERROR_CREATE_INVITATION =
   "Something went wrong when creating an invitation";
+export const ERROR_CREATE_CLASS_MEMBER =
+  "Something went wrong when creating new class member";
 export const ERROR_INVALID_INVITATION = "Invitation expired or not found";
 export const ERROR_CLASS_NOT_FOUND = "Class not found";
 export const ERROR_SEND_INVITATIONS_FAILED =
