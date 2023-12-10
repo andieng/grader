@@ -15,31 +15,31 @@ const fetcher = async (uri) => {
   return response.json();
 };
 
-const DUMMY_CLASSES = ['ClassA', 'ClassB', 'ClassC', 'ClassD', 'ClassE', 'ClassF', 'ClassG'];
-
 export default withPageAuthRequired(
   function Dashboard({ params: { lang } }) {
     const d = useMemo(() => {
       return getDictionary(lang, 'pages/Dashboard');
     }, [lang]);
 
-    // const { data, isLoading, error } = useSWR('/api/user/profile', fetcher);
     const classes = useSWR('/api/classes', fetcher);
 
     if (d === null || classes.isLoading) return <Spin size="large" />;
     if (classes.error) return <div>{error.message}</div>;
 
+    const allClasses = [...classes.data.teaching, ...classes.data.enrolled];
+    allClasses.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+
     return (
       <div className={cx('wrapper')}>
         <div className={cx('main')}>
-          {DUMMY_CLASSES.map((title, index) => (
+          {allClasses.map((classItem, index) => (
             <Card
               key={index}
               className={cx('card')}
-              title={title}
+              title={classItem.className}
               bodyStyle={{ backgroundColor: 'white', height: '180px' }}
             >
-              {/* Nội dung của card */}
+              {/* Other details you want to display */}
             </Card>
           ))}
         </div>
