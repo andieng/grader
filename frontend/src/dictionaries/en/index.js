@@ -14,7 +14,7 @@ const dictionary = {
   'pages/Home': Home,
   'pages/ClassDetail': ClassDetail,
   'pages/Verify': Verify,
-  'layouts/UserLayout': User,
+  'layouts/User': User,
 };
 
 const mappingDictionaryPath = (path) => {
