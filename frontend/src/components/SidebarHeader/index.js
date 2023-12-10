@@ -32,9 +32,13 @@ const fetcher = async (uri) => {
 function transformData(data) {
   let keyCounter = 1;
   let transformedData = {};
-  Object.keys(data).forEach((key) => {
-    transformedData[key] = data[key].map((item) => getItem(item, (keyCounter++).toString()));
-  });
+  if (data)
+    Object.keys(data).forEach((key) => {
+      transformedData[key] = data[key].map((item) => ({
+        label: item.className,
+        key: item.classId,
+      }));
+    });
   return transformedData;
 }
 
@@ -42,8 +46,6 @@ const dummyDataFromServer = {
   teaching: ['classA', 'classB'],
   enrolled: ['classC', 'classD', 'classE', 'classC', 'classD', 'classE', 'classC', 'classD', 'classE'],
 };
-
-const afterTransforming = transformData(dummyDataFromServer);
 
 const SidebarHeader = ({ children, lang, isInDashboard }) => {
   const pathname = usePathname();
@@ -63,6 +65,10 @@ const SidebarHeader = ({ children, lang, isInDashboard }) => {
     return getDictionary(lang, 'components/SideBar');
   }, [lang]);
 
+  const { data, isLoading, error } = useSWR('/api/user/profile', fetcher);
+  const classes = useSWR('/api/classes', fetcher);
+
+  const afterTransforming = transformData(classes.data);
   const items = [
     {
       label: (
@@ -83,10 +89,8 @@ const SidebarHeader = ({ children, lang, isInDashboard }) => {
     getItem(`${d.enrolled}`, 'sub2', <ContactsOutlined />, afterTransforming.enrolled),
   ];
 
-  const { data, isLoading, error } = useSWR('/api/user/profile', fetcher);
-
-  if (isLoading || d === null) return <Spin size="large" />;
-  if (error) return <div>{error.message}</div>;
+  if (isLoading || d === null || classes.isLoading) return <Spin size="large" />;
+  if (error || classes.error) return <div>{error.message}</div>;
 
   return (
     <>

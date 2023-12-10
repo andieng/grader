@@ -1,4 +1,5 @@
 import { Button, Dropdown, Space, Modal, Input, Form } from 'antd';
+import { mutate } from 'swr';
 import { useMemo, useCallback, useState } from 'react';
 import { LogoutOutlined, DownOutlined, GlobalOutlined, BellOutlined, TeamOutlined } from '@ant-design/icons';
 import classnames from 'classnames/bind';
@@ -52,6 +53,7 @@ export default function Header({ user, lang, isInDashboard }) {
     console.log(data);
     setLoading(false);
     setOpen(false);
+    mutate('/api/classes');
   };
 
   const onFinishFailed = (errorInfo) => {
