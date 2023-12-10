@@ -10,7 +10,7 @@ import styles from '@/styles/layouts/UserLayout.module.scss';
 
 const cx = classnames.bind(styles);
 
-export default function UserLayout({ children }) {
+export default function UserLayout({ children, lang }) {
   const { user } = useUser();
   const d = useMemo(() => {
     return getDictionary(lang, 'layouts/User');

@@ -1,16 +1,18 @@
-import SidebarHeader from '@/components/SidebarHeader';
+import ClassMenu from '@/components/ClassMenu';
 
-export default function DashboardLayout({ children, params: { lang } }) {
+const ClassDetailLayout = ({ children, params: { lang } }) => {
   return (
-    <SidebarHeader
+    <ClassMenu
       lang={lang}
       children={children}
     />
   );
-}
+};
+
+export default ClassDetailLayout;
 
 export const metadata = {
-  title: 'Dashboard',
+  title: 'Classes',
   description: 'Grader - Grade Management App',
   icons: {
     icon: '/icon-64x64.png',

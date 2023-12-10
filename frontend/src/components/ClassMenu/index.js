@@ -6,11 +6,11 @@ import Link from 'next/link';
 import { Menu } from 'antd';
 import classnames from 'classnames/bind';
 import getDictionary from '@/utils/language';
-import styles from '@/styles/layouts/ClassDetail.module.scss';
+import styles from '@/styles/components/ClassMenu.module.scss';
 
 const cx = classnames.bind(styles);
 
-const ClassDetailLayout = ({ children, params: { lang } }) => {
+const ClassMenu = ({ children, lang }) => {
   const [current, setCurrent] = useState('detail');
 
   const d = useMemo(() => {
@@ -21,8 +21,8 @@ const ClassDetailLayout = ({ children, params: { lang } }) => {
 
   let redirectLocale = '';
 
-  if (pathname.includes('/en')) redirectLocale = '/en/dashboard';
-  else redirectLocale = '/vi/dashboard';
+  if (pathname.includes('/en')) redirectLocale = '/en/classes';
+  else redirectLocale = '/vi/classes';
 
   const topBarClickHandler = (e) => {
     console.log('click ', e);
@@ -62,4 +62,4 @@ const ClassDetailLayout = ({ children, params: { lang } }) => {
   );
 };
 
-export default ClassDetailLayout;
+export default ClassMenu;
