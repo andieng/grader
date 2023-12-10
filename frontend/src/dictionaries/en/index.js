@@ -4,6 +4,8 @@ import Dashboard from './pages/Dashboard.lang.json';
 import Home from './pages/Home.lang.json';
 import SideBar from './components/SideBar.lang.json';
 import ClassDetail from './pages/ClassDetail.lang.json';
+import Verify from './pages/Verify.lang.json';
+import User from './layouts/User.lang.json';
 
 const dictionary = {
   'components/Header': Header,
@@ -11,6 +13,8 @@ const dictionary = {
   'pages/Dashboard': Dashboard,
   'pages/Home': Home,
   'pages/ClassDetail': ClassDetail,
+  'pages/Verify': Verify,
+  'layouts/UserLayout': User,
 };
 
 const mappingDictionaryPath = (path) => {

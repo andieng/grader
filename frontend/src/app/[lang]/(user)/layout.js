@@ -2,15 +2,19 @@
 
 import { useUser } from '@auth0/nextjs-auth0/client';
 import Link from 'next/link';
+import { useMemo } from 'react';
 import { Result, Button } from 'antd';
 import classnames from 'classnames/bind';
-import { ERROR_NOT_VERIFIED } from '@/constants/messages';
+import getDictionary from '@/utils/language';
 import styles from '@/styles/layouts/UserLayout.module.scss';
 
 const cx = classnames.bind(styles);
 
 export default function UserLayout({ children }) {
   const { user } = useUser();
+  const d = useMemo(() => {
+    return getDictionary(lang, 'layouts/User');
+  }, [lang]);
 
   if (user && !user?.email_verified) {
     return (
@@ -18,10 +22,10 @@ export default function UserLayout({ children }) {
         status="403"
         title="403"
         className={cx('error-result')}
-        subTitle={ERROR_NOT_VERIFIED}
+        subTitle={d.error_not_verified}
         extra={
           <Link href="/">
-            <Button type="primary">Back Home</Button>
+            <Button type="primary">{d.back_home}</Button>
           </Link>
         }
       />

@@ -28,7 +28,7 @@ const signup = async (req, res) => {
       screen_hint: 'signup',
       ui_locales: locale,
     },
-    returnTo: `/${locale}`,
+    returnTo: `/${locale}/verify`,
   });
 };
 
