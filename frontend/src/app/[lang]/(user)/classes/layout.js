@@ -10,7 +10,7 @@ export default function DashboardLayout({ children, params: { lang } }) {
 }
 
 export const metadata = {
-  title: 'Dashboard',
+  title: 'Classes',
   description: 'Grader - Grade Management App',
   icons: {
     icon: '/icon-64x64.png',
