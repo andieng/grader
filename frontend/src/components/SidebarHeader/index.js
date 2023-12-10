@@ -10,6 +10,7 @@ import getDictionary from '@/utils/language';
 import classnames from 'classnames/bind';
 import styles from '@/styles/components/SideMenu.module.scss';
 import Link from 'next/link';
+import chalk from 'chalk';
 
 const cx = classnames.bind(styles);
 
@@ -44,7 +45,7 @@ const dummyDataFromServer = {
 
 const afterTransforming = transformData(dummyDataFromServer);
 
-const SidebarHeader = ({ children, lang }) => {
+const SidebarHeader = ({ children, lang, isInDashboard }) => {
   const pathname = usePathname();
   const router = useRouter();
 
@@ -55,7 +56,7 @@ const SidebarHeader = ({ children, lang }) => {
 
   const sidebarClickHandler = (event) => {
     console.log('click ', event);
-    if (event.key != 0) router.push(`${redirectLocale}/classes/d/aDummyClassId`);
+    if (event.key != 0) router.push(`${redirectLocale}/d/aDummyClassId`);
   };
 
   const d = useMemo(() => {
@@ -92,6 +93,7 @@ const SidebarHeader = ({ children, lang }) => {
       <Header
         user={data.user}
         lang={lang}
+        isInDashboard={isInDashboard}
       />
       <div className={cx('container')}>
         <div>
