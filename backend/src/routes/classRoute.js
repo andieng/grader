@@ -5,6 +5,7 @@ import {
   getClassDetails,
   addMemberToClass,
   inviteMember,
+  getClassMembers,
 } from "../controllers/classController";
 import { isVerified, saveUserInfo } from "../middlewares/checkAuth";
 
@@ -15,6 +16,7 @@ classRouter.get("/", getClasses);
 classRouter.post("/create", createClass);
 
 classRouter.get("/:classId", getClassDetails);
+classRouter.get("/:classId/members", getClassMembers);
 classRouter.post("/:classId/members", addMemberToClass);
 classRouter.post("/:classId/invitations", inviteMember);
 

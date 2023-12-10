@@ -152,9 +152,6 @@ export const getClasses = async (req, res) => {
         enrolled: [],
       });
     }
-    // const classInfo = classMemberInfo.map(async (item) => {
-    //     return await Class.findByPk(item.classId)
-    // })
     const classMemberInfoSplit = groupBy(classMemberInfo, "role");
 
     const teachingClassMemberInfo = classMemberInfoSplit.teacher;
@@ -181,6 +178,32 @@ export const getClasses = async (req, res) => {
       teaching: teachingClasses,
       enrolled: enrolledClasses,
     });
+  }
+};
+
+export const getClassMembers = async (req, res) => {
+  const { classId } = req.params;
+  const { role } = req.query;
+
+  const findClass = await Class.findByPk(classId);
+  if (!findClass) {
+    res.status(400);
+    throw new Error(ERROR_CLASS_NOT_FOUND);
+  }
+
+  if (role) {
+    const classMembers = await ClassMember.findAll({
+      classId,
+      role,
+    });
+
+    return res.json(classMembers);
+  } else {
+    const classMembers = await ClassMember.findAll({
+      classId,
+    });
+
+    return res.json(classMembers);
   }
 };
 
