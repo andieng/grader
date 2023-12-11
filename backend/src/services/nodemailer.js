@@ -29,21 +29,28 @@ export async function sendMail(mailContent) {
     text: generateInvitationPlainText(mailContent),
     html: generateInvitationHtml(mailContent),
   };
-  return new Promise((resolve, reject) => {
-    transporter
-      .sendMail(mailOptions)
-      .then((info) => {
-        if (info) {
-          console.log("Email sent: ", info.messageId);
-          resolve();
-        } else {
-          resolve(null);
-        }
-      })
-      .catch((err) => {
+  return await new Promise((resolve, reject) => {
+    transporter.sendMail(mailOptions, (err, info) => {
+      if (err) {
         console.error("Email error: ", err);
         reject(err);
-      });
+      } else {
+        console.log("Email sent: ", info.messageId);
+        resolve(info);
+      }
+    });
+    // .then((info) => {
+    //   if (info) {
+    //     console.log("Email sent: ", info.messageId);
+    //     resolve();
+    //   } else {
+    //     resolve(null);
+    //   }
+    // })
+    // .catch((err) => {
+    //   console.error("Email error: ", err);
+    //   reject(err);
+    // });
   });
   // await new Promise((resolve, reject) => {
   //   // send mail
