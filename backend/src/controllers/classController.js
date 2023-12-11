@@ -16,7 +16,7 @@ import {
 } from "../helpers/invitationMailHelper";
 import { groupBy } from "../helpers/objectHelper";
 import { Assignment, Class, ClassMember, Invitation, User } from "../models";
-import { sendMail } from "../services/nodemailer";
+import { sendMail } from "../services/sendGridMail";
 
 export const addMemberToClass = async (req, res) => {
   const { token } = req.body;
@@ -149,7 +149,7 @@ export const inviteMember = async (req, res) => {
       message: generateMessage(lang),
     };
     console.log("Mail content: ", mailContent);
-    console.log("Promise: ", await sendMail(mailContent));
+    console.log("Promise: ", sendMail(mailContent));
   });
 
   // emails.forEach(async (email) => {
