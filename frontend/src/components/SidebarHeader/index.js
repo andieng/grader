@@ -10,7 +10,6 @@ import getDictionary from '@/utils/language';
 import classnames from 'classnames/bind';
 import styles from '@/styles/components/SideMenu.module.scss';
 import Link from 'next/link';
-import chalk from 'chalk';
 
 const cx = classnames.bind(styles);
 
@@ -31,6 +30,7 @@ const fetcher = async (uri) => {
 
 function transformData(data) {
   let transformedData = {};
+  if (data != undefined && data.error) return {};
   if (data)
     Object.keys(data).forEach((key) => {
       transformedData[key] = data[key].map((item) => ({
