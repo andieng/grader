@@ -38,7 +38,6 @@ export const saveClassMember = async (req, res, next) => {
       required: true,
     },
   });
-  console.log(findClassMember);
 
   if (!findClassMember) {
     res.status(400);

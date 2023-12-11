@@ -17,7 +17,7 @@ const config = {
 
 const transporter = nodemailer.createTransport(config);
 
-export function sendMail(mailContent) {
+export async function sendMail(mailContent) {
   const mailOptions = {
     from: '"Grader" <nguyenngocthuy9a1@gmail.com>',
     to: mailContent.recipient,
@@ -26,13 +26,7 @@ export function sendMail(mailContent) {
     html: generateInvitationHtml(mailContent),
   };
 
-  transporter.sendMail(mailOptions, function (error, info) {
-    if (error) {
-      transporter.close();
-      throw error;
-    } else {
-      console.info("Message sent: " + info.messageId);
-      transporter.close();
-    }
-  });
+  const info = await transporter.sendMail(mailOptions);
+  transporter.close();
+  return info;
 }

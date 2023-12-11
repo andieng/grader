@@ -134,7 +134,7 @@ export const inviteMember = async (req, res) => {
       message: generateMessage(lang),
     };
 
-    sendMail(mailContent);
+    await sendMail(mailContent);
   });
 
   res.json({ message: MSG_INVITE_SUCCESSFULLY });
