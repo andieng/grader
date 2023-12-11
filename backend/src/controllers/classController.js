@@ -194,14 +194,18 @@ export const getClassMembers = async (req, res) => {
 
   if (role) {
     const classMembers = await ClassMember.findAll({
-      classId: userClass.classId,
-      role,
+      where: {
+        classId: userClass.classId,
+        role,
+      },
     });
 
     return res.json(classMembers);
   } else {
     const classMembers = await ClassMember.findAll({
-      classId: userClass.classId,
+      where: {
+        classId: userClass.classId,
+      },
     });
 
     return res.json(classMembers);
