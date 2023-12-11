@@ -14,6 +14,7 @@ export const ERROR_CREATE_CLASS_MEMBER =
   "Something went wrong when creating new class member";
 export const ERROR_INVALID_INVITATION = "Invitation expired or not found";
 export const ERROR_CLASS_NOT_FOUND = "Class not found";
+export const ERROR_CLASS_MEMBER_NOT_FOUND = "Class member not found";
 export const ERROR_SEND_INVITATIONS_FAILED =
   "Something went wrong when sending invitations";
 

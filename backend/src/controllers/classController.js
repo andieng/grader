@@ -1,4 +1,5 @@
 import {
+  ERROR_CLASS_MEMBER_NOT_FOUND,
   ERROR_CLASS_NOT_FOUND,
   ERROR_CREATE_ASSIGNMENT,
   ERROR_CREATE_CLASS,
@@ -106,7 +107,22 @@ export const createClass = async (req, res) => {
 
 export const inviteMember = async (req, res) => {
   const { url, emails, role, lang } = req.body;
-  const classMember = req.classMember;
+  const classMember = await ClassMember.findOne({
+    where: {
+      memberId: req.user.id,
+      classId: req.params.classId,
+    },
+    include: {
+      model: Class,
+      as: "class",
+      required: true,
+    },
+  });
+
+  if (!classMember) {
+    res.status(400);
+    throw new Error(ERROR_CLASS_MEMBER_NOT_FOUND);
+  }
 
   emails.forEach(async (email) => {
     const createdInvitation = await Invitation.create({
@@ -225,7 +241,18 @@ export const getClassMembers = async (req, res) => {
   }
 };
 
-export const getClassDetails = async (req, res) => {};
+export const getClassDetails = async (req, res) => {
+  const { classId } = req.params;
+
+  const classDetails = await Class.findByPk(classId);
+
+  if (!classDetails) {
+    res.status(400);
+    throw new Error(ERROR_CLASS_NOT_FOUND);
+  }
+
+  return res.json(classDetails);
+};
 
 export const addAssignment = async (req, res) => {
   const { assignmentName, assignmentGradeScale } = req.body;
