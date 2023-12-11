@@ -35,22 +35,4 @@ const isVerified = async (req, res, next) => {
   return next();
 };
 
-const saveUserInfo = async (req, res, next) => {
-  const user = await User.findOne({
-    where: { email: req.auth.payload[CLAIMS_EMAIL] },
-  });
-  if (!user) {
-    res.status(500);
-    throw new Error(ERROR_USER_NOT_EXIST);
-  }
-  req.user = user;
-  if (req.auth.payload[CLAIMS_ROLES].includes("admin")) {
-    req.user.role = "admin";
-  } else {
-    req.user.role = "user";
-  }
-
-  return next();
-};
-
-export { isAdmin, isUser, isVerified, saveUserInfo };
+export { isAdmin, isUser, isVerified };

@@ -6,9 +6,9 @@ import {
   addMemberToClass,
   inviteMember,
   getClassMembers,
-  saveClass,
 } from "../controllers/classController";
-import { isVerified, saveUserInfo } from "../middlewares/checkAuth";
+import { isVerified } from "../middlewares/checkAuth";
+import { saveUserInfo, saveClass } from "../middlewares/saveData";
 
 const classRouter = express.Router();
 

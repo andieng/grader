@@ -208,19 +208,6 @@ export const getClassMembers = async (req, res) => {
   }
 };
 
-export const saveClass = async (req, res) => {
-  const { classId } = req.params;
-
-  const findClass = await Class.findByPk(classId);
-  if (!findClass) {
-    res.status(400);
-    throw new Error(ERROR_CLASS_NOT_FOUND);
-  }
-
-  req.class = findClass;
-  return next();
-};
-
 export const getClassDetails = async (req, res) => {};
 
 export const addAssignment = async (req, res) => {
