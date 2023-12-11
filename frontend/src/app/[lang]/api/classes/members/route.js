@@ -31,6 +31,8 @@ export const POST = async function addMember(req) {
 
     const reqData = await req.json();
 
+    console.log(reqData);
+
     const response = await fetch(`${process.env.API_BASE_URL}/api/classes/${reqData.classId}/members`, {
       method: 'POST',
       headers: {
@@ -43,6 +45,7 @@ export const POST = async function addMember(req) {
     });
 
     const data = await response.json();
+    console.log(chalk.red('daat'), data);
 
     return NextResponse.json(data);
   } catch (err) {

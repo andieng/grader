@@ -15,7 +15,7 @@ import { withPageAuthRequired } from '@auth0/nextjs-auth0/client';
 const cx = classnames.bind(styles);
 
 export default withPageAuthRequired(
-  function ClassDetail({ params: { lang } }) {
+  function ClassDetail({ params: { lang, token } }) {
     const router = useRouter();
     const pathname = usePathname();
 
