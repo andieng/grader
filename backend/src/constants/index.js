@@ -21,9 +21,9 @@ export const ERROR_SEND_INVITATIONS_FAILED =
 export const MSG_INVITE_SUCCESSFULLY = "Invite members via email successfully";
 
 // Claims
-export const CLAIMS_EMAIL = "https://grader.com/claims/email";
-export const CLAIMS_EMAIL_VERIFIED = "https://grader.com/claims/email_verified";
-export const CLAIMS_ROLES = "https://grader.com/claims/roles";
+export const CLAIM_EMAIL = "https://grader.com/claims/email";
+export const CLAIM_EMAIL_VERIFIED = "https://grader.com/claims/email_verified";
+export const CLAIM_ROLES = "https://grader.com/claims/roles";
 
 // English mail content
 export const EN_DESCRIPTION_STUDENT_PREFIX = "Invited you to enroll";
