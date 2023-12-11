@@ -8,7 +8,11 @@ import {
 const config = {
   host: process.env.MAIL_SERVER,
   port: process.env.MAIL_PORT,
-  secure: true,
+  port: 587,
+  secure: false,
+  requireTLS: true,
+  logger: true,
+  debug: true,
   auth: {
     user: process.env.MAIL_USERNAME,
     pass: process.env.MAIL_PASSWORD,
@@ -37,7 +41,7 @@ export async function sendMail(mailContent) {
         }
       })
       .catch((err) => {
-        console.error("Email error:::", err);
+        console.error("Email error: ", err);
         reject(err);
       });
   });
