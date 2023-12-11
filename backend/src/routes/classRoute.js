@@ -8,18 +8,22 @@ import {
   getClassMembers,
 } from "../controllers/classController";
 import { isVerified } from "../middlewares/checkAuth";
-import { saveUserInfo, saveClass } from "../middlewares/saveData";
+import { saveUserInfo, saveClassMember } from "../middlewares/saveData";
 
 const classRouter = express.Router();
 
-classRouter.use(isVerified, saveUserInfo);
-classRouter.get("/", getClasses);
-classRouter.post("/create", createClass);
+classRouter.use(isVerified);
+classRouter.get("/", saveUserInfo, getClasses);
+classRouter.post("/create", saveUserInfo, createClass);
 
-classRouter.use("/:classId", saveClass);
-classRouter.get("/:classId", getClassDetails);
-classRouter.get("/:classId/members", getClassMembers);
-classRouter.post("/:classId/members", addMemberToClass);
-classRouter.post("/:classId/invitations", inviteMember);
+classRouter.get("/:classId", saveUserInfo, saveClassMember, getClassDetails);
+classRouter.get("/:classId/members", saveUserInfo, getClassMembers);
+classRouter.post("/:classId/members", saveUserInfo, addMemberToClass);
+classRouter.post(
+  "/:classId/invitations",
+  saveUserInfo,
+  saveClassMember,
+  inviteMember
+);
 
 export default classRouter;

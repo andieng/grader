@@ -1,5 +1,10 @@
-import { User, Class } from "../models";
-import { CLAIM_EMAIL, CLAIM_ROLES } from "../constants";
+import { User, Class, ClassMember } from "../models";
+import {
+  CLAIM_EMAIL,
+  CLAIM_ROLES,
+  ERROR_CLASS_NOT_FOUND,
+  ERROR_USER_NOT_EXIST,
+} from "../constants";
 
 export const saveUserInfo = async (req, res, next) => {
   const user = await User.findOne({
@@ -19,15 +24,27 @@ export const saveUserInfo = async (req, res, next) => {
   return next();
 };
 
-export const saveClass = async (req, res, next) => {
+export const saveClassMember = async (req, res, next) => {
   const { classId } = req.params;
 
-  const findClass = await Class.findByPk(classId);
-  if (!findClass) {
+  const findClassMember = await ClassMember.findOne({
+    where: {
+      memberId: req.user.id,
+      classId,
+    },
+    include: {
+      model: Class,
+      as: "class",
+      required: true,
+    },
+  });
+  console.log(findClassMember);
+
+  if (!findClassMember) {
     res.status(400);
     throw new Error(ERROR_CLASS_NOT_FOUND);
   }
 
-  req.class = findClass;
+  req.classMember = findClassMember;
   return next();
 };

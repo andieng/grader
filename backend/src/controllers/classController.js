@@ -14,16 +14,16 @@ import {
   generateMessage,
 } from "../helpers/invitationMailHelper";
 import { groupBy } from "../helpers/objectHelper";
-import { Assignment, Class, ClassMember, Invitation } from "../models";
+import { Assignment, Class, ClassMember, Invitation, User } from "../models";
 import { sendMail } from "../services/nodemailer";
 
 export const addMemberToClass = async (req, res) => {
   const { token } = req.body;
-  const userClass = req.class;
+  const { classId } = req.params;
 
   const findMember = await ClassMember.findOne({
     where: {
-      classId: userClass.classId,
+      classId,
       memberId: req.user.id,
     },
   });
@@ -36,19 +36,20 @@ export const addMemberToClass = async (req, res) => {
     res.status(400);
     throw new Error(ERROR_INVALID_INVITATION);
   }
+
   if (invitation.email !== null && invitation.email !== req.user.email) {
     res.status(400);
     throw new Error(ERROR_CLASS_NOT_FOUND);
   }
 
   const member = await ClassMember.create({
-    classId: userClass.classId,
+    classId,
     memberId: req.user.id,
     role: invitation.role,
   });
   await Invitation.destroy({
     where: {
-      classId: userClass.classId,
+      classId,
       email: req.user.email,
     },
   });
@@ -105,11 +106,11 @@ export const createClass = async (req, res) => {
 
 export const inviteMember = async (req, res) => {
   const { url, emails, role, lang } = req.body;
-  const userClass = req.class;
+  const classMember = req.classMember;
 
   emails.forEach(async (email) => {
     const createdInvitation = await Invitation.create({
-      classId: userClass.classId,
+      classId: classMember.classId,
       email,
       role,
     });
@@ -121,11 +122,11 @@ export const inviteMember = async (req, res) => {
     const inviteLink = `${url}/invitations?token=${token}`;
 
     const mailContent = {
-      subject: generateSubject(userClass.className, role, lang),
-      className: userClass.className,
+      subject: generateSubject(classMember.class.className, role, lang),
+      className: classMember.class.className,
       name: req.user.name,
       avatar: req.user.avatar,
-      description: generateDescription(userClass.className, role, lang),
+      description: generateDescription(classMember.class.className, role, lang),
       buttonContent: generateButtonContent(lang),
       inviteLink,
       recipient: email,
@@ -190,13 +191,19 @@ export const getClasses = async (req, res) => {
 
 export const getClassMembers = async (req, res) => {
   const { role } = req.query;
-  const userClass = req.class;
+  const { classId } = req.params;
 
   if (role) {
     const classMembers = await ClassMember.findAll({
       where: {
-        classId: userClass.classId,
+        classId,
         role,
+        memberId: req.user.id,
+      },
+      include: {
+        model: User,
+        as: "member",
+        required: true,
       },
     });
 
@@ -204,7 +211,13 @@ export const getClassMembers = async (req, res) => {
   } else {
     const classMembers = await ClassMember.findAll({
       where: {
-        classId: userClass.classId,
+        classId,
+        memberId: req.user.id,
+      },
+      include: {
+        model: User,
+        as: "member",
+        required: true,
       },
     });
 
