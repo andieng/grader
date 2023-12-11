@@ -27,7 +27,7 @@ export const POST = async function inviteMember(req) {
 
     return NextResponse.json(data);
   } catch (err) {
-    console.log(err);
+    console.log(chalk.bgRed('err'), err);
     return NextResponse.json({ error: err }, { status: 200 });
   }
 };

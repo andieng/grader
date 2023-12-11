@@ -1,70 +1,41 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
-import Link from 'next/link';
-import { MoreOutlined, QuestionOutlined, PlusOutlined } from '@ant-design/icons';
-import { Menu, Card, Button, Row, Col, Result } from 'antd';
-import getDictionary from '@/utils/language';
-import classnames from 'classnames/bind';
-import styles from '@/styles/pages/ClassDetail.module.scss';
-import DetailTab from '@/components/DetailTab';
-import PeopleTab from '@/components/PeopleTab';
-import { withPageAuthRequired } from '@auth0/nextjs-auth0/client';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { Spin } from 'antd';
+import { useUser } from '@auth0/nextjs-auth0/client';
+import { useSearchParams } from 'next/navigation';
 
-const cx = classnames.bind(styles);
+// http://localhost:3000/en/d/9f1a2304-b8b9-4a12-aabf-fb19fb50e943/invitations?token=5f82e753-1005-4d72-a309-ec94939c0967
 
-// http://localhost:3000/en/d/8b42872f-feef-4015-8c54-a35f5faf271a/invitations?token=da1222c3-e8f4-4565-953e-fb09a1b7ad10
+export default function InvitationPage({ params: { lang, classId } }) {
+  const router = useRouter();
 
-export default withPageAuthRequired(
-  function InvitationPage({ params: { lang } }) {
-    const router = useRouter();
-    const invitationUrl = window.location.href;
-    // const pathname = usePathname();
+  const { user } = useUser();
 
-    // const [token, setToken] = useState('');
-    // useEffect(() => {
+  const searchParams = useSearchParams();
+  const token = searchParams.get('token');
 
-    //   if (tokenFromUrl) {
-    //     setToken(tokenFromUrl);
-    //   }
-    // }, []);
+  const redirectUrl = `d/${classId}/invitations?token=${token}`;
 
-    const url = new URL(invitationUrl);
-    const searchParams = new URLSearchParams(url.search);
-    const token = searchParams.get('token');
-    const pathname = url.pathname;
-    const parts = pathname.split('/');
-    const classId = parts[3];
+  const addMember = async () => {
+    console.log('inside ');
+    const response = await fetch('/api/classes/members', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ classId, token }),
+    });
+  };
 
-    console.log(classId);
-    console.log(token);
+  useEffect(() => {
+    if (!user) {
+      router.replace(`${process.env.NEXT_PUBLIC_BASE_URL}/${lang}/api/auth/login?returnTo=/${redirectUrl}`);
+      // sau khi login thì add member
+    }
+    if (user) addMember();
+  }, [user]);
 
-    const addMember = async () => {
-      const response = await fetch('/api/classes/members', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ classId, token }),
-      });
-    };
-
-    addMember();
-
-    let redirectLocale = '';
-
-    if (pathname.includes('/en')) redirectLocale = '/en/dashboard';
-    else redirectLocale = '/vi/dashboard';
-
-    const d = useMemo(() => {
-      return getDictionary(lang, 'pages/ClassDetail');
-    }, [lang]);
-
-    return <div>invite</div>;
-  },
-  {
-    // doesn't work
-    returnTo: '/something',
-  },
-);
+  return <Spin size="large" />;
+}
