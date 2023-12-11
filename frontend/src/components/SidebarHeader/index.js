@@ -84,7 +84,13 @@ const SidebarHeader = ({ children, lang, isInDashboard }) => {
   ];
 
   if (isLoading || d === null || classes.isLoading) return <Spin size="large" />;
-  if (error || classes.error) return <div>{error.message}</div>;
+  if (error || classes.error)
+    return (
+      <div>
+        {error?.message}
+        {classes?.error.message}
+      </div>
+    );
 
   return (
     <>

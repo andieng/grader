@@ -57,6 +57,7 @@
 .user-avatar {
   width: 40px;
   height: 40px;
+  border-radius: 50%;
 }
 
 .invitation-modal {
@@ -71,6 +72,18 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    margin-right: 10px;
+  }
+  & button {
+    width: 70px !important;
   }
   margin-bottom: 15px;
+}
+
+.invite-btn {
+  display: flex;
+  justify-content: flex-end;
+  & button {
+    margin-left: 20px;
+  }
 }

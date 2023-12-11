@@ -16,5 +16,6 @@
   "inviteStudents": "Invite Students",
   "inviteUrl": "Invitation Link",
   "inviteInput": "Enter name or email",
-  "copied": "Link copied"
+  "copied": "Link copied",
+  "requiredMail": "Please input email!"
 }

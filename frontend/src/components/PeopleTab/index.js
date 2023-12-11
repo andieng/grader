@@ -1,11 +1,13 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { Input, Card, Button, Row, Modal, message } from 'antd';
+import useSWR from 'swr';
+import { Input, Card, Button, Row, Modal, message, Spin, Form } from 'antd';
 import { MoreOutlined, CopyOutlined, UserAddOutlined } from '@ant-design/icons';
 import getDictionary from '@/utils/language';
 import classnames from 'classnames/bind';
 import styles from '@/styles/components/PeopleTab.module.scss';
+import { usePathname } from 'next/navigation';
 
 const cx = classnames.bind(styles);
 
@@ -13,48 +15,92 @@ const DUMMY_STUDENTS = [
   {
     name: 'Hạnh Thư Nguyễn',
     avatar: '10:29',
+    role: 'teacher',
   },
   {
     name: 'Hạnh Thư Nguyễn',
     avatar: '10:29',
+    role: 'teacher',
   },
   {
     name: 'Hạnh Thư Nguyễn',
     avatar: '10:29',
+    role: 'student',
   },
   {
     name: 'Hạnh Thư Nguyễn',
     avatar: '10:29',
+    role: 'student',
   },
   {
     name: 'Hạnh Thư Nguyễn',
     avatar: '10:29',
+    role: 'student',
   },
   {
     name: 'Hạnh Thư Nguyễn',
     avatar: '10:29',
+    role: 'teacher',
   },
   {
     name: 'Hạnh Thư Nguyễn',
     avatar: '10:29',
+    role: 'student',
   },
   {
     name: 'Hạnh Thư Nguyễn',
     avatar: '10:29',
+    role: 'teacher',
   },
 ];
 
+// const fetcher = async ({ url, args }) => {
+//   // const response = await fetch(`${url}?role=${args}`);
+//   const response = await fetch(`${url}?role=students`);
+//   return response.json();
+// };
+const fetcher = async (url) => {
+  const response = await fetch(url);
+  return response.json();
+};
+
 const PeopleTab = ({ lang }) => {
   const [targetInvitation, setTargetInvitation] = useState('Teachers');
+  const [showInvitationLink, setShowInvitationLink] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [messageApi, contextHolder] = message.useMessage();
+  const [form] = Form.useForm();
+
+  const onFinish = async (values) => {
+    form.resetFields();
+    setLoading(true);
+    setLoading(false);
+    setOpen(false);
+    // mutate('/api/classes');
+  };
+
+  const onFinishFailed = (errorInfo) => {
+    console.log('Failed:', errorInfo);
+  };
 
   const d = useMemo(() => {
     return getDictionary(lang, 'pages/ClassDetail');
   }, [lang]);
 
-  const [loading, setLoading] = useState(false);
-  const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+  let parts = pathname.split('/');
+  let classId = parts[parts.length - 1];
 
-  const [messageApi, contextHolder] = message.useMessage();
+  const params = {
+    classId,
+  };
+  const apiUrl = `/en/api/classes/members?${new URLSearchParams(params)}`;
+
+  const classes = useSWR('/api/classes', fetcher);
+  const members = useSWR(apiUrl, fetcher);
+  const curClass = classes.data.teaching.filter((teaching) => teaching.classId === classId)[0];
+
   const copyHandler = (link) => {
     navigator.clipboard.writeText(link);
     messageApi.open({
@@ -64,6 +110,8 @@ const PeopleTab = ({ lang }) => {
   };
 
   const showModal = (title) => {
+    if (title === d.inviteTeachers) setShowInvitationLink(false);
+    else if (title === d.inviteStudents) setShowInvitationLink(true);
     setOpen(true);
     setTargetInvitation(title);
   };
@@ -77,8 +125,21 @@ const PeopleTab = ({ lang }) => {
   };
 
   const handleCancel = () => {
+    form.resetFields();
     setOpen(false);
   };
+
+  if (members.isLoading || classes.isLoading || d === null) return <Spin size="large" />;
+  if (classes.error || members.error)
+    return (
+      <div>
+        {classes.error?.message}
+        {members.error?.message}
+      </div>
+    );
+
+  const students = members.data.filter((student) => student.role === 'student');
+  const teachers = members.data.filter((student) => student.role === 'teacher');
 
   return (
     <div className={cx('container')}>
@@ -97,16 +158,16 @@ const PeopleTab = ({ lang }) => {
           </div>
         }
       >
-        {DUMMY_STUDENTS.map((item, index) => (
+        {teachers.map((item, index) => (
           <div key={index}>
             <Row>
               <div className={cx('card-post-info')}>
                 <img
                   className={cx('user-avatar')}
-                  src={'/user.png'}
+                  src={item.member.avatar}
                   alt="User"
                 />
-                <p>{item.name}</p>
+                <p>{item.member.name}</p>
                 <Button
                   type="text"
                   shape="circle"
@@ -115,7 +176,7 @@ const PeopleTab = ({ lang }) => {
                 />
               </div>
             </Row>
-            {index !== DUMMY_STUDENTS.length - 1 && <hr className={cx('horizontal-line')} />}{' '}
+            {index !== teachers.length - 1 && <hr className={cx('horizontal-line')} />}{' '}
           </div>
         ))}
       </Card>
@@ -133,7 +194,7 @@ const PeopleTab = ({ lang }) => {
           </div>
         }
       >
-        {DUMMY_STUDENTS.map((item, index) => (
+        {students.map((item, index) => (
           <div key={index}>
             <Row>
               <div className={cx('card-post-info')}>
@@ -151,7 +212,7 @@ const PeopleTab = ({ lang }) => {
                 />
               </div>
             </Row>
-            {index !== DUMMY_STUDENTS.length - 1 && <hr className={cx('horizontal-line')} />}{' '}
+            {index !== students.length - 1 && <hr className={cx('horizontal-line')} />}{' '}
           </div>
         ))}
       </Card>
@@ -161,33 +222,56 @@ const PeopleTab = ({ lang }) => {
         title={<h2>{targetInvitation}</h2>}
         onOk={handleOk}
         onCancel={handleCancel}
-        footer={[
-          <Button
-            key="back"
-            onClick={handleCancel}
-          >
-            {d.cancel}
-          </Button>,
-          <Button
-            key="submit"
-            type="primary"
-            loading={loading}
-            onClick={handleOk}
-          >
-            {d.invite}
-          </Button>,
-        ]}
+        footer={[]}
       >
-        <h4>{d.inviteUrl}</h4>
-        <div className={cx('invitation-link')}>
-          <p>https://classroom.google.com/c/NjQ1MTM5MTE3NjQ1?cjc=ck5vu6z</p>
-          <Button
-            type="text"
-            icon={<CopyOutlined />}
-            onClick={() => copyHandler('https://classroom.google.com/c/NjQ1MTM5MTE3NjQ1?cjc=ck5vu6z')}
-          ></Button>
-        </div>
-        <Input placeholder={d.inviteInput} />
+        {showInvitationLink && (
+          <>
+            <h4>{d.inviteUrl}</h4>
+            <div className={cx('invitation-link')}>
+              <p>{curClass.classInviteStudentLink}</p>
+              <Button
+                type="text"
+                icon={<CopyOutlined />}
+                onClick={() => copyHandler(curClass.classInviteStudentLink)}
+              ></Button>
+            </div>
+          </>
+        )}
+        <Form
+          name="form"
+          form={form}
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+          autoComplete="off"
+        >
+          <Form.Item
+            name="className"
+            rules={[
+              {
+                required: true,
+                message: d.requiredMail,
+              },
+            ]}
+          >
+            <Input placeholder={d.inviteInput} />
+          </Form.Item>
+          <Form.Item className={cx('invite-btn')}>
+            <Button
+              key="back"
+              onClick={handleCancel}
+            >
+              {d.cancel}
+            </Button>
+            <Button
+              key="submit"
+              htmlType="submit"
+              type="primary"
+              loading={loading}
+            >
+              {d.invite}
+            </Button>
+          </Form.Item>
+        </Form>
       </Modal>
     </div>
   );

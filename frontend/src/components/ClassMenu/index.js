@@ -20,6 +20,8 @@ const ClassMenu = ({ children, lang }) => {
   const pathname = usePathname();
 
   let redirectLocale = '';
+  let parts = pathname.split('/');
+  let classId = parts[parts.length - 1];
 
   if (pathname.includes('/en')) redirectLocale = '/en';
   else redirectLocale = '/vi';
@@ -31,15 +33,15 @@ const ClassMenu = ({ children, lang }) => {
 
   const items = [
     {
-      label: <Link href={`${redirectLocale}/d/aDummyClassId`}>{d.detail}</Link>,
+      label: <Link href={`${redirectLocale}/d/${classId}`}>{d.detail}</Link>,
       key: 'detail',
     },
     {
-      label: <Link href={`${redirectLocale}/p/aDummyClassId`}>{d.people}</Link>,
+      label: <Link href={`${redirectLocale}/p/${classId}`}>{d.people}</Link>,
       key: 'people',
     },
     {
-      label: <Link href={`${redirectLocale}/g/aDummyClassId`}>{d.grades}</Link>,
+      label: <Link href={`${redirectLocale}/g/${classId}`}>{d.grades}</Link>,
       key: 'grades',
     },
   ];
