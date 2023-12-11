@@ -72,11 +72,29 @@ const PeopleTab = ({ lang }) => {
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
 
+  const pathname = usePathname();
+  let parts = pathname.split('/');
+  let classId = parts[parts.length - 1];
+
   const onFinish = async (values) => {
-    form.resetFields();
     setLoading(true);
+
+    let role = 'teacher';
+    const email = values.email;
+
+    if (showInvitationLink) role = 'student';
+
+    const response = await fetch('/api/classes/invitations', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ classId, role, email }),
+    });
+
     setLoading(false);
     setOpen(false);
+    form.resetFields();
     // mutate('/api/classes');
   };
 
@@ -88,10 +106,6 @@ const PeopleTab = ({ lang }) => {
     return getDictionary(lang, 'pages/ClassDetail');
   }, [lang]);
 
-  const pathname = usePathname();
-  let parts = pathname.split('/');
-  let classId = parts[parts.length - 1];
-
   const params = {
     classId,
   };
@@ -100,6 +114,8 @@ const PeopleTab = ({ lang }) => {
   const classes = useSWR('/api/classes', fetcher);
   const members = useSWR(apiUrl, fetcher);
   const curClass = classes.data.teaching.filter((teaching) => teaching.classId === classId)[0];
+
+  console.log(classes.data);
 
   const copyHandler = (link) => {
     navigator.clipboard.writeText(link);
@@ -137,6 +153,8 @@ const PeopleTab = ({ lang }) => {
         {members.error?.message}
       </div>
     );
+
+  console.log(members.data);
 
   const students = members.data.filter((student) => student.role === 'student');
   const teachers = members.data.filter((student) => student.role === 'teacher');
@@ -228,11 +246,11 @@ const PeopleTab = ({ lang }) => {
           <>
             <h4>{d.inviteUrl}</h4>
             <div className={cx('invitation-link')}>
-              <p>{curClass.classInviteStudentLink}</p>
+              <p>{curClass?.classInviteStudentLink}</p>
               <Button
                 type="text"
                 icon={<CopyOutlined />}
-                onClick={() => copyHandler(curClass.classInviteStudentLink)}
+                onClick={() => copyHandler(curClass?.classInviteStudentLink)}
               ></Button>
             </div>
           </>
@@ -245,7 +263,7 @@ const PeopleTab = ({ lang }) => {
           autoComplete="off"
         >
           <Form.Item
-            name="className"
+            name="email"
             rules={[
               {
                 required: true,

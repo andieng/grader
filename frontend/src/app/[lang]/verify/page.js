@@ -2,9 +2,9 @@
 
 import { useUser } from '@auth0/nextjs-auth0/client';
 import Link from 'next/link';
-import { useMemo } from 'react';
+import { useMemo, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { Result, Button } from 'antd';
+import { Result, Button, Spin } from 'antd';
 import classnames from 'classnames/bind';
 import getDictionary from '@/utils/language';
 import styles from '@/styles/pages/Verify.module.scss';
@@ -19,6 +19,10 @@ export default function Verify({ params: { lang } }) {
 
   const pathname = usePathname();
   const router = useRouter();
+
+  useEffect(() => {
+    router.push('/dashboard');
+  }, []);
 
   let redirectLocale = '';
 
