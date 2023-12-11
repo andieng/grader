@@ -124,17 +124,16 @@ export const inviteMember = async (req, res) => {
     throw new Error(ERROR_CLASS_MEMBER_NOT_FOUND);
   }
 
-  emails.forEach(async (email) => {
-    const createdInvitation = await Invitation.create({
+  const createdInvitations = await Invitation.bulkCreate(
+    emails.map((email) => ({
       classId: classMember.classId,
       email,
       role,
-    });
-    if (!createdInvitation) {
-      res.status(500);
-      throw new Error(ERROR_CREATE_INVITATION);
-    }
-    const token = createdInvitation.token;
+    }))
+  );
+
+  createdInvitations.forEach(async (item) => {
+    const token = item.token;
     const inviteLink = `${url}/invitations?token=${token}`;
 
     const mailContent = {
@@ -145,13 +144,42 @@ export const inviteMember = async (req, res) => {
       description: generateDescription(classMember.class.className, role, lang),
       buttonContent: generateButtonContent(lang),
       inviteLink,
-      recipient: email,
+      recipient: item.email,
       sender: req.user.email,
       message: generateMessage(lang),
     };
-    console.log(mailContent);
-    console.log(await sendMail(mailContent));
+    console.log("Mail content: ", mailContent);
+    console.log("Promise: ", await sendMail(mailContent));
   });
+
+  // emails.forEach(async (email) => {
+  //   const createdInvitation = await Invitation.create({
+  //     classId: classMember.classId,
+  //     email,
+  //     role,
+  //   });
+  //   if (!createdInvitation) {
+  //     res.status(500);
+  //     throw new Error(ERROR_CREATE_INVITATION);
+  //   }
+  //   const token = createdInvitation.token;
+  //   const inviteLink = `${url}/invitations?token=${token}`;
+
+  //   const mailContent = {
+  //     subject: generateSubject(classMember.class.className, role, lang),
+  //     className: classMember.class.className,
+  //     name: req.user.name,
+  //     avatar: req.user.avatar,
+  //     description: generateDescription(classMember.class.className, role, lang),
+  //     buttonContent: generateButtonContent(lang),
+  //     inviteLink,
+  //     recipient: email,
+  //     sender: req.user.email,
+  //     message: generateMessage(lang),
+  //   };
+  //   console.log(mailContent);
+  //   console.log(await sendMail(mailContent));
+  // });
 
   res.json({ message: MSG_INVITE_SUCCESSFULLY });
 };
