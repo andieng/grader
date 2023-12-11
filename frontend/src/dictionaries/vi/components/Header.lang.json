@@ -8,5 +8,5 @@
   "className": "Tên lớp học",
   "create": "Tạo",
   "cancel": "Hủy",
-  "classNameRequired": "Please input your class name!"
+  "classNameRequired": "Tên lớp không được bỏ trống"
 }

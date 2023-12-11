@@ -1,5 +1,4 @@
 import { getAccessToken } from '@auth0/nextjs-auth0';
-import chalk from 'chalk';
 import { NextResponse } from 'next/server';
 
 export const POST = async function createClass(req) {
@@ -7,7 +6,6 @@ export const POST = async function createClass(req) {
     const { accessToken } = await getAccessToken();
 
     const { className } = await req.json();
-    console.log(chalk.cyan('name'), className.className);
 
     const response = await fetch(`${process.env.API_BASE_URL}/api/classes/create`, {
       method: 'POST',
@@ -24,9 +22,7 @@ export const POST = async function createClass(req) {
     if (!response.ok) {
     }
 
-    // console.log(chalk.bgRed('response'), response);
     const data = await response.json();
-    console.log(chalk.bgCyan('data'), data);
 
     return NextResponse.json(data);
   } catch (err) {

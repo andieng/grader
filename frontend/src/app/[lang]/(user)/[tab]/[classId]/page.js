@@ -13,43 +13,6 @@ import PeopleTab from '@/components/PeopleTab';
 
 const cx = classnames.bind(styles);
 
-const DUMMY_CARDS = [
-  {
-    content: 'Hạnh Thư Nguyễn đã đăng một câu hỏi mới: Ai đã đặt tên cho dòng sông',
-    time: '10:29',
-  },
-  {
-    content:
-      'Hạnh Thư Nguyễn đã đăng một câu hỏi mới: Bao nhiêu lâu thì bán được 1 tỷ gói mè Hạnh Thư Nguyễn đã đăng một câu hỏi mới: Bao nhiêu lâu thì bán được 1 tỷ gói mè',
-    time: '10:27',
-  },
-  {
-    content:
-      'Hạnh Thư Nguyễn đã đăng một câu hỏi mới: Bao nhiêu lâu thì bán được 1 tỷ gói mè Hạnh Thư Nguyễn đã đăng một câu hỏi mới: Bao nhiêu lâu thì bán được 1 tỷ gói mè',
-    time: '10:27',
-  },
-  {
-    content:
-      'Hạnh Thư Nguyễn đã đăng một câu hỏi mới: Bao nhiêu lâu thì bán được 1 tỷ gói mè Hạnh Thư Nguyễn đã đăng một câu hỏi mới: Bao nhiêu lâu thì bán được 1 tỷ gói mè',
-    time: '10:27',
-  },
-  {
-    content:
-      'Hạnh Thư Nguyễn đã đăng một câu hỏi mới: Bao nhiêu lâu thì bán được 1 tỷ gói mè Hạnh Thư Nguyễn đã đăng một câu hỏi mới: Bao nhiêu lâu thì bán được 1 tỷ gói mè',
-    time: '10:27',
-  },
-  {
-    content:
-      'Hạnh Thư Nguyễn đã đăng một câu hỏi mới: Bao nhiêu lâu thì bán được 1 tỷ gói mè Hạnh Thư Nguyễn đã đăng một câu hỏi mới: Bao nhiêu lâu thì bán được 1 tỷ gói mè',
-    time: '10:27',
-  },
-  {
-    content:
-      'Hạnh Thư Nguyễn đã đăng một câu hỏi mới: Bao nhiêu lâu thì bán được 1 tỷ gói mè Hạnh Thư Nguyễn đã đăng một câu hỏi mới: Bao nhiêu lâu thì bán được 1 tỷ gói mè',
-    time: '10:27',
-  },
-];
-
 const ClassDetail = ({ params: { lang } }) => {
   const router = useRouter();
   const pathname = usePathname();
