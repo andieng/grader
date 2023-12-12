@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { Menu, Card, Button, Row, Col, Result } from 'antd';
+import { Card, Button, Row, Col, Result } from 'antd';
 import { MoreOutlined, QuestionOutlined, PlusOutlined } from '@ant-design/icons';
 import getDictionary from '@/utils/language';
 import classnames from 'classnames/bind';

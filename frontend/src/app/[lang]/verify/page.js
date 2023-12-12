@@ -3,7 +3,7 @@
 import { useUser } from '@auth0/nextjs-auth0/client';
 import Link from 'next/link';
 import { useMemo, useEffect } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { Result, Button, Spin } from 'antd';
 import classnames from 'classnames/bind';
 import getDictionary from '@/utils/language';
@@ -17,17 +17,11 @@ export default function Verify({ params: { lang } }) {
   }, [lang]);
   const { user } = useUser();
 
-  const pathname = usePathname();
   const router = useRouter();
 
   useEffect(() => {
-    router.push('/dashboard');
+    router.push(`/${lang}/dashboard`);
   }, []);
-
-  let redirectLocale = '';
-
-  if (pathname.includes('/en')) redirectLocale = '/en';
-  else redirectLocale = '/vi';
 
   if (!user?.email_verified) {
     return (
@@ -44,7 +38,7 @@ export default function Verify({ params: { lang } }) {
         className={cx('error-result')}
         subTitle={d.verify_message}
         extra={
-          <Link href={`${redirectLocale}`}>
+          <Link href={`/${lang}`}>
             <Button type="primary">{d.back_home}</Button>
           </Link>
         }
@@ -53,7 +47,6 @@ export default function Verify({ params: { lang } }) {
   }
 
   if (!user) {
-    console.log(chalk.bgYellow('inside if 1'));
     return (
       <Result
         status="403"
@@ -61,7 +54,7 @@ export default function Verify({ params: { lang } }) {
         className={cx('error-result')}
         subTitle={d.error_not_authenticated}
         extra={
-          <Link href={`${redirectLocale}`}>
+          <Link href={`/${lang}`}>
             <Button type="primary">{d.back_home}</Button>
           </Link>
         }

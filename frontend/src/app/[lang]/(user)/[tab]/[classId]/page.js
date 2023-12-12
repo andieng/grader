@@ -1,10 +1,7 @@
 'use client';
 
-import { useState, useMemo } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
-import Link from 'next/link';
-import { MoreOutlined, QuestionOutlined, PlusOutlined } from '@ant-design/icons';
-import { Menu, Card, Button, Row, Col, Result } from 'antd';
+import { useMemo } from 'react';
+import { usePathname } from 'next/navigation';
 import getDictionary from '@/utils/language';
 import classnames from 'classnames/bind';
 import styles from '@/styles/pages/ClassDetail.module.scss';
@@ -15,14 +12,8 @@ import { withPageAuthRequired } from '@auth0/nextjs-auth0/client';
 const cx = classnames.bind(styles);
 
 export default withPageAuthRequired(
-  function ClassDetail({ params: { lang, token } }) {
-    const router = useRouter();
+  function ClassDetail({ params: { lang } }) {
     const pathname = usePathname();
-
-    let redirectLocale = '';
-
-    if (pathname.includes('/en')) redirectLocale = '/en/dashboard';
-    else redirectLocale = '/vi/dashboard';
 
     let activeTab = '';
     if (pathname.includes('/p/') && activeTab !== 'people') activeTab = 'people';
@@ -38,6 +29,6 @@ export default withPageAuthRequired(
     else if (activeTab === 'grades') return <div>grades</div>;
   },
   {
-    returnTo: '/dashboard',
+    returnTo: `/dashboard`,
   },
 );
