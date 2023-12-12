@@ -51,7 +51,7 @@ export default function InvitationPage({ params: { lang, classId } }) {
       router.replace(`${process.env.NEXT_PUBLIC_BASE_URL}/${lang}/api/auth/login?returnTo=/${redirectUrl}`);
     } else {
       addMember();
-      router.replace(`/${lang}/d/${classId}`);
+      router.replace(`${process.env.NEXT_PUBLIC_BASE_URL}/${lang}/d/${classId}`);
     }
   }, [user]);
 
