@@ -212,7 +212,6 @@ export const getClassMembers = async (req, res) => {
       where: {
         classId,
         role,
-        memberId: req.user.id,
       },
       include: {
         model: User,
@@ -226,7 +225,6 @@ export const getClassMembers = async (req, res) => {
     const classMembers = await ClassMember.findAll({
       where: {
         classId,
-        memberId: req.user.id,
       },
       include: {
         model: User,
