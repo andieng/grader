@@ -6,12 +6,7 @@ const ClassDetailLayout = ({ children, params: { lang } }) => {
     <>
       <SidebarHeader
         lang={lang}
-        children={
-          <ClassMenu
-            lang={lang}
-            children={children}
-          />
-        }
+        children={<ClassMenu lang={lang}>{children}</ClassMenu>}
       />
     </>
   );
