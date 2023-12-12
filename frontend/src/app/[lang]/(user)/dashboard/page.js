@@ -2,7 +2,7 @@
 
 import useSWR from 'swr';
 import { useMemo } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import getDictionary from '@/utils/language';
 import { Spin, Card } from 'antd';
 import classnames from 'classnames/bind';
@@ -22,16 +22,10 @@ export default withPageAuthRequired(
       return getDictionary(lang, 'pages/Dashboard');
     }, [lang]);
 
-    const pathname = usePathname();
     const router = useRouter();
 
-    let redirectLocale = '';
-
-    if (pathname.includes('/en')) redirectLocale = '/en';
-    else redirectLocale = '/vi';
-
     const chooseClassHandler = (classId) => {
-      router.push(`${redirectLocale}/d/${classId}`);
+      router.push(`/${lang}/d/${classId}`);
     };
 
     const classes = useSWR('/api/classes', fetcher);
