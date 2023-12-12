@@ -70,18 +70,18 @@ const SidebarHeader = ({ children, lang, isInDashboard }) => {
 
   if (classId != 'dashboard' && current != classId) {
     // chưa open được sub menu
-    if (afterTransforming.teaching != undefined && afterTransforming.teaching.length != 0) {
-      console.log('hrtr', afterTransforming.teaching);
-      const isTeachingItem = afterTransforming.teaching.some((item) =>
-        String(clickedItemKey).startsWith(String(classId)),
-      );
+    // if (afterTransforming.teaching != undefined && afterTransforming.teaching.length != 0) {
+    //   console.log('hrtr', afterTransforming.teaching);
+    //   const isTeachingItem = afterTransforming.teaching.some((item) =>
+    //     String(clickedItemKey).startsWith(String(classId)),
+    //   );
 
-      if (isTeachingItem) {
-        setOpenKeys(['teaching']);
-      } else {
-        setOpenKeys(['enrolled']);
-      }
-    }
+    //   if (isTeachingItem) {
+    //     setOpenKeys(['teaching']);
+    //   } else {
+    //     setOpenKeys(['enrolled']);
+    //   }
+    // }
     setCurrent(classId);
   }
   const items = [
