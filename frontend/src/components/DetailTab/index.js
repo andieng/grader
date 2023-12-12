@@ -1,11 +1,13 @@
 'use client';
 
 import { useMemo } from 'react';
-import { Card, Button, Row, Col, Result } from 'antd';
-import { MoreOutlined, QuestionOutlined, PlusOutlined } from '@ant-design/icons';
+import useSWR from 'swr';
+import { Card, Button, Row, Col } from 'antd';
+import { MoreOutlined, QuestionOutlined } from '@ant-design/icons';
 import getDictionary from '@/utils/language';
 import classnames from 'classnames/bind';
 import styles from '@/styles/components/DetailTab.module.scss';
+import { usePathname } from 'next/navigation';
 
 const cx = classnames.bind(styles);
 
@@ -20,16 +22,31 @@ const DUMMY_CARDS = [
   },
 ];
 
+const fetcher = async (url) => {
+  const response = await fetch(url);
+  return response.json();
+};
+
 const DetailTab = ({ lang }) => {
   // const d = useMemo(() => {
   //   return getDictionary(lang, 'pages/ClassDetail');
   // }, [lang]);
+  const pathname = usePathname();
+  let parts = pathname.split('/');
+  let classId = parts[parts.length - 1];
+
+  const params = {
+    classId,
+  };
+  const apiUrl = `/en/api/classes/details?${new URLSearchParams(params)}`;
+  const currentClass = useSWR(apiUrl, fetcher);
+
+  console.log(currentClass.data);
 
   return (
     <div className={cx('container')}>
       <div className={cx('cover-img')}>
-        <h2>2309-PTUDWNC-20_3</h2>
-        <h4>Phát triển ứng dụng web nâng cao</h4>
+        <h2>{currentClass.data?.className}</h2>
       </div>
       <div className={cx('class-info')}>
         <Col className={cx('posts')}>

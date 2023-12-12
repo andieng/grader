@@ -11,49 +11,6 @@ import { usePathname } from 'next/navigation';
 
 const cx = classnames.bind(styles);
 
-const DUMMY_STUDENTS = [
-  {
-    name: 'Hạnh Thư Nguyễn',
-    avatar: '10:29',
-    role: 'teacher',
-  },
-  {
-    name: 'Hạnh Thư Nguyễn',
-    avatar: '10:29',
-    role: 'teacher',
-  },
-  {
-    name: 'Hạnh Thư Nguyễn',
-    avatar: '10:29',
-    role: 'student',
-  },
-  {
-    name: 'Hạnh Thư Nguyễn',
-    avatar: '10:29',
-    role: 'student',
-  },
-  {
-    name: 'Hạnh Thư Nguyễn',
-    avatar: '10:29',
-    role: 'student',
-  },
-  {
-    name: 'Hạnh Thư Nguyễn',
-    avatar: '10:29',
-    role: 'teacher',
-  },
-  {
-    name: 'Hạnh Thư Nguyễn',
-    avatar: '10:29',
-    role: 'student',
-  },
-  {
-    name: 'Hạnh Thư Nguyễn',
-    avatar: '10:29',
-    role: 'teacher',
-  },
-];
-
 // const fetcher = async ({ url, args }) => {
 //   // const response = await fetch(`${url}?role=${args}`);
 //   const response = await fetch(`${url}?role=students`);
@@ -113,7 +70,7 @@ const PeopleTab = ({ lang }) => {
 
   const classes = useSWR('/api/classes', fetcher);
   const members = useSWR(apiUrl, fetcher);
-  const curClass = classes.data.teaching.filter((teaching) => teaching.classId === classId)[0];
+  const curClass = classes.data.teaching?.filter((teaching) => teaching.classId === classId)[0];
 
   console.log(classes.data);
 
@@ -218,10 +175,10 @@ const PeopleTab = ({ lang }) => {
               <div className={cx('card-post-info')}>
                 <img
                   className={cx('user-avatar')}
-                  src={'/user.png'}
+                  src={item.member.avatar}
                   alt="User"
                 />
-                <p>{item.name}</p>
+                <p>{item.member.name}</p>
                 <Button
                   type="text"
                   shape="circle"
