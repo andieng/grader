@@ -6,8 +6,6 @@ import { Spin } from 'antd';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { useSearchParams } from 'next/navigation';
 
-// http://localhost:3000/en/d/9f1a2304-b8b9-4a12-aabf-fb19fb50e943/invitations?token=5f82e753-1005-4d72-a309-ec94939c0967
-
 const saveTokenToLocalStorage = (token) => {
   localStorage.setItem('token', token);
 };

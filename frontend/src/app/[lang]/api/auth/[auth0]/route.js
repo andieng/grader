@@ -36,7 +36,7 @@ const logout = async (req, res) => {
   const locale = getLocale(req);
 
   return handleLogout(req, res, {
-    returnTo: `http://localhost:3000/${locale}`,
+    returnTo: `${process.env.NEXT_PUBLIC_BASE_URL}/${locale}`,
   });
 };
 
