@@ -1,16 +1,16 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { Menu } from 'antd';
 import classnames from 'classnames/bind';
 import getDictionary from '@/utils/language';
-import styles from '@/styles/layouts/ClassDetail.module.scss';
+import styles from '@/styles/components/ClassMenu.module.scss';
 
 const cx = classnames.bind(styles);
 
-const ClassDetailLayout = ({ children, params: { lang } }) => {
+const ClassMenu = ({ children, lang }) => {
   const [current, setCurrent] = useState('detail');
 
   const d = useMemo(() => {
@@ -20,9 +20,11 @@ const ClassDetailLayout = ({ children, params: { lang } }) => {
   const pathname = usePathname();
 
   let redirectLocale = '';
+  let parts = pathname.split('/');
+  let classId = parts[parts.length - 1];
 
-  if (pathname.includes('/en')) redirectLocale = '/en/dashboard';
-  else redirectLocale = '/vi/dashboard';
+  if (pathname.includes('/en')) redirectLocale = '/en';
+  else redirectLocale = '/vi';
 
   const topBarClickHandler = (e) => {
     console.log('click ', e);
@@ -31,15 +33,15 @@ const ClassDetailLayout = ({ children, params: { lang } }) => {
 
   const items = [
     {
-      label: <Link href={`${redirectLocale}/d/aDummyClassId`}>{d.detail}</Link>,
+      label: <Link href={`${redirectLocale}/d/${classId}`}>{d.detail}</Link>,
       key: 'detail',
     },
     {
-      label: <Link href={`${redirectLocale}/p/aDummyClassId`}>{d.people}</Link>,
+      label: <Link href={`${redirectLocale}/p/${classId}`}>{d.people}</Link>,
       key: 'people',
     },
     {
-      label: <Link href={`${redirectLocale}/g/aDummyClassId`}>{d.grades}</Link>,
+      label: <Link href={`${redirectLocale}/g/${classId}`}>{d.grades}</Link>,
       key: 'grades',
     },
   ];
@@ -62,4 +64,4 @@ const ClassDetailLayout = ({ children, params: { lang } }) => {
   );
 };
 
-export default ClassDetailLayout;
+export default ClassMenu;

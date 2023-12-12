@@ -77,7 +77,8 @@
   width: 100px;
 }
 
-.user-item, .language-item {
+.user-item,
+.language-item {
   display: inline-block;
   font-weight: 500;
   font-size: 1.6rem;
@@ -87,4 +88,26 @@
 .dropdown-icon > svg {
   width: 16px;
   height: 16px;
+}
+
+.createClass-btn {
+  margin-right: 25px;
+}
+
+.create-modal {
+  font-family: 'Quicksand', sans-serif !important;
+  & input {
+    margin-top: 10px;
+  }
+  & button {
+    margin-top: 10px;
+  }
+}
+
+.modal-btn {
+  display: flex;
+  justify-content: flex-end;
+  & button {
+    margin-left: 20px;
+  }
 }
