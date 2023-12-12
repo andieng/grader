@@ -133,7 +133,7 @@ export const inviteMember = async (req, res) => {
   );
 
   createdInvitations.forEach(async (item) => {
-    const inviteLink = `${url}/${req.params.classId}/invitations?token=${token}`;
+    const inviteLink = `${url}/${req.params.classId}/invitations?token=${item.token}`;
 
     const mailContent = {
       subject: generateSubject(classMember.class.className, role, lang),
