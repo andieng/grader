@@ -96,7 +96,7 @@ export default function Header({ user, lang, isInDashboard }) {
       {
         label: (
           <a
-            href={`http://localhost:3000/${lang}/api/auth/logout`}
+            href={`${process.env.NEXT_PUBLIC_BASE_URL}/${lang}/api/auth/logout`}
             className={cx('user-item')}
           >
             {d.logout}
