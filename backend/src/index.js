@@ -2,7 +2,15 @@ import "express-async-errors";
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
+import { auth } from "express-oauth2-jwt-bearer";
 import userRouter from "./routes/userRoute";
+import adminRouter from "./routes/adminRoute";
+import classRouter from "./routes/classRoute";
+
+const jwtCheck = auth({
+  audience: process.env.AUTH0_AUDIENCE,
+  issuerBaseURL: process.env.AUTH0_ISSUER_BASE_URL,
+});
 
 const app = express();
 
@@ -11,7 +19,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
+app.use("/api", jwtCheck);
 app.use("/api/user", userRouter);
+app.use("/api/admin", adminRouter);
+app.use("/api/classes", classRouter);
 
 app.get("/", (req, res) => {
   res.json({ msg: "Hello World!" });

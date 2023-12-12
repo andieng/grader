@@ -145,6 +145,10 @@ span {
     font-size: 60px;
     margin-bottom: 10vh;
   }
+
+  & .ant-spin-dot-item {
+    background-color: $color-primary;
+  }
 }
 
 .ant-dropdown > .ant-dropdown-menu {

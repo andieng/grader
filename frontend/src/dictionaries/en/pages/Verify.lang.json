@@ -1,0 +1,6 @@
+{
+    "error_not_authenticated": "Sorry, you need to login to access this page",
+    "verify_email": "Verify your email account",
+    "verify_message": "Please check your mailbox, we have sent a verification email to your email address!",
+    "back_home": "Back Home"
+}

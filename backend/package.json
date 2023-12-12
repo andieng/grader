@@ -13,19 +13,21 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@sendgrid/mail": "^8.1.0",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "jsonwebtoken": "^9.0.2",
-    "jwks-rsa": "^3.1.0",
-    "nodemon": "^3.0.1"
+    "nodemon": "^3.0.1",
+    "sequelize-auto": "^0.8.8"
   },
   "dependencies": {
     "@netlify/functions": "^2.3.0",
     "cors": "^2.8.5",
     "express-async-errors": "^3.1.1",
+    "express-oauth2-jwt-bearer": "^1.6.0",
     "pg": "^8.11.3",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.34.0",
-    "serverless-http": "^3.2.0"
+    "serverless-http": "^3.2.0",
+    "uuid": "^9.0.1"
   }
 }

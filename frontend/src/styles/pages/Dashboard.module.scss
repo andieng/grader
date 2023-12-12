@@ -8,14 +8,24 @@
 .main {
   height: calc(100vh - 72px);
   width: 100%;
-  background-color: #f6f6f6;
+  overflow-y: scroll;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+  align-content: flex-start;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding-left: 1.5rem;
+  padding-top: 1.5rem;
 }
 
 .title {
-    margin-bottom: 80px;
+  margin-bottom: 80px;
   font-size: 6rem;
+}
+
+.card {
+  border: solid 1px #0000004b;
+  margin: 8px;
+  cursor: pointer;
+  width: 290px;
+  background-color: #ffe4c495;
 }

@@ -1,10 +1,10 @@
 import express from "express";
 import { getProfile } from "../controllers/userController";
-import checkAuthentication from "../middlewares/checkAuthentication";
+import { isUser } from "../middlewares/checkAuth";
 
 const userRouter = express.Router();
 
-userRouter.use(checkAuthentication);
+userRouter.use(isUser);
 userRouter.get("/", getProfile);
 
 export default userRouter;

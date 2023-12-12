@@ -8,3 +8,6 @@
   from = "/*"
   to = "/.netlify/functions/server"
   status = 200
+
+[[plugins]]
+  package = "@netlify/plugin-emails"
