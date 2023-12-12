@@ -4,9 +4,10 @@ export default function DashboardLayout({ children, params: { lang } }) {
   return (
     <SidebarHeader
       lang={lang}
-      children={children}
       isInDashboard={true}
-    />
+    >
+      {children}
+    </SidebarHeader>
   );
 }
 
