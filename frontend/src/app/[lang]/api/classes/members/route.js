@@ -17,6 +17,7 @@ export const GET = async function getMembers(req) {
     });
 
     const data = await response.json();
+    console.log(chalk.bgYellow('memebers in class:'), data);
 
     return NextResponse.json(data);
   } catch (err) {

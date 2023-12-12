@@ -1,8 +1,8 @@
 'use client';
 
 import useSWR from 'swr';
-import { useMemo } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { useMemo, useState } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 import { AppstoreOutlined, TeamOutlined, ContactsOutlined } from '@ant-design/icons';
 import { Menu, Spin } from 'antd';
 import Header from '@/components/Header';
@@ -42,17 +42,21 @@ function transformData(data) {
 }
 
 const SidebarHeader = ({ children, lang, isInDashboard }) => {
-  const pathname = usePathname();
+  const [current, setCurrent] = useState('0');
+  const [openKeys, setOpenKeys] = useState([]);
+
+  console.log(openKeys);
+
   const router = useRouter();
+  const pathname = usePathname();
 
-  let redirectLocale = '';
-
-  if (pathname.includes('/en')) redirectLocale = '/en';
-  else redirectLocale = '/vi';
+  let parts = pathname.split('/');
+  let classId = parts[parts.length - 1];
 
   const sidebarClickHandler = (event) => {
-    console.log('click ', event);
-    if (event.key != 0) router.push(`${redirectLocale}/d/${event.key}`);
+    if (event.key !== '0') {
+      router.push(`/${lang}/d/${event.key}`);
+    }
   };
 
   const d = useMemo(() => {
@@ -63,10 +67,27 @@ const SidebarHeader = ({ children, lang, isInDashboard }) => {
   const classes = useSWR('/api/classes', fetcher);
 
   const afterTransforming = transformData(classes.data);
+
+  if (classId != 'dashboard' && current != classId) {
+    // chưa open được sub menu
+    if (afterTransforming.teaching != undefined && afterTransforming.teaching.length != 0) {
+      console.log('hrtr', afterTransforming.teaching);
+      const isTeachingItem = afterTransforming.teaching.some((item) =>
+        String(clickedItemKey).startsWith(String(classId)),
+      );
+
+      if (isTeachingItem) {
+        setOpenKeys(['teaching']);
+      } else {
+        setOpenKeys(['enrolled']);
+      }
+    }
+    setCurrent(classId);
+  }
   const items = [
     {
       label: (
-        <Link href={`${redirectLocale}/dashboard`}>
+        <Link href={`/${lang}/dashboard`}>
           <p className={cx('user-item')}>{d.dashboard}</p>
         </Link>
       ),
@@ -76,11 +97,11 @@ const SidebarHeader = ({ children, lang, isInDashboard }) => {
     {
       type: 'divider',
     },
-    getItem(`${d.teaching}`, 'sub1', <TeamOutlined />, afterTransforming.teaching),
+    getItem(`${d.teaching}`, 'teaching', <TeamOutlined />, afterTransforming.teaching),
     {
       type: 'divider',
     },
-    getItem(`${d.enrolled}`, 'sub2', <ContactsOutlined />, afterTransforming.enrolled),
+    getItem(`${d.enrolled}`, 'enrolled', <ContactsOutlined />, afterTransforming.enrolled),
   ];
 
   if (isLoading || d === null || classes.isLoading) return <Spin size="large" />;
@@ -104,7 +125,8 @@ const SidebarHeader = ({ children, lang, isInDashboard }) => {
           <Menu
             className={cx('menu')}
             onClick={sidebarClickHandler}
-            defaultSelectedKeys={['0']}
+            selectedKeys={[current]}
+            defaultOpenKeys={openKeys}
             mode="inline"
             items={items}
           />
