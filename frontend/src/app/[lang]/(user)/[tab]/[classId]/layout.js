@@ -3,12 +3,9 @@ import SidebarHeader from '@/components/SidebarHeader';
 
 const ClassDetailLayout = ({ children, params: { lang } }) => {
   return (
-    <>
-      <SidebarHeader
-        lang={lang}
-        children={<ClassMenu lang={lang}>{children}</ClassMenu>}
-      />
-    </>
+    <SidebarHeader lang={lang}>
+      <ClassMenu lang={lang}>{children}</ClassMenu>
+    </SidebarHeader>
   );
 };
 
