@@ -113,8 +113,8 @@ const PeopleTab = ({ lang }) => {
 
   console.log(members.data);
 
-  const students = members.data.filter((student) => student.role === 'student');
-  const teachers = members.data.filter((student) => student.role === 'teacher');
+  const students = members.data?.filter((student) => student.role === 'student');
+  const teachers = members.data?.filter((student) => student.role === 'teacher');
 
   return (
     <div className={cx('container')}>
