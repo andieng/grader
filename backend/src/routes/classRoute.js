@@ -16,7 +16,7 @@ classRouter.use(isVerified, saveUserInfo);
 classRouter.get("/", getClasses);
 classRouter.post("/create", createClass);
 
-classRouter.get("/:classId", getClassDetails);
+classRouter.get("/:classId/details", getClassDetails);
 classRouter.get("/:classId/members", getClassMembers);
 classRouter.post("/:classId/members", addMemberToClass);
 classRouter.post("/:classId/invitations", inviteMember);
