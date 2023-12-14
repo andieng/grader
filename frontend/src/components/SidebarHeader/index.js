@@ -41,14 +41,17 @@ function transformData(data) {
   return transformedData;
 }
 
-const SidebarHeader = ({ children, lang, isInDashboard }) => {
+const SidebarHeader = ({ children, lang, isInDashboard, isLoggedIn }) => {
   const [current, setCurrent] = useState('0');
   const [openKeys, setOpenKeys] = useState([]);
-
-  console.log(openKeys);
+  const [hasUser, setHasUser] = useState(false);
 
   const router = useRouter();
   const pathname = usePathname();
+
+  isLoggedIn.then((isLogin) => {
+    if (hasUser !== isLogin) setHasUser(isLogin);
+  });
 
   let parts = pathname.split('/');
   let classId = parts[parts.length - 1];
@@ -115,24 +118,29 @@ const SidebarHeader = ({ children, lang, isInDashboard }) => {
 
   return (
     <>
-      <Header
-        user={data.user}
-        lang={lang}
-        isInDashboard={isInDashboard}
-      />
-      <div className={cx('container')}>
-        <div>
-          <Menu
-            className={cx('menu')}
-            onClick={sidebarClickHandler}
-            selectedKeys={[current]}
-            defaultOpenKeys={openKeys}
-            mode="inline"
-            items={items}
+      {hasUser && (
+        <>
+          <Header
+            user={data.user}
+            lang={lang}
+            isInDashboard={isInDashboard}
           />
-        </div>
-        {children}
-      </div>
+          <div className={cx('container')}>
+            <div>
+              <Menu
+                className={cx('menu')}
+                onClick={sidebarClickHandler}
+                selectedKeys={[current]}
+                defaultOpenKeys={openKeys}
+                mode="inline"
+                items={items}
+              />
+            </div>
+            {children}
+          </div>
+        </>
+      )}
+      {!hasUser && children}
     </>
   );
 };
