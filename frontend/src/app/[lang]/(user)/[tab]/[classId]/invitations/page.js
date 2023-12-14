@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Spin } from 'antd';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { useSearchParams } from 'next/navigation';
+import { mutate } from 'swr';
 
 const saveTokenToLocalStorage = (token) => {
   localStorage.setItem('token', token);
@@ -49,6 +50,7 @@ export default function InvitationPage({ params: { lang, classId } }) {
       router.replace(`${process.env.NEXT_PUBLIC_BASE_URL}/${lang}/api/auth/login?returnTo=/${redirectUrl}`);
     } else {
       addMember();
+      mutate('/api/classes');
       router.replace(`${process.env.NEXT_PUBLIC_BASE_URL}/${lang}/d/${classId}`);
     }
   }, [user]);

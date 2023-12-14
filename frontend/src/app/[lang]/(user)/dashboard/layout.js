@@ -8,13 +8,6 @@ export default function DashboardLayout({ children, params: { lang } }) {
     return false;
   };
 
-  // let isLogin = false;
-
-  // hasUser().then((hasUser) => {
-  //   console.log(hasUser);
-  //   isLogin = hasUser;
-  // });
-
   return (
     <SidebarHeader
       lang={lang}
