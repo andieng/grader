@@ -8,6 +8,7 @@ import getDictionary from '@/utils/language';
 import classnames from 'classnames/bind';
 import styles from '@/styles/components/DetailTab.module.scss';
 import { usePathname } from 'next/navigation';
+import ClassMenu from '@/components/ClassMenu';
 
 const cx = classnames.bind(styles);
 
@@ -42,36 +43,40 @@ const DetailTab = ({ lang }) => {
   const currentClass = useSWR(apiUrl, fetcher);
 
   return (
-    <div className={cx('container')}>
-      <div className={cx('cover-img')}>
-        <h2>{currentClass.data?.className}</h2>
-      </div>
-      <div className={cx('class-info')}>
-        <Col className={cx('posts')}>
-          {DUMMY_CARDS.map((item, index) => (
-            <Row key={index}>
-              <Card className={cx('card-post')}>
-                <div className={cx('card-post-info')}>
-                  <Button
-                    type="primary"
-                    shape="circle"
-                    icon={<QuestionOutlined />}
-                  />
-                  <div>
-                    <p>{item.content}</p>
-                    <p>{item.time}</p>
+    <div className={cx('wrap')}>
+      {' '}
+      <ClassMenu lang={lang}></ClassMenu>
+      <div className={cx('container')}>
+        <div className={cx('cover-img')}>
+          <h2>{currentClass.data?.className}</h2>
+        </div>
+        <div className={cx('class-info')}>
+          <Col className={cx('posts')}>
+            {DUMMY_CARDS.map((item, index) => (
+              <Row key={index}>
+                <Card className={cx('card-post')}>
+                  <div className={cx('card-post-info')}>
+                    <Button
+                      type="primary"
+                      shape="circle"
+                      icon={<QuestionOutlined />}
+                    />
+                    <div>
+                      <p>{item.content}</p>
+                      <p>{item.time}</p>
+                    </div>
+                    <Button
+                      type="text"
+                      shape="circle"
+                      size="large"
+                      icon={<MoreOutlined className={cx('more-btn')} />}
+                    />
                   </div>
-                  <Button
-                    type="text"
-                    shape="circle"
-                    size="large"
-                    icon={<MoreOutlined className={cx('more-btn')} />}
-                  />
-                </div>
-              </Card>
-            </Row>
-          ))}
-        </Col>
+                </Card>
+              </Row>
+            ))}
+          </Col>
+        </div>
       </div>
     </div>
   );

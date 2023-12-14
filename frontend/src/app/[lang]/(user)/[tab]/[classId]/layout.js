@@ -1,4 +1,3 @@
-import ClassMenu from '@/components/ClassMenu';
 import SidebarHeader from '@/components/SidebarHeader';
 import { getSession } from '@auth0/nextjs-auth0';
 
@@ -14,12 +13,7 @@ const ClassDetailLayout = ({ children, params: { lang } }) => {
       lang={lang}
       isLoggedIn={hasUser()}
     >
-      <ClassMenu
-        lang={lang}
-        isLoggedIn={hasUser()}
-      >
-        {children}
-      </ClassMenu>
+      {children}
     </SidebarHeader>
   );
 };

@@ -8,6 +8,7 @@ import getDictionary from '@/utils/language';
 import classnames from 'classnames/bind';
 import styles from '@/styles/components/PeopleTab.module.scss';
 import { usePathname } from 'next/navigation';
+import ClassMenu from '@/components/ClassMenu';
 
 const cx = classnames.bind(styles);
 
@@ -113,141 +114,144 @@ const PeopleTab = ({ lang }) => {
   const teachers = members.data?.filter((student) => student.role === 'teacher');
 
   return (
-    <div className={cx('container')}>
-      {contextHolder}
-      <Card
-        className={cx('card')}
-        title={
-          <div className={cx('card-title')}>
-            <h2>{d.teachers}</h2>
-            {!isStudent && (
-              <Button
-                type="primary"
-                shape="circle"
-                icon={<UserAddOutlined />}
-                onClick={() => showModal(d.inviteTeachers)}
-              />
-            )}
-          </div>
-        }
-      >
-        {teachers.map((item, index) => (
-          <div key={index}>
-            <Row>
-              <div className={cx('card-post-info')}>
-                <img
-                  className={cx('user-avatar')}
-                  src={item.member.avatar}
-                  alt="User"
-                />
-                <p>{item.member.name}</p>
+    <div className={cx('wrap')}>
+      <ClassMenu lang={lang}></ClassMenu>
+      <div className={cx('container')}>
+        {contextHolder}
+        <Card
+          className={cx('card')}
+          title={
+            <div className={cx('card-title')}>
+              <h2>{d.teachers}</h2>
+              {!isStudent && (
                 <Button
-                  type="text"
+                  type="primary"
                   shape="circle"
-                  size="large"
-                  icon={<MoreOutlined className={cx('more-btn')} />}
+                  icon={<UserAddOutlined />}
+                  onClick={() => showModal(d.inviteTeachers)}
                 />
-              </div>
-            </Row>
-            {index !== teachers.length - 1 && <hr className={cx('horizontal-line')} />}{' '}
-          </div>
-        ))}
-      </Card>
-      <Card
-        className={cx('card')}
-        title={
-          <div className={cx('card-title')}>
-            <h2>{d.students}</h2>
-            {!isStudent && (
-              <Button
-                type="primary"
-                shape="circle"
-                icon={<UserAddOutlined />}
-                onClick={() => showModal(d.inviteStudents)}
-              />
-            )}
-          </div>
-        }
-      >
-        {students.map((item, index) => (
-          <div key={index}>
-            <Row>
-              <div className={cx('card-post-info')}>
-                <img
-                  className={cx('user-avatar')}
-                  src={item.member.avatar}
-                  alt="User"
-                />
-                <p>{item.member.name}</p>
-                <Button
-                  type="text"
-                  shape="circle"
-                  size="large"
-                  icon={<MoreOutlined className={cx('more-btn')} />}
-                />
-              </div>
-            </Row>
-            {index !== students.length - 1 && <hr className={cx('horizontal-line')} />}{' '}
-          </div>
-        ))}
-      </Card>
-      <Modal
-        className={cx('invitation-modal')}
-        open={open}
-        title={<h2>{targetInvitation}</h2>}
-        onOk={handleOk}
-        onCancel={handleCancel}
-        footer={[]}
-      >
-        {showInvitationLink && (
-          <>
-            <h4>{d.inviteUrl}</h4>
-            <div className={cx('invitation-link')}>
-              <p>{curClass?.classInviteStudentLink}</p>
-              <Button
-                type="text"
-                icon={<CopyOutlined />}
-                onClick={() => copyHandler(curClass?.classInviteStudentLink)}
-              ></Button>
+              )}
             </div>
-          </>
-        )}
-        <Form
-          name="form"
-          form={form}
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
-          autoComplete="off"
+          }
         >
-          <Form.Item
-            name="email"
-            rules={[
-              {
-                required: true,
-                message: d.requiredMail,
-              },
-            ]}
+          {teachers.map((item, index) => (
+            <div key={index}>
+              <Row>
+                <div className={cx('card-post-info')}>
+                  <img
+                    className={cx('user-avatar')}
+                    src={item.member.avatar}
+                    alt="User"
+                  />
+                  <p>{item.member.name}</p>
+                  <Button
+                    type="text"
+                    shape="circle"
+                    size="large"
+                    icon={<MoreOutlined className={cx('more-btn')} />}
+                  />
+                </div>
+              </Row>
+              {index !== teachers.length - 1 && <hr className={cx('horizontal-line')} />}{' '}
+            </div>
+          ))}
+        </Card>
+        <Card
+          className={cx('card')}
+          title={
+            <div className={cx('card-title')}>
+              <h2>{d.students}</h2>
+              {!isStudent && (
+                <Button
+                  type="primary"
+                  shape="circle"
+                  icon={<UserAddOutlined />}
+                  onClick={() => showModal(d.inviteStudents)}
+                />
+              )}
+            </div>
+          }
+        >
+          {students.map((item, index) => (
+            <div key={index}>
+              <Row>
+                <div className={cx('card-post-info')}>
+                  <img
+                    className={cx('user-avatar')}
+                    src={item.member.avatar}
+                    alt="User"
+                  />
+                  <p>{item.member.name}</p>
+                  <Button
+                    type="text"
+                    shape="circle"
+                    size="large"
+                    icon={<MoreOutlined className={cx('more-btn')} />}
+                  />
+                </div>
+              </Row>
+              {index !== students.length - 1 && <hr className={cx('horizontal-line')} />}{' '}
+            </div>
+          ))}
+        </Card>
+        <Modal
+          className={cx('invitation-modal')}
+          open={open}
+          title={<h2>{targetInvitation}</h2>}
+          onOk={handleOk}
+          onCancel={handleCancel}
+          footer={[]}
+        >
+          {showInvitationLink && (
+            <>
+              <h4>{d.inviteUrl}</h4>
+              <div className={cx('invitation-link')}>
+                <p>{curClass?.classInviteStudentLink}</p>
+                <Button
+                  type="text"
+                  icon={<CopyOutlined />}
+                  onClick={() => copyHandler(curClass?.classInviteStudentLink)}
+                ></Button>
+              </div>
+            </>
+          )}
+          <Form
+            name="form"
+            form={form}
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+            autoComplete="off"
           >
-            <Input placeholder={d.inviteInput} />
-          </Form.Item>
-          <Form.Item className={cx('invite-btn')}>
-            <Button
-              key="back"
-              onClick={handleCancel}
+            <Form.Item
+              name="email"
+              rules={[
+                {
+                  required: true,
+                  message: d.requiredMail,
+                },
+              ]}
             >
-              {d.cancel}
-            </Button>
-            <Button
-              key="submit"
-              htmlType="submit"
-              type="primary"
-              loading={loading}
-            >
-              {d.invite}
-            </Button>
-          </Form.Item>
-        </Form>
-      </Modal>
+              <Input placeholder={d.inviteInput} />
+            </Form.Item>
+            <Form.Item className={cx('invite-btn')}>
+              <Button
+                key="back"
+                onClick={handleCancel}
+              >
+                {d.cancel}
+              </Button>
+              <Button
+                key="submit"
+                htmlType="submit"
+                type="primary"
+                loading={loading}
+              >
+                {d.invite}
+              </Button>
+            </Form.Item>
+          </Form>
+        </Modal>
+      </div>
     </div>
   );
 };

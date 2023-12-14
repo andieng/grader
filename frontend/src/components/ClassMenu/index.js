@@ -10,14 +10,8 @@ import styles from '@/styles/components/ClassMenu.module.scss';
 
 const cx = classnames.bind(styles);
 
-const ClassMenu = ({ children, lang, isLoggedIn }) => {
+const ClassMenu = ({ children, lang }) => {
   const [current, setCurrent] = useState('detail');
-  const [hasUser, setHasUser] = useState(true);
-
-  if (isLoggedIn)
-    isLoggedIn.then((isLogin) => {
-      if (hasUser !== isLogin) setHasUser(isLogin);
-    });
 
   const d = useMemo(() => {
     return getDictionary(lang, 'pages/ClassDetail');
@@ -56,21 +50,16 @@ const ClassMenu = ({ children, lang, isLoggedIn }) => {
   else if (pathname.includes('/d/') && current !== 'detail') setCurrent('detail');
 
   return (
-    <>
-      {hasUser && (
-        <div className={cx('container')}>
-          <Menu
-            className={cx('menu')}
-            onClick={topBarClickHandler}
-            selectedKeys={[current]}
-            mode="horizontal"
-            items={items}
-          />
-          {children}
-        </div>
-      )}
-      {!hasUser && children}
-    </>
+    <div className={cx('container')}>
+      <Menu
+        className={cx('menu')}
+        onClick={topBarClickHandler}
+        selectedKeys={[current]}
+        mode="horizontal"
+        items={items}
+      />
+      {children}
+    </div>
   );
 };
 
