@@ -6,6 +6,7 @@ import SideBar from './components/SideBar.lang.json';
 import ClassDetail from './pages/ClassDetail.lang.json';
 import Verify from './pages/Verify.lang.json';
 import User from './layouts/User.lang.json';
+import Invitation from './pages/Invitation.lang.json';
 
 const dictionary = {
   'components/Header': Header,
@@ -15,6 +16,7 @@ const dictionary = {
   'pages/ClassDetail': ClassDetail,
   'pages/Verify': Verify,
   'layouts/User': User,
+  'pages/Invitation': Invitation,
 };
 
 const mappingDictionaryPath = (path) => {

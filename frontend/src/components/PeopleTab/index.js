@@ -61,7 +61,7 @@ const PeopleTab = ({ lang }) => {
   };
 
   const d = useMemo(() => {
-    return getDictionary(lang, 'pages/ClassDetail');
+    return getDictionary(lang, 'pages/Invitation');
   }, [lang]);
 
   const params = {
@@ -76,8 +76,6 @@ const PeopleTab = ({ lang }) => {
   if (curClass?.classInviteStudentLink) {
     if (isStudent === true) setIsStudent(false);
   }
-
-  console.log(classes.data);
 
   const copyHandler = (link) => {
     navigator.clipboard.writeText(link);
@@ -115,8 +113,6 @@ const PeopleTab = ({ lang }) => {
         {members.error?.message}
       </div>
     );
-
-  console.log(members.data);
 
   const students = members.data?.filter((student) => student.role === 'student');
   const teachers = members.data?.filter((student) => student.role === 'teacher');

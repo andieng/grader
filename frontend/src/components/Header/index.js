@@ -50,7 +50,6 @@ export default function Header({ user, lang, isInDashboard }) {
     });
 
     const data = await response.json();
-    console.log(data);
     setLoading(false);
     setOpen(false);
     mutate('/api/classes');

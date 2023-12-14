@@ -41,8 +41,6 @@ const DetailTab = ({ lang }) => {
   const apiUrl = `/en/api/classes/details?${new URLSearchParams(params)}`;
   const currentClass = useSWR(apiUrl, fetcher);
 
-  console.log(currentClass.data);
-
   return (
     <div className={cx('container')}>
       <div className={cx('cover-img')}>

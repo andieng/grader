@@ -51,6 +51,6 @@ export const POST = async function addMember(req) {
     return NextResponse.json(data);
   } catch (err) {
     console.log(err);
-    return NextResponse.json({ error: err }, { status: 200 });
+    return NextResponse.json({ error: err }, { status: 404 });
   }
 };

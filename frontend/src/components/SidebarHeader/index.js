@@ -45,6 +45,7 @@ const SidebarHeader = ({ children, lang, isInDashboard, isLoggedIn }) => {
   const [current, setCurrent] = useState('0');
   const [openKeys, setOpenKeys] = useState([]);
   const [hasUser, setHasUser] = useState(true);
+  const [isOpenTeaching, setIsOpenTeaching] = useState(false);
 
   const router = useRouter();
   const pathname = usePathname();
@@ -73,19 +74,18 @@ const SidebarHeader = ({ children, lang, isInDashboard, isLoggedIn }) => {
   const afterTransforming = transformData(classes.data);
 
   if (classId != 'dashboard' && current != classId) {
-    // chưa open được sub menu
-    // if (afterTransforming.teaching != undefined && afterTransforming.teaching.length != 0) {
-    //   console.log('hrtr', afterTransforming.teaching);
-    //   const isTeachingItem = afterTransforming.teaching.some((item) =>
-    //     String(clickedItemKey).startsWith(String(classId)),
-    //   );
+    if (afterTransforming.teaching != undefined && afterTransforming.teaching.length != 0) {
+      const isTeachingItem = afterTransforming.teaching.some((item) => String(item.key) === String(classId));
 
-    //   if (isTeachingItem) {
-    //     setOpenKeys(['teaching']);
-    //   } else {
-    //     setOpenKeys(['enrolled']);
-    //   }
-    // }
+      if (isTeachingItem) {
+        if (!isOpenTeaching) {
+          setOpenKeys(['teaching']);
+          setIsOpenTeaching(true);
+        }
+      } else {
+        setOpenKeys(['enrolled']);
+      }
+    }
     setCurrent(classId);
   }
   const items = [

@@ -33,7 +33,6 @@ const ClassMenu = ({ children, lang, isLoggedIn }) => {
   else redirectLocale = '/vi';
 
   const topBarClickHandler = (e) => {
-    console.log('click ', e);
     setCurrent(e.key);
   };
 
