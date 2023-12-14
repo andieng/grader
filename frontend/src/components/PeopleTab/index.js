@@ -11,11 +11,6 @@ import { usePathname } from 'next/navigation';
 
 const cx = classnames.bind(styles);
 
-// const fetcher = async ({ url, args }) => {
-//   // const response = await fetch(`${url}?role=${args}`);
-//   const response = await fetch(`${url}?role=students`);
-//   return response.json();
-// };
 const fetcher = async (url) => {
   const response = await fetch(url);
   return response.json();
@@ -61,7 +56,7 @@ const PeopleTab = ({ lang }) => {
   };
 
   const d = useMemo(() => {
-    return getDictionary(lang, 'pages/Invitation');
+    return getDictionary(lang, 'pages/ClassDetail');
   }, [lang]);
 
   const params = {
