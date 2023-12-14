@@ -26,6 +26,7 @@ const PeopleTab = ({ lang }) => {
   const [showInvitationLink, setShowInvitationLink] = useState(true);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
+  const [isStudent, setIsStudent] = useState(true);
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
 
@@ -71,6 +72,10 @@ const PeopleTab = ({ lang }) => {
   const classes = useSWR('/api/classes', fetcher);
   const members = useSWR(apiUrl, fetcher);
   const curClass = classes.data.teaching?.filter((teaching) => teaching.classId === classId)[0];
+
+  if (curClass?.classInviteStudentLink) {
+    if (isStudent === true) setIsStudent(false);
+  }
 
   console.log(classes.data);
 
@@ -124,12 +129,14 @@ const PeopleTab = ({ lang }) => {
         title={
           <div className={cx('card-title')}>
             <h2>{d.teachers}</h2>
-            <Button
-              type="primary"
-              shape="circle"
-              icon={<UserAddOutlined />}
-              onClick={() => showModal(d.inviteTeachers)}
-            />
+            {!isStudent && (
+              <Button
+                type="primary"
+                shape="circle"
+                icon={<UserAddOutlined />}
+                onClick={() => showModal(d.inviteTeachers)}
+              />
+            )}
           </div>
         }
       >
@@ -160,12 +167,14 @@ const PeopleTab = ({ lang }) => {
         title={
           <div className={cx('card-title')}>
             <h2>{d.students}</h2>
-            <Button
-              type="primary"
-              shape="circle"
-              icon={<UserAddOutlined />}
-              onClick={() => showModal(d.inviteStudents)}
-            />
+            {!isStudent && (
+              <Button
+                type="primary"
+                shape="circle"
+                icon={<UserAddOutlined />}
+                onClick={() => showModal(d.inviteStudents)}
+              />
+            )}
           </div>
         }
       >

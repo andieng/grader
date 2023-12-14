@@ -44,14 +44,15 @@ function transformData(data) {
 const SidebarHeader = ({ children, lang, isInDashboard, isLoggedIn }) => {
   const [current, setCurrent] = useState('0');
   const [openKeys, setOpenKeys] = useState([]);
-  const [hasUser, setHasUser] = useState(false);
+  const [hasUser, setHasUser] = useState(true);
 
   const router = useRouter();
   const pathname = usePathname();
 
-  isLoggedIn.then((isLogin) => {
-    if (hasUser !== isLogin) setHasUser(isLogin);
-  });
+  if (isLoggedIn)
+    isLoggedIn.then((isLogin) => {
+      if (hasUser !== isLogin) setHasUser(isLogin);
+    });
 
   let parts = pathname.split('/');
   let classId = parts[parts.length - 1];
