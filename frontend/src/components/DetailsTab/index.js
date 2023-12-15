@@ -6,7 +6,7 @@ import { Card, Button, Row, Col } from 'antd';
 import { MoreOutlined, QuestionOutlined } from '@ant-design/icons';
 import getDictionary from '@/utils/language';
 import classnames from 'classnames/bind';
-import styles from '@/styles/components/DetailTab.module.scss';
+import styles from '@/styles/components/DetailsTab.module.scss';
 import { usePathname } from 'next/navigation';
 import ClassMenu from '@/components/ClassMenu';
 
@@ -28,14 +28,7 @@ const fetcher = async (url) => {
   return response.json();
 };
 
-const DetailTab = ({ lang }) => {
-  // const d = useMemo(() => {
-  //   return getDictionary(lang, 'pages/ClassDetail');
-  // }, [lang]);
-  const pathname = usePathname();
-  let parts = pathname.split('/');
-  let classId = parts[parts.length - 1];
-
+const DetailsTab = ({ lang, classId }) => {
   const params = {
     classId,
   };
@@ -44,7 +37,6 @@ const DetailTab = ({ lang }) => {
 
   return (
     <div className={cx('wrap')}>
-      {' '}
       <ClassMenu lang={lang}></ClassMenu>
       <div className={cx('container')}>
         <div className={cx('cover-img')}>
@@ -82,4 +74,4 @@ const DetailTab = ({ lang }) => {
   );
 };
 
-export default DetailTab;
+export default DetailsTab;

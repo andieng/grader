@@ -26,7 +26,7 @@ export const POST = async function createClass(req) {
 
     return NextResponse.json(data);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return NextResponse.json({ error: err }, { status: 200 });
   }
 };

@@ -1,4 +1,15 @@
 .container {
   display: flex;
   flex-direction: column;
+  align-self: flex-start;
+  padding: 0 10px;
+  width: 100%;
+
+  // & > ul > li {
+  //   margin: 0px 10px !important;
+  // }
+
+  & a {
+    font-size: 1.6rem;
+  }
 }

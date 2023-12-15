@@ -14,7 +14,7 @@ const ClassMenu = ({ children, lang }) => {
   const [current, setCurrent] = useState('detail');
 
   const d = useMemo(() => {
-    return getDictionary(lang, 'pages/ClassDetail');
+    return getDictionary(lang, 'pages/ClassDetails');
   }, [lang]);
 
   const pathname = usePathname();
@@ -32,8 +32,8 @@ const ClassMenu = ({ children, lang }) => {
 
   const items = [
     {
-      label: <Link href={`${redirectLocale}/d/${classId}`}>{d.detail}</Link>,
-      key: 'detail',
+      label: <Link href={`${redirectLocale}/d/${classId}`}>{d.details}</Link>,
+      key: 'details',
     },
     {
       label: <Link href={`${redirectLocale}/p/${classId}`}>{d.people}</Link>,
@@ -47,7 +47,7 @@ const ClassMenu = ({ children, lang }) => {
 
   if (pathname.includes('/p/') && current !== 'people') setCurrent('people');
   else if (pathname.includes('/g/') && current !== 'grades') setCurrent('grades');
-  else if (pathname.includes('/d/') && current !== 'detail') setCurrent('detail');
+  else if (pathname.includes('/d/') && current !== 'details') setCurrent('details');
 
   return (
     <div className={cx('container')}>

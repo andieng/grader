@@ -17,7 +17,7 @@ const fetcher = async (url) => {
   return response.json();
 };
 
-const PeopleTab = ({ lang }) => {
+const PeopleTab = ({ lang, classId }) => {
   const [targetInvitation, setTargetInvitation] = useState('Teachers');
   const [showInvitationLink, setShowInvitationLink] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -25,10 +25,6 @@ const PeopleTab = ({ lang }) => {
   const [isStudent, setIsStudent] = useState(true);
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
-
-  const pathname = usePathname();
-  let parts = pathname.split('/');
-  let classId = parts[parts.length - 1];
 
   const onFinish = async (values) => {
     setLoading(true);
@@ -49,15 +45,14 @@ const PeopleTab = ({ lang }) => {
     setLoading(false);
     setOpen(false);
     form.resetFields();
-    // mutate('/api/classes');
   };
 
   const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
+    console.error('Failed:', errorInfo);
   };
 
   const d = useMemo(() => {
-    return getDictionary(lang, 'pages/ClassDetail');
+    return getDictionary(lang, 'pages/ClassDetails');
   }, [lang]);
 
   const params = {

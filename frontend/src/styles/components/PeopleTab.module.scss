@@ -1,6 +1,7 @@
 .wrap {
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 .container {
@@ -9,6 +10,7 @@
   flex-direction: column;
   gap: 30px;
   overflow: auto;
+  width: 1000px;
 }
 
 .card-title {

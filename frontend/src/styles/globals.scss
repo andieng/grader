@@ -158,3 +158,11 @@ span {
     margin: 2px;
   }
 }
+
+.ant-menu > .ant-menu-item {
+  margin: 0 10px;
+}
+
+.ant-menu-light .ant-menu-item-selected {
+  background-color: #dff7f4;
+}

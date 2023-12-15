@@ -56,7 +56,7 @@ export default function Header({ user, lang, isInDashboard }) {
   };
 
   const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
+    console.error('Failed:', errorInfo);
   };
 
   const handleCancel = () => {

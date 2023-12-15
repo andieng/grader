@@ -17,11 +17,10 @@ export const GET = async function getMembers(req) {
     });
 
     const data = await response.json();
-    console.log(chalk.bgYellow('memebers in class:'), data);
 
     return NextResponse.json(data);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return NextResponse.json({ error: err }, { status: 200 });
   }
 };
@@ -31,9 +30,6 @@ export const POST = async function addMember(req) {
     const { accessToken } = await getAccessToken();
 
     const reqData = await req.json();
-
-    console.log(reqData);
-
     const response = await fetch(`${process.env.API_BASE_URL}/api/classes/${reqData.classId}/members`, {
       method: 'POST',
       headers: {
@@ -46,11 +42,9 @@ export const POST = async function addMember(req) {
     });
 
     const data = await response.json();
-    console.log(chalk.red('daat'), data);
-
     return NextResponse.json(data);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return NextResponse.json({ error: err }, { status: 404 });
   }
 };
