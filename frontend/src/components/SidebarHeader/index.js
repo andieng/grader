@@ -41,14 +41,19 @@ function transformData(data) {
   return transformedData;
 }
 
-const SidebarHeader = ({ children, lang, isInDashboard }) => {
+const SidebarHeader = ({ children, lang, isInDashboard, isLoggedIn }) => {
   const [current, setCurrent] = useState('0');
   const [openKeys, setOpenKeys] = useState([]);
-
-  console.log(openKeys);
+  const [hasUser, setHasUser] = useState(true);
+  const [isOpenTeaching, setIsOpenTeaching] = useState(false);
 
   const router = useRouter();
   const pathname = usePathname();
+
+  if (isLoggedIn)
+    isLoggedIn.then((isLogin) => {
+      if (hasUser !== isLogin) setHasUser(isLogin);
+    });
 
   let parts = pathname.split('/');
   let classId = parts[parts.length - 1];
@@ -69,19 +74,18 @@ const SidebarHeader = ({ children, lang, isInDashboard }) => {
   const afterTransforming = transformData(classes.data);
 
   if (classId != 'dashboard' && current != classId) {
-    // chưa open được sub menu
-    // if (afterTransforming.teaching != undefined && afterTransforming.teaching.length != 0) {
-    //   console.log('hrtr', afterTransforming.teaching);
-    //   const isTeachingItem = afterTransforming.teaching.some((item) =>
-    //     String(clickedItemKey).startsWith(String(classId)),
-    //   );
+    if (afterTransforming.teaching != undefined && afterTransforming.teaching.length != 0) {
+      const isTeachingItem = afterTransforming.teaching.some((item) => String(item.key) === String(classId));
 
-    //   if (isTeachingItem) {
-    //     setOpenKeys(['teaching']);
-    //   } else {
-    //     setOpenKeys(['enrolled']);
-    //   }
-    // }
+      if (isTeachingItem) {
+        if (!isOpenTeaching) {
+          setOpenKeys(['teaching']);
+          setIsOpenTeaching(true);
+        }
+      } else {
+        setOpenKeys(['enrolled']);
+      }
+    }
     setCurrent(classId);
   }
   const items = [
@@ -115,24 +119,29 @@ const SidebarHeader = ({ children, lang, isInDashboard }) => {
 
   return (
     <>
-      <Header
-        user={data.user}
-        lang={lang}
-        isInDashboard={isInDashboard}
-      />
-      <div className={cx('container')}>
-        <div>
-          <Menu
-            className={cx('menu')}
-            onClick={sidebarClickHandler}
-            selectedKeys={[current]}
-            defaultOpenKeys={openKeys}
-            mode="inline"
-            items={items}
+      {hasUser && (
+        <>
+          <Header
+            user={data.user}
+            lang={lang}
+            isInDashboard={isInDashboard}
           />
-        </div>
-        {children}
-      </div>
+          <div className={cx('container')}>
+            <div>
+              <Menu
+                className={cx('menu')}
+                onClick={sidebarClickHandler}
+                selectedKeys={[current]}
+                defaultOpenKeys={openKeys}
+                mode="inline"
+                items={items}
+              />
+            </div>
+            {children}
+          </div>
+        </>
+      )}
+      {!hasUser && children}
     </>
   );
 };

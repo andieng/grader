@@ -27,7 +27,6 @@ const ClassMenu = ({ children, lang }) => {
   else redirectLocale = '/vi';
 
   const topBarClickHandler = (e) => {
-    console.log('click ', e);
     setCurrent(e.key);
   };
 
