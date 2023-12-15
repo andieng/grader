@@ -26,3 +26,5 @@ export const metadata = {
     icon: '/icon-64x64.png',
   },
 };
+
+export const dynamic = 'force-dynamic';
