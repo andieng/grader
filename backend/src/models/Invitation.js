@@ -4,11 +4,12 @@ const { Model, Sequelize } = _sequelize;
 export default class Invitation extends Model {
   static init(sequelize, DataTypes) {
   return super.init({
-    token: {
+    invitationId: {
       type: DataTypes.UUID,
       allowNull: false,
       defaultValue: DataTypes.UUIDV4,
-      primaryKey: true
+      primaryKey: true,
+      field: 'invitation_id'
     },
     classId: {
       type: DataTypes.UUID,
@@ -18,6 +19,10 @@ export default class Invitation extends Model {
         key: 'class_id'
       },
       field: 'class_id'
+    },
+    token: {
+      type: DataTypes.STRING(255),
+      allowNull: true
     },
     email: {
       type: DataTypes.STRING(255),
@@ -37,7 +42,7 @@ export default class Invitation extends Model {
         name: "invitations_pkey",
         unique: true,
         fields: [
-          { name: "token" },
+          { name: "invitation_id" },
         ]
       },
     ]

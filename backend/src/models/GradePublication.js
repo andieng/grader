@@ -42,6 +42,11 @@ export default class GradePublication extends Model {
     description: {
       type: DataTypes.TEXT,
       allowNull: true
+    },
+    onTimeline: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+      field: 'on_timeline'
     }
   }, {
     sequelize,

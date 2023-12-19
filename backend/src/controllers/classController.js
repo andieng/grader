@@ -17,6 +17,10 @@ import {
 import { groupBy } from "../helpers/objectHelper";
 import { Assignment, Class, ClassMember, Invitation, User } from "../models";
 import { sendMail } from "../services/sendGridMail";
+import {
+  generateInvitationToken,
+  generateInviteLink,
+} from "../helpers/generatorHelper";
 
 export const addMemberToClass = async (req, res) => {
   const { token } = req.body;
@@ -32,7 +36,7 @@ export const addMemberToClass = async (req, res) => {
     return res.json(findMember);
   }
 
-  const invitation = await Invitation.findByPk(token);
+  const invitation = await Invitation.findOne({ where: { token } });
   if (!invitation) {
     res.status(400);
     throw new Error(ERROR_INVALID_INVITATION);
@@ -79,6 +83,7 @@ export const createClass = async (req, res) => {
   }
   const createdInvitation = await Invitation.create({
     classId: createdClass.classId,
+    token: generateInvitationToken(),
     email: null,
     role: "student",
   });
@@ -87,8 +92,7 @@ export const createClass = async (req, res) => {
     throw new Error(ERROR_CREATE_INVITATION);
   }
   const token = createdInvitation.token;
-  const inviteLink = `${url}/${createdClass.classId}/invitations?token=${token}`;
-  createdClass.classInviteStudentLink = inviteLink;
+  createdClass.classCode = token;
   await createdClass.save();
 
   const createdTeacher = await ClassMember.create({
@@ -107,10 +111,11 @@ export const createClass = async (req, res) => {
 
 export const inviteMember = async (req, res) => {
   const { url, emails, role, lang } = req.body;
+  const { classId } = req.params;
   const classMember = await ClassMember.findOne({
     where: {
       memberId: req.user.id,
-      classId: req.params.classId,
+      classId,
     },
     include: {
       model: Class,
@@ -126,21 +131,23 @@ export const inviteMember = async (req, res) => {
 
   const createdInvitations = await Invitation.bulkCreate(
     emails.map((email) => ({
-      classId: classMember.classId,
+      classId,
+      token: generateInvitationToken(),
       email,
       role,
     }))
   );
 
   createdInvitations.forEach(async (item) => {
-    const inviteLink = `${url}/${req.params.classId}/invitations?token=${item.token}`;
+    const inviteLink = generateInviteLink(url, classId, item.token);
+    const className = classMember.class.className;
 
     const mailContent = {
-      subject: generateSubject(classMember.class.className, role, lang),
-      className: classMember.class.className,
+      subject: generateSubject(className, role, lang),
+      className,
       name: req.user.name,
       avatar: req.user.avatar,
-      description: generateDescription(classMember.class.className, role, lang),
+      description: generateDescription(className, role, lang),
       buttonContent: generateButtonContent(lang),
       inviteLink,
       recipient: item.email,

@@ -40,6 +40,10 @@ export default class Grade extends Model {
       allowNull: false,
       defaultValue: Sequelize.Sequelize.fn('now'),
       field: 'updated_at'
+    },
+    viewer: {
+      type: DataTypes.STRING(255),
+      allowNull: true
     }
   }, {
     sequelize,

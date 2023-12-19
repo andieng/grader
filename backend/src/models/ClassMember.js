@@ -44,7 +44,6 @@ export default class ClassMember extends Model {
     sequelize,
     tableName: 'class_members',
     schema: 'public',
-    hasTrigger: true,
     timestamps: false,
     indexes: [
       {

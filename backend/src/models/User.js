@@ -27,7 +27,8 @@ export default class User extends Model {
     },
     avatar: {
       type: DataTypes.TEXT,
-      allowNull: true
+      allowNull: true,
+      defaultValue: "https:\/\/firebasestorage.googleapis.com\/v0\/b\/grader-be3d5.appspot.com\/o\/avatar.png?alt=media&token=2df39de2-1989-41ef-8d30-983511171cfd"
     },
     createdAt: {
       type: DataTypes.DATE,

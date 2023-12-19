@@ -22,10 +22,10 @@ export default class Class extends Model {
       defaultValue: "https:\/\/firebasestorage.googleapis.com\/v0\/b\/grader-be3d5.appspot.com\/o\/class_picture.jpg?alt=media&token=d2e9d3ac-0d38-4e2c-a39c-c3dcc24dab3b",
       field: 'class_picture'
     },
-    classInviteStudentLink: {
-      type: DataTypes.TEXT,
+    classCode: {
+      type: DataTypes.STRING(255),
       allowNull: true,
-      field: 'class_invite_student_link'
+      field: 'class_code'
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -43,7 +43,6 @@ export default class Class extends Model {
     sequelize,
     tableName: 'classes',
     schema: 'public',
-    hasTrigger: true,
     timestamps: false,
     indexes: [
       {

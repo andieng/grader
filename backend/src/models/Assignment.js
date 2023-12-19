@@ -46,7 +46,6 @@ export default class Assignment extends Model {
     sequelize,
     tableName: 'assignments',
     schema: 'public',
-    hasTrigger: true,
     timestamps: false,
     indexes: [
       {
