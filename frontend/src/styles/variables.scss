@@ -33,10 +33,11 @@ $color-btn-black-bg-hover: #3b3b3b;
 $color-btn-black-text: #fff;
 
 // white button
+$color-btn-white-text: #616161;
 $color-btn-white-bg: #fff;
-$color-btn-white-text: #000;
-$color-btn-white-border: #808080;
-$color-btn-white-border-hover: #000;
+$color-btn-white-border: #9d9d9d;
+$color-btn-white-text-hover: $color-primary;
+$color-btn-white-border-hover: $color-primary;
 
 // link button
 $color-btn-link-text: $color-primary;

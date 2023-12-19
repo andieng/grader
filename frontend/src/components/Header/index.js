@@ -152,7 +152,7 @@ export default function Header({ user, lang, isInDashboard }) {
 
         {isInDashboard && (
           <Button
-            className={cx('createClass-btn')}
+            className={cx('create-class-btn')}
             type="primary"
             onClick={() => showModal()}
           >
@@ -226,7 +226,8 @@ export default function Header({ user, lang, isInDashboard }) {
             </Form.Item>
             <Form.Item className={cx('modal-btn')}>
               <Button
-                key="back"
+                key="cancel"
+                type="white"
                 onClick={handleCancel}
               >
                 {d.cancel}

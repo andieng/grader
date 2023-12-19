@@ -13,18 +13,6 @@ import Link from 'next/link';
 
 const cx = classnames.bind(styles);
 
-const saveTokenToLocalStorage = (token) => {
-  localStorage.setItem('token', token);
-};
-
-const getTokenFromLocalStorage = () => {
-  return localStorage.getItem('token');
-};
-
-const removeTokenFromLocalStorage = () => {
-  localStorage.removeItem('token');
-};
-
 export default function InvitationPage({ params: { lang, classId } }) {
   const router = useRouter();
   const [error, setError] = useState(false);
@@ -39,24 +27,27 @@ export default function InvitationPage({ params: { lang, classId } }) {
     return getDictionary(lang, 'pages/Invitation');
   }, [lang]);
 
-  if (token != null) saveTokenToLocalStorage(token);
-  else token = getTokenFromLocalStorage();
+  if (token != null) localStorage.setItem('token', token);
+  else token = localStorage.getItem('token');
 
   const redirectUrl = `d/${classId}/invitations`;
 
   const addMember = async () => {
-    const response = await fetch('/api/classes/members', {
+    // const response = await fetch('/api/classes/members', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify({ classId, token }),
+    // });
+
+    const data = fetch('/api/classes/members', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ classId, token }),
-    });
-
-    const data = await response.json();
-    if (data?.error) {
-      throw new Error(data.error);
-    }
+    }).then((res) => res.json());
 
     return data;
   };
@@ -75,7 +66,7 @@ export default function InvitationPage({ params: { lang, classId } }) {
         })
         .finally(() => {
           setLoading(false);
-          removeTokenFromLocalStorage();
+          localStorage.removeItem('token');
         });
     }
   }, [user, error]);

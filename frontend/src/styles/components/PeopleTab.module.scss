@@ -1,3 +1,5 @@
+@use "../variables" as *;
+
 .wrap {
   display: flex;
   flex-direction: column;
@@ -9,24 +11,57 @@
   display: flex;
   flex-direction: column;
   gap: 30px;
-  overflow: auto;
   width: 1000px;
 }
 
 .card-title {
-  color: #33a8ac;
+  color: rgb(11, 176, 181);
   display: flex;
   justify-content: space-between;
+  margin: 0 5px;
+  height: 68px;
   align-items: center;
   font-family: 'Quicksand', sans-serif !important;
-  & button {
-    width: 30px !important;
-    height: 30px !important;
+
+  & h2 {
+    font-size: 3rem;
+    font-weight: 500;
+  }
+
+  & .user-invite-btn {
+    width: 42px;
+    height: 42px;
+    color: rgb(11, 176, 181);
+    margin-left: 25px;
+
+    svg {
+      width: 23px;
+      height: 23px;
+    }
+  }
+
+  & .user-invite-btn:hover {
+    color: rgb(11, 176, 181) !important;
+  }
+
+  & .user-invite-btn:active {
+    color: rgb(11, 176, 181) !important;
   }
 }
 
 .card {
-  border: solid 1px #0000004b;
+  box-shadow: none;
+
+  & > :first-child {
+    border-bottom-color: $color-primary;
+    padding-left: 18px;
+    padding-right: 18px;
+    height: 68px;
+  }
+
+  & > :last-child {
+    padding: 0;
+  }
 }
 
 .posts {
@@ -41,14 +76,18 @@
 }
 
 .card-post-info {
+  margin: 0 8px;
   width: 100%;
   display: flex;
   flex-direction: row;
-  gap: 30px;
+  gap: 20px;
+  padding: 6px 18px;
+
   & > * {
     margin-bottom: 10px;
     margin-top: 10px;
   }
+
   & > p {
     font-weight: 600;
     display: flex;
@@ -62,9 +101,14 @@
 }
 
 .user-avatar {
-  width: 40px;
-  height: 40px;
+  width: 35px;
+  height: 35px;
   border-radius: 50%;
+}
+
+.user-divider {
+  border-block-start-color: rgb(234, 234, 234);
+  margin: 0;
 }
 
 .invitation-modal {
@@ -74,6 +118,8 @@
 .invitation-link {
   display: flex;
   align-items: center;
+  margin-bottom: 15px;
+
   & p {
     color: gray;
     overflow: hidden;
@@ -81,16 +127,23 @@
     text-overflow: ellipsis;
     margin-right: 10px;
   }
+
   & button {
     width: 70px !important;
   }
-  margin-bottom: 15px;
 }
 
 .invite-btn {
   display: flex;
   justify-content: flex-end;
+
   & button {
     margin-left: 20px;
   }
+}
+
+.title-info {
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
 }

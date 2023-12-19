@@ -63,7 +63,7 @@ export const addMemberToClass = async (req, res) => {
 };
 
 export const createClass = async (req, res) => {
-  const { className, classPicture, url } = req.body;
+  const { className, classPicture } = req.body;
 
   let createdClass;
   if (classPicture) {
@@ -173,6 +173,11 @@ export const getClasses = async (req, res) => {
       where: {
         memberId: req.user.id,
       },
+      include: {
+        model: Class,
+        as: "class",
+        required: true,
+      },
     });
     if (!classMemberInfo) {
       return res.json({
@@ -180,31 +185,41 @@ export const getClasses = async (req, res) => {
         enrolled: [],
       });
     }
-    const classMemberInfoSplit = groupBy(classMemberInfo, "role");
 
-    const teachingClassMemberInfo = classMemberInfoSplit.teacher;
-    let teachingClasses = [];
-    if (teachingClassMemberInfo?.length > 0) {
-      teachingClasses = await Promise.all(
-        teachingClassMemberInfo.map(
-          async ({ classId }) => await Class.findByPk(classId)
-        )
-      );
-    }
+    const classMemberInfoDataValues = await Promise.all(
+      classMemberInfo.map(async (item) => {
+        return {
+          ...item.dataValues,
+          class: {
+            ...item.dataValues.class.dataValues,
+            numStudents: await ClassMember.count({
+              where: {
+                classId: item.dataValues.classId,
+                role: "student",
+              },
+            }),
+            numTeachers: await ClassMember.count({
+              where: {
+                classId: item.dataValues.classId,
+                role: "teacher",
+              },
+            }),
+          },
+        };
+      })
+    );
+    const classMemberInfoSplit = groupBy(classMemberInfoDataValues, "role");
 
-    const enrolledClassMemberInfo = classMemberInfoSplit.student;
-    let enrolledClasses = [];
-    if (enrolledClassMemberInfo?.length > 0) {
-      enrolledClasses = await Promise.all(
-        enrolledClassMemberInfo.map(
-          async ({ classId }) => await Class.findByPk(classId)
-        )
-      );
-    }
+    const teachingClasses = classMemberInfoSplit.teacher?.map(
+      (item) => item.class
+    );
+    const enrolledClasses = classMemberInfoSplit.student?.map(
+      (item) => item.class
+    );
 
     return res.json({
-      teaching: teachingClasses,
-      enrolled: enrolledClasses,
+      teaching: teachingClasses || [],
+      enrolled: enrolledClasses || [],
     });
   }
 };

@@ -2,13 +2,13 @@
 
 import { useMemo, useState } from 'react';
 import useSWR from 'swr';
-import { Input, Card, Button, Row, Modal, message, Spin, Form } from 'antd';
-import { MoreOutlined, CopyOutlined, UserAddOutlined } from '@ant-design/icons';
+import { Input, Card, Button, Row, Modal, message, Spin, Form, Divider } from 'antd';
+import { CopyOutlined, UserAddOutlined } from '@ant-design/icons';
 import getDictionary from '@/utils/language';
 import classnames from 'classnames/bind';
 import styles from '@/styles/components/PeopleTab.module.scss';
-import { usePathname } from 'next/navigation';
 import ClassMenu from '@/components/ClassMenu';
+import { generateInviteLink } from '@/utils/generator';
 
 const cx = classnames.bind(styles);
 
@@ -22,9 +22,39 @@ const PeopleTab = ({ lang, classId }) => {
   const [showInvitationLink, setShowInvitationLink] = useState(true);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
-  const [isStudent, setIsStudent] = useState(true);
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
+
+  const d = useMemo(() => {
+    return getDictionary(lang, 'pages/ClassDetails');
+  }, [lang]);
+
+  const apiUrl = useMemo(() => `/en/api/classes/members?${new URLSearchParams({ classId })}`, [classId]);
+
+  const classes = useSWR('/api/classes', fetcher);
+  const members = useSWR(apiUrl, fetcher);
+  const teachingClass = useMemo(() => {
+    const filterTeachingClass = classes.data.teaching?.filter((teaching) => teaching.classId === classId)[0];
+    if (!filterTeachingClass) {
+      return null;
+    }
+    return {
+      ...filterTeachingClass,
+      classInviteStudentLink: generateInviteLink(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/${lang}/d`,
+        classId,
+        filterTeachingClass.classCode,
+      ),
+    };
+  }, [classes]);
+  const isStudent = useMemo(() => (teachingClass ? false : true), [teachingClass]);
+
+  const { students, teachers } = useMemo(() => {
+    return {
+      students: members.data?.filter((student) => student.role === 'student'),
+      teachers: members.data?.filter((student) => student.role === 'teacher'),
+    };
+  }, [members]);
 
   const onFinish = async (values) => {
     setLoading(true);
@@ -50,23 +80,6 @@ const PeopleTab = ({ lang, classId }) => {
   const onFinishFailed = (errorInfo) => {
     console.error('Failed:', errorInfo);
   };
-
-  const d = useMemo(() => {
-    return getDictionary(lang, 'pages/ClassDetails');
-  }, [lang]);
-
-  const params = {
-    classId,
-  };
-  const apiUrl = `/en/api/classes/members?${new URLSearchParams(params)}`;
-
-  const classes = useSWR('/api/classes', fetcher);
-  const members = useSWR(apiUrl, fetcher);
-  const curClass = classes.data.teaching?.filter((teaching) => teaching.classId === classId)[0];
-
-  if (curClass?.classInviteStudentLink) {
-    if (isStudent === true) setIsStudent(false);
-  }
 
   const copyHandler = (link) => {
     navigator.clipboard.writeText(link);
@@ -105,9 +118,6 @@ const PeopleTab = ({ lang, classId }) => {
       </div>
     );
 
-  const students = members.data?.filter((student) => student.role === 'student');
-  const teachers = members.data?.filter((student) => student.role === 'teacher');
-
   return (
     <div className={cx('wrap')}>
       <ClassMenu lang={lang}></ClassMenu>
@@ -115,21 +125,28 @@ const PeopleTab = ({ lang, classId }) => {
         {contextHolder}
         <Card
           className={cx('card')}
+          bordered={false}
           title={
             <div className={cx('card-title')}>
               <h2>{d.teachers}</h2>
-              {!isStudent && (
-                <Button
-                  type="primary"
-                  shape="circle"
-                  icon={<UserAddOutlined />}
-                  onClick={() => showModal(d.inviteTeachers)}
-                />
-              )}
+              <div className={cx('title-info')}>
+                <span>
+                  {teachers.length} teacher{teachers.length > 1 && 's'}
+                </span>
+                {!isStudent && (
+                  <Button
+                    type="text"
+                    shape="circle"
+                    className={cx('user-invite-btn')}
+                    icon={<UserAddOutlined />}
+                    onClick={() => showModal(d.inviteTeachers)}
+                  />
+                )}
+              </div>
             </div>
           }
         >
-          {teachers.map((item, index) => (
+          {teachers.map((item, index, teachers) => (
             <div key={index}>
               <Row>
                 <div className={cx('card-post-info')}>
@@ -139,31 +156,32 @@ const PeopleTab = ({ lang, classId }) => {
                     alt="User"
                   />
                   <p>{item.member.name}</p>
-                  <Button
-                    type="text"
-                    shape="circle"
-                    size="large"
-                    icon={<MoreOutlined className={cx('more-btn')} />}
-                  />
                 </div>
               </Row>
-              {index !== teachers.length - 1 && <hr className={cx('horizontal-line')} />}{' '}
+              {index !== teachers.length - 1 && <Divider className={cx('user-divider')} />}
             </div>
           ))}
         </Card>
         <Card
+          bordered={false}
           className={cx('card')}
           title={
             <div className={cx('card-title')}>
               <h2>{d.students}</h2>
-              {!isStudent && (
-                <Button
-                  type="primary"
-                  shape="circle"
-                  icon={<UserAddOutlined />}
-                  onClick={() => showModal(d.inviteStudents)}
-                />
-              )}
+              <div className={cx('title-info')}>
+                <span>
+                  {students.length} student{students.length > 1 && 's'}
+                </span>
+                {!isStudent && (
+                  <Button
+                    type="text"
+                    shape="circle"
+                    className={cx('user-invite-btn')}
+                    icon={<UserAddOutlined />}
+                    onClick={() => showModal(d.inviteStudents)}
+                  />
+                )}
+              </div>
             </div>
           }
         >
@@ -177,15 +195,9 @@ const PeopleTab = ({ lang, classId }) => {
                     alt="User"
                   />
                   <p>{item.member.name}</p>
-                  <Button
-                    type="text"
-                    shape="circle"
-                    size="large"
-                    icon={<MoreOutlined className={cx('more-btn')} />}
-                  />
                 </div>
               </Row>
-              {index !== students.length - 1 && <hr className={cx('horizontal-line')} />}{' '}
+              {index !== students.length - 1 && <Divider className={cx('user-divider')} />}
             </div>
           ))}
         </Card>
@@ -201,11 +213,11 @@ const PeopleTab = ({ lang, classId }) => {
             <>
               <h4>{d.inviteUrl}</h4>
               <div className={cx('invitation-link')}>
-                <p>{curClass?.classInviteStudentLink}</p>
+                <p>{teachingClass?.classInviteStudentLink}</p>
                 <Button
                   type="text"
                   icon={<CopyOutlined />}
-                  onClick={() => copyHandler(curClass?.classInviteStudentLink)}
+                  onClick={() => copyHandler(teachingClass?.classInviteStudentLink)}
                 ></Button>
               </div>
             </>
@@ -231,6 +243,7 @@ const PeopleTab = ({ lang, classId }) => {
             <Form.Item className={cx('invite-btn')}>
               <Button
                 key="back"
+                type="white"
                 onClick={handleCancel}
               >
                 {d.cancel}

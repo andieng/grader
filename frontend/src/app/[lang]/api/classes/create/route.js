@@ -15,7 +15,6 @@ export const POST = async function createClass(req) {
       },
       body: JSON.stringify({
         className: className.className,
-        url: `${process.env.AUTH0_BASE_URL}/d`,
       }),
     });
 

@@ -1,7 +1,8 @@
 import { customAlphabet } from "nanoid";
 
 export const generateInvitationToken = () => {
-  return customAlphabet("1234567890abcdefghijklmnopqrstuvwxyz", 7);
+  const nanoid = customAlphabet("1234567890abcdefghijklmnopqrstuvwxyz", 7);
+  return nanoid();
 };
 
 export const generateInviteLink = (url, classId, token) => {

@@ -3,7 +3,18 @@ import { getSession, getAccessToken } from '@auth0/nextjs-auth0';
 
 export async function generateMetadata({ params }) {
   const { classId } = params;
-  const { accessToken } = await getAccessToken();
+  let accessToken;
+  try {
+    accessToken = (await getAccessToken())?.accessToken;
+  } catch (err) {
+    return {
+      title: 'Grader',
+      description: 'Grader',
+      icons: {
+        icon: '/icon-64x64.png',
+      },
+    };
+  }
 
   const response = await fetch(`${process.env.API_BASE_URL}/api/classes/${classId}/details`, {
     headers: {
@@ -12,6 +23,17 @@ export async function generateMetadata({ params }) {
   });
 
   const data = await response.json();
+
+  if (!data.className) {
+    return {
+      title: 'Grader',
+      description: 'Grader',
+      icons: {
+        icon: '/icon-64x64.png',
+      },
+    };
+  }
+
   return {
     title: `${data.className} | Grader`,
     description: `${data.className} | Grader`,

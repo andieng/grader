@@ -1,3 +1,6 @@
 {
-  "dashboard": "Dashboard"
+  "dashboard": "Dashboard",
+  "classCodeCopied": "Class code copied",
+  "students": "students",
+  "teachers": "teachers"
 }

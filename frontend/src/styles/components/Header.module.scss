@@ -10,7 +10,8 @@
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   height: 72px;
   justify-content: space-between;
-  padding: 0 60px;
+  padding: 0 10px;
+  padding-right: 20px;
   background-color: $color-background;
 }
 
@@ -90,8 +91,9 @@
   height: 16px;
 }
 
-.createClass-btn {
+.create-class-btn {
   margin-right: 25px;
+  font-size: 1.5rem;
 }
 
 .create-modal {
