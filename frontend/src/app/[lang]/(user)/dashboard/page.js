@@ -25,15 +25,7 @@ export default withPageAuthRequired(
     const d = useMemo(() => {
       return getDictionary(lang, 'pages/Dashboard');
     }, [lang]);
-
-    const chooseClassHandler = (classId) => {
-      router.push(`/${lang}/d/${classId}`);
-    };
-
     const classes = useSWR('/api/classes', fetcher);
-
-    if (d === null || classes.isLoading) return <Spin size="large" />;
-    if (classes.error) return <div>{error.message}</div>;
 
     const allClasses = useMemo(() => {
       const allClasses = [...classes.data.teaching, ...classes.data.enrolled];
@@ -48,6 +40,13 @@ export default withPageAuthRequired(
         content: `${d.classCodeCopied}`,
       });
     }, []);
+
+    const chooseClassHandler = (classId) => {
+      router.push(`/${lang}/d/${classId}`);
+    };
+
+    if (d === null || classes.isLoading) return <Spin size="large" />;
+    if (classes.error) return <div>{error.message}</div>;
 
     return (
       <>
