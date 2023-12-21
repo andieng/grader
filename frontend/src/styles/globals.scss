@@ -160,6 +160,12 @@ span {
   margin: 0 10px;
 }
 
+.ant-menu .ant-menu-sub > li {
+  margin-left: 4px;
+  margin-right: 4px;
+  font-size: 1.5rem;
+}
+
 .ant-menu-light .ant-menu-item-selected {
   background-color: #dff7f4;
 }

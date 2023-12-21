@@ -15,7 +15,7 @@
   font-size: 16px;
   width: 256px;
 
-  & li:first-child {
+  & > li:first-child {
     margin: 4px;
   } 
 }
