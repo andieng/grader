@@ -33,14 +33,6 @@ export default function InvitationPage({ params: { lang, classId } }) {
   const redirectUrl = `d/${classId}/invitations`;
 
   const addMember = async () => {
-    // const response = await fetch('/api/classes/members', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify({ classId, token }),
-    // });
-
     const data = fetch('/api/classes/members', {
       method: 'POST',
       headers: {
