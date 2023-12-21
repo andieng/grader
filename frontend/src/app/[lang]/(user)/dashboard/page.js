@@ -82,7 +82,10 @@ export default withPageAuthRequired(
                 }
                 actions={[
                   <span key="class-code">{classItem.classCode}</span>,
-                  <Tooltip title="Copy">
+                  <Tooltip
+                    key="copy-btn"
+                    title="Copy"
+                  >
                     <Button
                       type="white"
                       className={cx('copy-btn')}
@@ -101,7 +104,6 @@ export default withPageAuthRequired(
                 ]}
               >
                 <Meta
-                  key={classItem.classId}
                   title={classItem.className}
                   className={cx('card-title')}
                   description={
