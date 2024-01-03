@@ -126,6 +126,8 @@ export default function Header({ user, lang, isInDashboard }) {
     [pathname, router],
   );
 
+  console.log(user);
+
   return (
     <header className={cx('header')}>
       <HomeButton />
@@ -134,14 +136,14 @@ export default function Header({ user, lang, isInDashboard }) {
         {!user && (
           <>
             <Button
-              type="transparent"
+              type="text"
               className={cx('login-btn')}
               href={`${lang}/api/auth/login`}
             >
               {d.login}
             </Button>
             <Button
-              type="primary"
+              type="transparent"
               className={cx('signup-btn')}
               href={`${lang}/api/auth/signup`}
             >
@@ -157,6 +159,16 @@ export default function Header({ user, lang, isInDashboard }) {
             onClick={() => showModal()}
           >
             {d.createClass}
+          </Button>
+        )}
+
+        {user && !isInDashboard && (
+          <Button
+            type="text"
+            href={redirectLocale}
+            className={cx('dashboard-btn')}
+          >
+            {d.dashboard}
           </Button>
         )}
 

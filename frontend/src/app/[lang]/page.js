@@ -2,13 +2,14 @@
 
 import useSWR from 'swr';
 import { useMemo } from 'react';
-import { Spin } from 'antd';
+import { Spin, Button } from 'antd';
 import { NextResponse } from 'next/server';
 import classnames from 'classnames/bind';
 import Header from '@/components/Header';
 import styles from '@/styles/pages/Home.module.scss';
 import getDictionary from '@/utils/language';
 import { ERROR_ROLE_NOT_FOUND } from '@/constants/messages';
+import { Connection, ConnectionBackground } from '@/assets/vectors';
 
 const cx = classnames.bind(styles);
 
@@ -34,25 +35,50 @@ export default function Home({ params: { lang } }) {
 
   if (data?.error) {
     return (
-      <div className={cx('wrapper')}>
-        <Header lang={lang} />
+      <div className={cx('wrapper') + ' overflow-hidden'}>
+        <Header
+          lang={lang}
+          user={data?.user}
+        />
         <div className={cx('main')}>
-          <h1 className={cx('welcome')}>{d.welcome}</h1>
-          <h3 className={cx('description')}>{d.introduce}</h3>
+          <ConnectionBackground className={cx('connection-bg')} />
+          <Connection className={cx('connection')} />
+          <div className={cx('introduction')}>
+            <h2 className={cx('slogan-first-sentence')}>{d.slogan_first_sentence}</h2>
+            <h2 className={cx('slogan-second-sentence')}>{d.slogan_second_sentence}</h2>
+            <Button
+              className={cx('get-started')}
+              type="primary"
+              href={`${lang}/dashboard`}
+            >
+              {d.get_started}
+            </Button>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className={cx('wrapper')}>
+    <div className={cx('wrapper') + ' overflow-hidden'}>
       <Header
-        user={data?.user}
         lang={lang}
+        user={data?.user}
       />
       <div className={cx('main')}>
-        <h1 className={cx('welcome')}>{d.welcome}</h1>
-        <h3 className={cx('description')}>{d.introduce}</h3>
+        <ConnectionBackground className={cx('connection-bg')} />
+        <Connection className={cx('connection')} />
+        <div className={cx('introduction')}>
+          <h2 className={cx('slogan-first-sentence')}>{d.slogan_first_sentence}</h2>
+          <h2 className={cx('slogan-second-sentence')}>{d.slogan_second_sentence}</h2>
+          <Button
+            className={cx('get-started')}
+            type="primary"
+            href={`${lang}/dashboard`}
+          >
+            {d.get_started}
+          </Button>
+        </div>
       </div>
     </div>
   );

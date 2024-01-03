@@ -90,11 +90,7 @@ const SidebarHeader = ({ children, lang, isInDashboard, isLoggedIn }) => {
   }
   const items = [
     {
-      label: (
-        <Link href={`/${lang}/dashboard`}>
-          <p className={cx('user-item')}>{d.dashboard}</p>
-        </Link>
-      ),
+      label: <Link href={`/${lang}/dashboard`}>{d.dashboard}</Link>,
       key: '0',
       icon: <AppstoreOutlined />,
     },

@@ -8,5 +8,6 @@
   "className": "Class name",
   "create": "Create",
   "cancel": "Cancel",
-  "classNameRequired": "Please input your class name!"
+  "classNameRequired": "Please input your class name!",
+  "dashboard": "Dashboard"
 }

@@ -8,5 +8,6 @@
   "className": "Tên lớp học",
   "create": "Tạo",
   "cancel": "Hủy",
-  "classNameRequired": "Tên lớp không được bỏ trống"
+  "classNameRequired": "Tên lớp không được bỏ trống",
+  "dashboard": "Tổng quan"
 }

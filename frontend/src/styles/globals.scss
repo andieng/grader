@@ -8,15 +8,25 @@
 
 html {
   font-size: 62.5%;
+  height: 100%;
 }
 
 body {
+  height: 100%;
   font-family: $font-family-default;
   font-size: 1.6rem;
   font-weight: 500;
   color: $color-text-normal;
   line-height: 1.5;
   background-color: $color-background;
+}
+
+body:has(.overflow-hidden) {
+  overflow: hidden;
+}
+
+body > div {
+  height: 100%;
 }
 
 a {

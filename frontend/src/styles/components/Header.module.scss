@@ -7,7 +7,6 @@
   top: 0;
   z-index: 1000;
   max-width: 100%;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   height: 72px;
   justify-content: space-between;
   padding: 0 10px;
@@ -26,18 +25,28 @@
   font-size: 3rem;
 }
 
-.login-btn {
-  font-size: 1.7rem;
+.login-btn, .dashboard-btn {
+  font-size: 1.6rem;
   text-align: center;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 22px;
+  padding-right: 22px;
+  border-radius: 20px;
+}
+
+.dashboard-btn {
+  margin-right: 10px;
 }
 
 .signup-btn {
-  font-size: 1.7rem;
+  border-radius: 20px;
+  font-size: 1.6rem;
   margin-left: 8px;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 22px;
+  padding-right: 22px;
 }
 
 .auth {
