@@ -1,31 +1,38 @@
 import _sequelize from 'sequelize';
 const { Model, Sequelize } = _sequelize;
 
-export default class Class extends Model {
+export default class StudentMapping extends Model {
   static init(sequelize, DataTypes) {
   return super.init({
     classId: {
       type: DataTypes.UUID,
       allowNull: false,
-      defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
+      references: {
+        model: 'classes',
+        key: 'class_id'
+      },
       field: 'class_id'
     },
-    className: {
-      type: DataTypes.STRING(255),
-      allowNull: true,
-      field: 'class_name'
-    },
-    classPicture: {
+    studentId: {
       type: DataTypes.TEXT,
-      allowNull: true,
-      defaultValue: "https:\/\/firebasestorage.googleapis.com\/v0\/b\/grader-be3d5.appspot.com\/o\/class_picture.jpg?alt=media&token=d2e9d3ac-0d38-4e2c-a39c-c3dcc24dab3b",
-      field: 'class_picture'
+      allowNull: false,
+      primaryKey: true,
+      field: 'student_id'
     },
-    classCode: {
+    userId: {
+      type: DataTypes.UUID,
+      allowNull: true,
+      references: {
+        model: 'users',
+        key: 'id'
+      },
+      field: 'user_id'
+    },
+    fullName: {
       type: DataTypes.STRING(255),
       allowNull: true,
-      field: 'class_code'
+      field: 'full_name'
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -38,23 +45,20 @@ export default class Class extends Model {
       allowNull: false,
       defaultValue: Sequelize.Sequelize.fn('now'),
       field: 'updated_at'
-    },
-    studentMappingFile: {
-      type: DataTypes.TEXT,
-      allowNull: true,
-      field: 'student_mapping_file'
     }
   }, {
     sequelize,
-    tableName: 'classes',
+    tableName: 'student_mapping',
     schema: 'public',
+    hasTrigger: true,
     timestamps: false,
     indexes: [
       {
-        name: "classes_pkey",
+        name: "student_mapping_pkey",
         unique: true,
         fields: [
           { name: "class_id" },
+          { name: "student_id" },
         ]
       },
     ]

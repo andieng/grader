@@ -38,11 +38,18 @@ export default class GradeReviewComment extends Model {
       allowNull: false,
       defaultValue: Sequelize.Sequelize.fn('now'),
       field: 'created_at'
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.Sequelize.fn('now'),
+      field: 'updated_at'
     }
   }, {
     sequelize,
     tableName: 'grade_review_comments',
     schema: 'public',
+    hasTrigger: true,
     timestamps: false,
     indexes: [
       {

@@ -1,3 +1,4 @@
+import XLSX from "xlsx";
 import {
   ERROR_CLASS_MEMBER_NOT_FOUND,
   ERROR_CLASS_NOT_FOUND,
@@ -5,8 +6,13 @@ import {
   ERROR_CREATE_CLASS,
   ERROR_CREATE_CLASS_MEMBER,
   ERROR_CREATE_INVITATION,
+  ERROR_INPUT_FILE_NOT_FOUND,
+  ERROR_INPUT_DATA_NOT_FOUND,
   ERROR_INVALID_INVITATION,
   MSG_INVITE_SUCCESSFULLY,
+  ERROR_MAPPING_NOT_FOUND,
+  ERROR_STUDENT_ID_ALREADY_MAPPED,
+  ERROR_USER_ALREADY_MAPPED,
 } from "../constants";
 import {
   generateSubject,
@@ -15,7 +21,15 @@ import {
   generateMessage,
 } from "../helpers/invitationMailHelper";
 import { groupBy } from "../helpers/objectHelper";
-import { Assignment, Class, ClassMember, Invitation, User } from "../models";
+import {
+  Assignment,
+  Class,
+  ClassMember,
+  Grade,
+  Invitation,
+  User,
+  StudentMapping,
+} from "../models";
 import { sendMail } from "../services/sendGridMail";
 import {
   generateInvitationToken,
@@ -271,13 +285,27 @@ export const getClassDetails = async (req, res) => {
   return res.json(classDetails);
 };
 
+export const getAssignments = async (req, res) => {
+  const { classId } = req.params;
+
+  const assignments = await Assignment.findAll({
+    where: {
+      classId,
+    },
+  });
+
+  return res.json(assignments);
+};
+
 export const addAssignment = async (req, res) => {
   const { assignmentName, assignmentGradeScale } = req.body;
+  const { classId } = req.params;
 
   const createdAssignment = await Assignment.create({
-    classId: req.class.classId,
+    classId,
     assignmentName,
     assignmentGradeScale,
+    viewerRole: "teacher",
   });
 
   if (!createdAssignment) {
@@ -286,4 +314,123 @@ export const addAssignment = async (req, res) => {
   }
 
   return res.json(createdAssignment);
+};
+
+export const upsertGradesByJson = async (req, res) => {
+  const { grades } = req.body;
+  const { assignmentId } = req.params;
+
+  if (!grades) {
+    res.status(400);
+    throw new Error(ERROR_INPUT_DATA_NOT_FOUND);
+  }
+
+  const upsertedGrades = await Promise.all(
+    grades.map(async (gradeItem) => {
+      const [grade] = await Grade.upsert({
+        assignmentId,
+        studentId: isNaN(gradeItem.StudentId)
+          ? gradeItem.StudentId
+          : gradeItem.StudentId.toString(),
+        gradeValue: gradeItem.Grade,
+      });
+
+      return grade;
+    })
+  );
+
+  res.json(upsertedGrades);
+};
+
+export const upsertGradesByFile = async (req, res) => {
+  const { assignmentGradeFile } = req.files;
+  const { assignmentId } = req.params;
+
+  if (!assignmentGradeFile) {
+    res.status(400);
+    throw new Error(ERROR_INPUT_FILE_NOT_FOUND);
+  }
+  const xlsxData = XLSX.read(assignmentGradeFile.data);
+  const jsonData = XLSX.utils.sheet_to_json(xlsxData.Sheets.Sheet1);
+
+  const upsertedGrades = await Promise.all(
+    jsonData.map(async (gradeItem) => {
+      const [grade] = await Grade.upsert({
+        assignmentId,
+        studentId: isNaN(gradeItem.StudentId)
+          ? gradeItem.StudentId
+          : gradeItem.StudentId.toString(),
+        gradeValue: gradeItem.Grade,
+      });
+
+      return grade;
+    })
+  );
+
+  res.json(upsertedGrades);
+};
+
+export const upsertStudentMapping = async (req, res) => {
+  const { studentMappingFile } = req.files;
+  const { classId } = req.params;
+
+  if (!studentMappingFile) {
+    res.status(400);
+    throw new Error(ERROR_INPUT_FILE_NOT_FOUND);
+  }
+  const xlsxData = XLSX.read(studentMappingFile.data);
+  const jsonData = XLSX.utils.sheet_to_json(xlsxData.Sheets.Sheet1);
+
+  const upsertedStudentMapping = await Promise.all(
+    jsonData.map(async (item) => {
+      const [studentMapping] = await StudentMapping.upsert({
+        classId,
+        studentId: isNaN(item.StudentId)
+          ? item.StudentId
+          : item.StudentId.toString(),
+        fullName: item.FullName,
+      });
+
+      return studentMapping;
+    })
+  );
+
+  res.json(upsertedStudentMapping);
+};
+
+export const mapStudent = async (req, res) => {
+  const { classId, studentId } = req.params;
+
+  const userAlreadyMapped = await StudentMapping.findOne({
+    where: {
+      userId: req.user.id,
+    },
+  });
+
+  if (userAlreadyMapped) {
+    res.status(400);
+    throw new Error(ERROR_USER_ALREADY_MAPPED);
+  }
+
+  const studentMapping = await StudentMapping.findOne({
+    where: {
+      classId,
+      studentId,
+    },
+  });
+
+  if (!studentMapping) {
+    res.status(400);
+    throw new Error(ERROR_MAPPING_NOT_FOUND);
+  }
+
+  if (studentMapping.userId) {
+    res.status(400);
+    throw new Error(ERROR_STUDENT_ID_ALREADY_MAPPED);
+  }
+
+  studentMapping.userId = req.user.id;
+  await studentMapping.save();
+
+  res.json(studentMapping);
 };

@@ -47,11 +47,18 @@ export default class GradePublication extends Model {
       type: DataTypes.BOOLEAN,
       allowNull: true,
       field: 'on_timeline'
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.Sequelize.fn('now'),
+      field: 'updated_at'
     }
   }, {
     sequelize,
     tableName: 'grade_publications',
     schema: 'public',
+    hasTrigger: true,
     timestamps: false,
     indexes: [
       {

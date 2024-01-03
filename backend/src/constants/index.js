@@ -17,6 +17,12 @@ export const ERROR_CLASS_NOT_FOUND = "Class not found";
 export const ERROR_CLASS_MEMBER_NOT_FOUND = "Class member not found";
 export const ERROR_SEND_INVITATIONS_FAILED =
   "Something went wrong when sending invitations";
+export const ERROR_INPUT_DATA_NOT_FOUND = "Input data not found";
+export const ERROR_INPUT_FILE_NOT_FOUND = "Input file not found";
+export const ERROR_MAPPING_NOT_FOUND = "Mapping not found";
+export const ERROR_STUDENT_ID_ALREADY_MAPPED =
+  "This student id has already been mapped";
+export const ERROR_USER_ALREADY_MAPPED = "User has already been mapped";
 
 // Success message
 export const MSG_INVITE_SUCCESSFULLY = "Invite members via email successfully";

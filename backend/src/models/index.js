@@ -8,6 +8,7 @@ import _GradeReviewComment from "./GradeReviewComment.js";
 import _GradeReview from "./GradeReview.js";
 import _Grade from "./Grade.js";
 import _User from "./User.js";
+import _StudentMapping from "./StudentMapping.js";
 import _Invitation from "./Invitation.js";
 
 function initModels(sequelize) {
@@ -19,25 +20,14 @@ function initModels(sequelize) {
   const GradeReview = _GradeReview.init(sequelize, DataTypes);
   const Grade = _Grade.init(sequelize, DataTypes);
   const Invitation = _Invitation.init(sequelize, DataTypes);
+  const StudentMapping = _StudentMapping.init(sequelize, DataTypes);
   const User = _User.init(sequelize, DataTypes);
 
-  Assignment.belongsToMany(User, {
-    as: "studentIdUsers",
-    through: Grade,
-    foreignKey: "assignmentId",
-    otherKey: "studentId",
-  });
   Class.belongsToMany(User, {
     as: "memberIdUsers",
     through: ClassMember,
     foreignKey: "classId",
     otherKey: "memberId",
-  });
-  User.belongsToMany(Assignment, {
-    as: "assignmentIdAssignments",
-    through: Grade,
-    foreignKey: "studentId",
-    otherKey: "assignmentId",
   });
   User.belongsToMany(Class, {
     as: "classIdClasses",
@@ -45,8 +35,6 @@ function initModels(sequelize) {
     foreignKey: "memberId",
     otherKey: "classId",
   });
-  Grade.belongsTo(Assignment, { as: "assignment", foreignKey: "assignmentId" });
-  Assignment.hasMany(Grade, { as: "grades", foreignKey: "assignmentId" });
   Assignment.belongsTo(Class, { as: "class", foreignKey: "classId" });
   Class.hasMany(Assignment, { as: "assignments", foreignKey: "classId" });
   ClassMember.belongsTo(Class, { as: "class", foreignKey: "classId" });
@@ -58,6 +46,11 @@ function initModels(sequelize) {
   });
   Invitation.belongsTo(Class, { as: "class", foreignKey: "classId" });
   Class.hasMany(Invitation, { as: "invitations", foreignKey: "classId" });
+  StudentMapping.belongsTo(Class, { as: "class", foreignKey: "classId" });
+  Class.hasMany(StudentMapping, {
+    as: "studentMappings",
+    foreignKey: "classId",
+  });
   GradeReview.belongsTo(GradePublication, {
     as: "gradePublication",
     foreignKey: "gradePublicationId",
@@ -96,8 +89,8 @@ function initModels(sequelize) {
     as: "teacherGradeReviews",
     foreignKey: "teacherId",
   });
-  Grade.belongsTo(User, { as: "student", foreignKey: "studentId" });
-  User.hasMany(Grade, { as: "grades", foreignKey: "studentId" });
+  StudentMapping.belongsTo(User, { as: "user", foreignKey: "userId" });
+  User.hasMany(StudentMapping, { as: "studentMappings", foreignKey: "userId" });
 
   return {
     Assignment,
@@ -108,6 +101,7 @@ function initModels(sequelize) {
     GradeReview,
     Grade,
     Invitation,
+    StudentMapping,
     User,
   };
 }
@@ -148,6 +142,7 @@ export const {
   GradeReviewComment,
   Invitation,
   Assignment,
+  StudentMapping,
 } = initModels(sequelize);
 
 export default sequelize;

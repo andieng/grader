@@ -41,6 +41,11 @@ export default class Assignment extends Model {
       allowNull: false,
       defaultValue: Sequelize.Sequelize.fn('now'),
       field: 'updated_at'
+    },
+    viewerRole: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+      field: 'viewer_role'
     }
   }, {
     sequelize,
