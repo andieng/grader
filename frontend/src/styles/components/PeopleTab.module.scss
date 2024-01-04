@@ -8,7 +8,6 @@
 }
 
 .container {
-  height: 100%;
   padding: 20px 70px 30px 70px;
   display: flex;
   flex-direction: column;
@@ -54,6 +53,8 @@
 
 .card {
   box-shadow: none;
+  padding: 15px 30px;
+  min-height: 140px;
 
   & > :first-child {
     border-bottom-color: $color-primary;

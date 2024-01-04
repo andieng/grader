@@ -25,10 +25,6 @@ body:has(.overflow-hidden) {
   overflow: hidden;
 }
 
-body > div {
-  height: 100%;
-}
-
 a {
   text-decoration: none;
   line-height: 1.5;
@@ -75,8 +71,8 @@ span {
 
   &:not(:disabled):not(.ant-btn-disabled):hover {
     background-color: $color-btn-default-bg-hover;
-    color: $color-btn-default-text-hover;
-    border-color: $color-btn-default-border-hover;
+    color: $color-btn-default-text;
+    border-color: $color-btn-default-border;
   }
 }
 

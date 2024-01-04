@@ -1,13 +1,12 @@
 .container {
   display: flex;
   flex-direction: row;
-  height: 100%;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  min-height: calc(100vh - 72px);
 }
 
 .container > :last-child {
   flex-grow: 1;
-  height: 100%;
+  min-height: calc(100vh - 72px);
 }
 
 .menu {

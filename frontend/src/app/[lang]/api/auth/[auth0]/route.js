@@ -16,7 +16,7 @@ const login = async (req, res) => {
     authorizationParams: {
       ui_locales: locale,
     },
-    returnTo: `/${locale}/dashboard`,
+    returnTo: `/${locale}`,
   });
 };
 

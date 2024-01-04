@@ -30,23 +30,22 @@
   text-align: center;
   padding-top: 5px;
   padding-bottom: 5px;
-  padding-left: 22px;
-  padding-right: 22px;
+  width: 104px;
   border-radius: 20px;
 }
 
 .dashboard-btn {
-  margin-right: 10px;
+  margin-right: 6px;
+  width: 135px;
 }
 
 .signup-btn {
   border-radius: 20px;
   font-size: 1.6rem;
-  margin-left: 8px;
+  margin-right: 10px;
   padding-top: 5px;
   padding-bottom: 5px;
-  padding-left: 22px;
-  padding-right: 22px;
+  width: 104px;
 }
 
 .auth {
@@ -91,6 +90,7 @@
 .language-item {
   display: inline-block;
   font-weight: 500;
+  text-align: left;
   font-size: 1.6rem;
   margin-left: 5px;
 }
@@ -100,12 +100,19 @@
   height: 16px;
 }
 
-.create-class-btn {
+.join-class-btn, .create-class-btn {
   margin-right: 25px;
   font-size: 1.5rem;
+  width: 125px;
+  height: 34px;
+  border-radius: 30px;
 }
 
-.create-modal {
+.create-class-btn {
+  margin-right: 0;
+}
+
+.modal {
   font-family: 'Quicksand', sans-serif !important;
   & input {
     margin-top: 10px;
@@ -118,7 +125,52 @@
 .modal-btn {
   display: flex;
   justify-content: flex-end;
+  
   & button {
     margin-left: 20px;
+    border-radius: 20px;
+    min-width: 100px;
+    height: 31px;  
   }
 }
+
+.modal-title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.error-modal {
+  font-family: 'Quicksand', sans-serif !important;
+  width: 400px !important;
+  margin-top: 35px;
+
+  & input {
+    margin-top: 10px;
+  }
+
+  & button {
+    margin-top: 10px;
+  }
+
+  & .join-failed-ok {
+    border-radius: 20px;
+    min-width: 70px;
+    height: 31px;  
+    margin-top: 20px;
+  }
+}
+
+.error-modal-title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 2.2rem;
+
+  & svg {
+    color: #ff4d4f;
+  }
+
+  & span {
+    margin-right: 10px;
+  }
+}
+

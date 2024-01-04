@@ -112,7 +112,6 @@ const SidebarHeader = ({ children, lang, isInDashboard, isLoggedIn }) => {
         {classes?.error.message}
       </div>
     );
-
   return (
     <>
       {hasUser && (

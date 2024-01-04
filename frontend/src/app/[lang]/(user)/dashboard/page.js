@@ -28,7 +28,7 @@ export default withPageAuthRequired(
     const classes = useSWR('/api/classes', fetcher);
 
     const allClasses = useMemo(() => {
-      const allClasses = [...classes.data.teaching, ...classes.data.enrolled];
+      const allClasses = classes.data !== [] ? [...classes.data.teaching, ...classes.data.enrolled] : [];
       allClasses.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
       return allClasses;
     }, [classes]);

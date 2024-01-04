@@ -1,8 +1,7 @@
 'use client';
 
 import { useUser } from '@auth0/nextjs-auth0/client';
-import Link from 'next/link';
-import { useMemo, useEffect } from 'react';
+import { useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { Result, Button, Spin } from 'antd';
 import classnames from 'classnames/bind';
@@ -16,14 +15,13 @@ export default function Verify({ params: { lang } }) {
     return getDictionary(lang, 'pages/Verify');
   }, [lang]);
   const { user } = useUser();
-
   const router = useRouter();
 
-  useEffect(() => {
-    router.push(`/${lang}/dashboard`);
-  }, []);
+  if (user?.email_verified) {
+    router.push(`/dashboard`);
+  }
 
-  if (!user?.email_verified) {
+  if (user && !user?.email_verified) {
     return (
       <Result
         icon={
@@ -38,25 +36,13 @@ export default function Verify({ params: { lang } }) {
         className={cx('error-result')}
         subTitle={d.verify_message}
         extra={
-          <Link href={`/${lang}`}>
-            <Button type="primary">{d.back_home}</Button>
-          </Link>
-        }
-      />
-    );
-  }
-
-  if (!user) {
-    return (
-      <Result
-        status="403"
-        title="401"
-        className={cx('error-result')}
-        subTitle={d.error_not_authenticated}
-        extra={
-          <Link href={`/${lang}`}>
-            <Button type="primary">{d.back_home}</Button>
-          </Link>
+          <Button
+            type="primary"
+            href={`/${lang}`}
+            className={cx('back-home-btn')}
+          >
+            {d.back_home}
+          </Button>
         }
       />
     );
