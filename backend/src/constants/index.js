@@ -23,6 +23,9 @@ export const ERROR_MAPPING_NOT_FOUND = "Mapping not found";
 export const ERROR_STUDENT_ID_ALREADY_MAPPED =
   "This student id has already been mapped";
 export const ERROR_USER_ALREADY_MAPPED = "User has already been mapped";
+export const ERROR_USER_ALREADY_JOINED_CLASS =
+  "User has already joined this class";
+export const ERROR_SOMETHING_WENT_WRONG = "Something went wrong";
 
 // Success message
 export const MSG_INVITE_SUCCESSFULLY = "Invite members via email successfully";
