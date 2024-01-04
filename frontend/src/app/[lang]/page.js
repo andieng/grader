@@ -2,14 +2,14 @@
 
 import useSWR from 'swr';
 import { useMemo } from 'react';
-import { Spin, Button } from 'antd';
+import { Spin, Button, Col, Row } from 'antd';
 import { NextResponse } from 'next/server';
 import classnames from 'classnames/bind';
 import Header from '@/components/Header';
 import styles from '@/styles/pages/Home.module.scss';
 import getDictionary from '@/utils/language';
 import { ERROR_ROLE_NOT_FOUND } from '@/constants/messages';
-import { Connection, ConnectionBackground } from '@/assets/vectors';
+import { Connection } from '@/assets/vectors';
 
 const cx = classnames.bind(styles);
 
@@ -40,10 +40,17 @@ export default function Home({ params: { lang } }) {
           lang={lang}
           user={data?.user}
         />
-        <div className={cx('main')}>
-          <ConnectionBackground className={cx('connection-bg')} />
-          <Connection className={cx('connection')} />
-          <div className={cx('introduction')}>
+        <Row className={cx('main')}>
+          <Col
+            span={12}
+            className={cx('image-container')}
+          >
+            <Connection className={cx('connection')} />
+          </Col>
+          <Col
+            span={12}
+            className={cx('introduction')}
+          >
             <h2 className={cx('slogan-first-sentence')}>{d.slogan_first_sentence}</h2>
             <h2 className={cx('slogan-second-sentence')}>{d.slogan_second_sentence}</h2>
             <Button
@@ -53,8 +60,8 @@ export default function Home({ params: { lang } }) {
             >
               {d.get_started}
             </Button>
-          </div>
-        </div>
+          </Col>
+        </Row>
       </div>
     );
   }
@@ -65,10 +72,17 @@ export default function Home({ params: { lang } }) {
         lang={lang}
         user={data?.user}
       />
-      <div className={cx('main')}>
-        <ConnectionBackground className={cx('connection-bg')} />
-        <Connection className={cx('connection')} />
-        <div className={cx('introduction')}>
+      <Row className={cx('main')}>
+        <Col
+          span={12}
+          className={cx('image-container')}
+        >
+          <Connection className={cx('connection')} />
+        </Col>
+        <Col
+          span={12}
+          className={cx('introduction')}
+        >
           <h2 className={cx('slogan-first-sentence')}>{d.slogan_first_sentence}</h2>
           <h2 className={cx('slogan-second-sentence')}>{d.slogan_second_sentence}</h2>
           <Button
@@ -78,8 +92,8 @@ export default function Home({ params: { lang } }) {
           >
             {d.get_started}
           </Button>
-        </div>
-      </div>
+        </Col>
+      </Row>
     </div>
   );
 }
