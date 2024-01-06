@@ -155,7 +155,7 @@ const PeopleTab = ({ lang, classId }) => {
                     src={item.member.avatar}
                     alt="User"
                   />
-                  <p>{item.member.name}</p>
+                  <p>{item.member.email}</p>
                 </div>
               </Row>
               {index !== teachers.length - 1 && <Divider className={cx('user-divider')} />}
@@ -194,7 +194,7 @@ const PeopleTab = ({ lang, classId }) => {
                     src={item.member.avatar}
                     alt="User"
                   />
-                  <p>{item.member.name}</p>
+                  <p>{item.member.email}</p>
                 </div>
               </Row>
               {index !== students.length - 1 && <Divider className={cx('user-divider')} />}
