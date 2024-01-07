@@ -20,15 +20,6 @@ export default class StudentMapping extends Model {
       primaryKey: true,
       field: 'student_id'
     },
-    userId: {
-      type: DataTypes.UUID,
-      allowNull: true,
-      references: {
-        model: 'users',
-        key: 'id'
-      },
-      field: 'user_id'
-    },
     fullName: {
       type: DataTypes.STRING(255),
       allowNull: true,
@@ -45,6 +36,16 @@ export default class StudentMapping extends Model {
       allowNull: false,
       defaultValue: Sequelize.Sequelize.fn('now'),
       field: 'updated_at'
+    },
+    userId: {
+      type: DataTypes.UUID,
+      allowNull: true,
+      references: {
+        model: 'users',
+        key: 'id'
+      },
+      unique: "student_mapping_user_id_key",
+      field: 'user_id'
     }
   }, {
     sequelize,
@@ -59,6 +60,13 @@ export default class StudentMapping extends Model {
         fields: [
           { name: "class_id" },
           { name: "student_id" },
+        ]
+      },
+      {
+        name: "student_mapping_user_id_key",
+        unique: true,
+        fields: [
+          { name: "user_id" },
         ]
       },
     ]

@@ -1,5 +1,7 @@
 import SequelizeAuto from "sequelize-auto";
 import pg from "pg";
+import "dotenv/config";
+
 const { PGHOST, PGDATABASE, PGUSER, PGPASSWORD } = process.env;
 const auto = new SequelizeAuto(PGDATABASE, PGUSER, PGPASSWORD, {
   host: PGHOST,

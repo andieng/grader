@@ -21,10 +21,6 @@ export default class User extends Model {
       allowNull: false,
       unique: "users_email_key"
     },
-    name: {
-      type: DataTypes.STRING(255),
-      allowNull: true
-    },
     avatar: {
       type: DataTypes.TEXT,
       allowNull: true,

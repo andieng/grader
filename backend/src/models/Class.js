@@ -43,6 +43,11 @@ export default class Class extends Model {
       type: DataTypes.TEXT,
       allowNull: true,
       field: 'student_mapping_file'
+    },
+    studentListFile: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+      field: 'student_list_file'
     }
   }, {
     sequelize,

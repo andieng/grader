@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon --experimental-specifier-resolution=node src/index.js",
+    "dev": "netlify dev",
     "start": "node --experimental-specifier-resolution=node src/index.js"
   },
   "keywords": [],

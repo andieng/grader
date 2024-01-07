@@ -10,11 +10,13 @@ import {
   ERROR_INPUT_DATA_NOT_FOUND,
   ERROR_INVALID_INVITATION,
   MSG_INVITE_SUCCESSFULLY,
-  ERROR_MAPPING_NOT_FOUND,
   ERROR_STUDENT_ID_ALREADY_MAPPED,
   ERROR_USER_ALREADY_MAPPED,
   ERROR_USER_ALREADY_JOINED_CLASS,
   ERROR_SOMETHING_WENT_WRONG,
+  ERROR_ASSIGNMENT_NOT_FOUND,
+  ERROR_NOT_AUTHORIZED,
+  ERROR_INVALID_MAPPING,
 } from "../constants";
 import {
   generateSubject,
@@ -37,6 +39,7 @@ import {
   generateInvitationToken,
   generateInviteLink,
 } from "../helpers/generatorHelper";
+import { Op } from "sequelize";
 
 export const getClasses = async (req, res) => {
   if (req.user.role === "admin") {
@@ -321,92 +324,11 @@ export const getClassDetails = async (req, res) => {
   return res.json(classDetails);
 };
 
-export const getAssignments = async (req, res) => {
-  const { classId } = req.params;
-
-  const assignments = await Assignment.findAll({
-    where: {
-      classId,
-    },
-  });
-
-  return res.json(assignments);
-};
-
-export const addAssignment = async (req, res) => {
-  const { assignmentName, assignmentGradeScale } = req.body;
-  const { classId } = req.params;
-
-  const createdAssignment = await Assignment.create({
-    classId,
-    assignmentName,
-    assignmentGradeScale,
-    viewerRole: "teacher",
-  });
-
-  if (!createdAssignment) {
-    res.status(500);
-    throw new Error(ERROR_CREATE_ASSIGNMENT);
-  }
-
-  return res.json(createdAssignment);
-};
-
-export const upsertGradesByJson = async (req, res) => {
-  const { grades } = req.body;
-  const { assignmentId } = req.params;
-
-  if (!grades) {
-    res.status(400);
-    throw new Error(ERROR_INPUT_DATA_NOT_FOUND);
-  }
-
-  const upsertedGrades = await Promise.all(
-    grades.map(async (gradeItem) => {
-      const [grade] = await Grade.upsert({
-        assignmentId,
-        studentId: isNaN(gradeItem.StudentId)
-          ? gradeItem.StudentId
-          : gradeItem.StudentId.toString(),
-        gradeValue: gradeItem.Grade,
-      });
-
-      return grade;
-    })
-  );
-
-  res.json(upsertedGrades);
-};
-
-export const upsertGradesByFile = async (req, res) => {
-  const { assignmentGradeFile } = req.files;
-  const { assignmentId } = req.params;
-
-  if (!assignmentGradeFile) {
+export const upsertStudentMapping = async (req, res) => {
+  if (!req.files) {
     res.status(400);
     throw new Error(ERROR_INPUT_FILE_NOT_FOUND);
   }
-  const xlsxData = XLSX.read(assignmentGradeFile.data);
-  const jsonData = XLSX.utils.sheet_to_json(xlsxData.Sheets.Sheet1);
-
-  const upsertedGrades = await Promise.all(
-    jsonData.map(async (gradeItem) => {
-      const [grade] = await Grade.upsert({
-        assignmentId,
-        studentId: isNaN(gradeItem.StudentId)
-          ? gradeItem.StudentId
-          : gradeItem.StudentId.toString(),
-        gradeValue: gradeItem.Grade,
-      });
-
-      return grade;
-    })
-  );
-
-  res.json(upsertedGrades);
-};
-
-export const upsertStudentMapping = async (req, res) => {
   const { studentMappingFile } = req.files;
   const { classId } = req.params;
 
@@ -434,8 +356,24 @@ export const upsertStudentMapping = async (req, res) => {
   res.json(upsertedStudentMapping);
 };
 
+export const checkTeacherRole = async (req, res, next) => {
+  const { classId } = req.params;
+  const member = await ClassMember.findOne({
+    where: {
+      classId,
+      memberId: req.user.id,
+    },
+  });
+  if (!member || member.role !== "teacher") {
+    res.status(403);
+    throw new Error(ERROR_NOT_AUTHORIZED);
+  }
+
+  return next();
+};
+
 export const mapStudent = async (req, res) => {
-  const { classId, studentId } = req.params;
+  const { studentId, classId } = req.params;
 
   const userAlreadyMapped = await StudentMapping.findOne({
     where: {
@@ -457,7 +395,7 @@ export const mapStudent = async (req, res) => {
 
   if (!studentMapping) {
     res.status(400);
-    throw new Error(ERROR_MAPPING_NOT_FOUND);
+    throw new Error(ERROR_INVALID_MAPPING);
   }
 
   if (studentMapping.userId) {

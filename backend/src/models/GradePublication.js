@@ -11,9 +11,10 @@ export default class GradePublication extends Model {
       primaryKey: true,
       field: 'grade_publication_id'
     },
-    title: {
-      type: DataTypes.STRING(255),
-      allowNull: true
+    assignmentId: {
+      type: DataTypes.UUID,
+      allowNull: true,
+      field: 'assignment_id'
     },
     classId: {
       type: DataTypes.UUID,
@@ -24,29 +25,20 @@ export default class GradePublication extends Model {
       },
       field: 'class_id'
     },
-    publisherId: {
+    teacherUserId: {
       type: DataTypes.UUID,
       allowNull: true,
       references: {
         model: 'users',
         key: 'id'
       },
-      field: 'publisher_id'
+      field: 'teacher_user_id'
     },
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: Sequelize.Sequelize.fn('now'),
       field: 'created_at'
-    },
-    description: {
-      type: DataTypes.TEXT,
-      allowNull: true
-    },
-    onTimeline: {
-      type: DataTypes.BOOLEAN,
-      allowNull: true,
-      field: 'on_timeline'
     },
     updatedAt: {
       type: DataTypes.DATE,

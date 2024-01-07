@@ -1,6 +1,6 @@
 import { User } from "../models";
 
-const getProfile = async (req, res) => {
+export const getProfile = async (req, res) => {
   const email = req.email;
   const user = await User.findOne({
     where: { email },
@@ -13,5 +13,3 @@ const getProfile = async (req, res) => {
 
   return res.json({ user });
 };
-
-export { getProfile };

@@ -1,4 +1,6 @@
 import express from "express";
+import { isVerified } from "../middlewares/checkAuth";
+import { saveUserInfo, saveAssignment } from "../middlewares/saveData";
 import {
   createClass,
   getClasses,
@@ -6,16 +8,23 @@ import {
   addMemberToClass,
   inviteMember,
   getClassMembers,
+  upsertStudentMapping,
+  joinClassByClassCode,
+  checkTeacherRole,
+  mapStudent,
+} from "../controllers/classController";
+import {
   addAssignment,
+  getAssignmentList,
+  updateAssignmentList,
+  updateAssignment,
+  deleteAssignment,
+} from "../controllers/assignmentController";
+import {
   upsertGradesByJson,
   upsertGradesByFile,
-  upsertStudentMapping,
-  mapStudent,
-  getAssignments,
-  joinClassByClassCode,
-} from "../controllers/classController";
-import { isVerified } from "../middlewares/checkAuth";
-import { saveUserInfo } from "../middlewares/saveData";
+  getClassGrades,
+} from "../controllers/gradeController";
 
 const classRouter = express.Router();
 
@@ -29,20 +38,28 @@ classRouter.get("/:classId/members", getClassMembers);
 classRouter.post("/:classId/members", addMemberToClass);
 classRouter.post("/:classId/invitations", inviteMember);
 
-classRouter.post("/:classId/student-mapping", upsertStudentMapping);
+classRouter.post(
+  "/:classId/student-mapping",
+  checkTeacherRole,
+  upsertStudentMapping
+);
 classRouter.post("/:classId/student-mapping/:studentId", mapStudent);
 
-// TODO: require teacher role in assignments routes
-classRouter.get("/:classId/assignments", getAssignments);
+classRouter.use("/:classId/assignments", checkTeacherRole);
+classRouter.get("/:classId/assignments", getAssignmentList);
 classRouter.post("/:classId/assignments", addAssignment);
+classRouter.put("/:classId/assignments", updateAssignmentList);
 
+classRouter.use("/:classId/assignments/:assignmentId", saveAssignment);
+classRouter.put("/:classId/assignments/:assignmentId", updateAssignment);
+classRouter.delete("/:classId/assignments/:assignmentId", deleteAssignment);
+
+classRouter.get("/:classId/grades", checkTeacherRole, getClassGrades);
 classRouter.post(
-  "/:classId/assignments/:assignmentId/grades/upload",
+  "/:classId/grades/upload",
+  checkTeacherRole,
   upsertGradesByFile
 );
-classRouter.post(
-  "/:classId/assignments/:assignmentId/grades",
-  upsertGradesByJson
-);
+classRouter.post("/:classId/grades", checkTeacherRole, upsertGradesByJson);
 
 export default classRouter;

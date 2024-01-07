@@ -11,36 +11,33 @@ export default class GradeReview extends Model {
       primaryKey: true,
       field: 'grade_review_id'
     },
-    gradePublicationId: {
-      type: DataTypes.UUID,
+    currentGrade: {
+      type: DataTypes.DECIMAL,
       allowNull: true,
-      references: {
-        model: 'grade_publications',
-        key: 'grade_publication_id'
-      },
-      field: 'grade_publication_id'
+      field: 'current_grade'
+    },
+    expectedGrade: {
+      type: DataTypes.DECIMAL,
+      allowNull: true,
+      field: 'expected_grade'
     },
     status: {
       type: DataTypes.STRING(255),
       allowNull: true
     },
-    studentId: {
+    studentUserId: {
       type: DataTypes.UUID,
       allowNull: true,
       references: {
         model: 'users',
         key: 'id'
       },
-      field: 'student_id'
+      field: 'student_user_id'
     },
-    teacherId: {
-      type: DataTypes.UUID,
+    studentExplanation: {
+      type: DataTypes.TEXT,
       allowNull: true,
-      references: {
-        model: 'users',
-        key: 'id'
-      },
-      field: 'teacher_id'
+      field: 'student_explanation'
     },
     createdAt: {
       type: DataTypes.DATE,
