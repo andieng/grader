@@ -4,6 +4,7 @@ import styles from '@/styles/pages/ClassDetails.module.scss';
 import DetailsTab from '@/components/DetailsTab';
 import PeopleTab from '@/components/PeopleTab';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0/client';
+import GradeTab from '@/components/GradeTab';
 
 const cx = classnames.bind(styles);
 
@@ -20,7 +21,10 @@ export default withPageAuthRequired(
         classId={classId}
       />
     ) : (
-      <div>grades</div>
+      <GradeTab
+        lang={lang}
+        classId={classId}
+      />
     );
   },
   {

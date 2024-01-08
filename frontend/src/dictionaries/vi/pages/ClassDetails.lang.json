@@ -17,5 +17,10 @@
   "inviteUrl": "Liên kết",
   "inviteInput": "Nhập tên hoặc email",
   "copied": "Đã sao chép đường liên kết",
-  "requiredMail": "Email không được bỏ trống!"
+  "requiredMail": "Email không được bỏ trống!",
+  "delete": "Xóa",
+  "upload": "Cập nhật dữ liệu",
+  "download": "Tải file mẫu",
+  "public": "Công khai",
+  "draft": "Bản nháp"
 }

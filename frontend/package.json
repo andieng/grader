@@ -19,7 +19,8 @@
     "negotiator": "^0.6.3",
     "next": "^14.0.3",
     "swr": "^2.2.4",
-    "url-parse": "^1.5.10"
+    "url-parse": "^1.5.10",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "eslint": "^8",

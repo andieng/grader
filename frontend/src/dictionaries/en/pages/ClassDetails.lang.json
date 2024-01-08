@@ -17,5 +17,10 @@
   "inviteUrl": "Invitation Link",
   "inviteInput": "Enter name or email",
   "copied": "Link copied",
-  "requiredMail": "Please input email!"
+  "requiredMail": "Please input email!",
+  "delete": "Delete",
+  "upload": "Upload file",
+  "download": "Download template",
+  "public": "Public",
+  "draft": "Draft"
 }

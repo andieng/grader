@@ -1,0 +1,99 @@
+.wrap {
+  margin: 100px;
+  margin-left: 400px;
+}
+
+// delete above later
+
+.wrap {
+  width: 150px;
+  border: solid 1px gray;
+}
+
+.header {
+  display: flex;
+  max-width: 100%;
+  align-items: center;
+  gap: 5px;
+  & * {
+    margin: 0 !important;
+  }
+}
+
+.option {
+  font-weight: 600;
+}
+
+.grade-information {
+  padding: 10px 20px 10px 20px;
+  & p {
+    color: gray;
+    &:last-of-type {
+      margin-bottom: 10px;
+    }
+  }
+  & .name {
+    color: black;
+    font-weight: 800;
+    max-width: 90px;
+    height: 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 10px;
+  }
+
+  & hr {
+    border-top: 1px solid grey;
+  }
+}
+
+.grades {
+  & div {
+    border-bottom: 1px solid grey;
+    height: 60px;
+  }
+}
+
+.grade-row {
+  display: flex;
+  flex-direction: column;
+  padding: 5px 20px 5px 20px;
+  justify-content: center;
+  & p {
+    font-weight: 700;
+  }
+  :hover {
+    cursor: text;
+  }
+}
+
+.grades-avg {
+  display: flex;
+  flex-direction: column;
+  padding: 5px 20px 5px 20px;
+  justify-content: center;
+  border-top: 1px solid grey;
+  font-weight: 700;
+  color: #e21414;
+}
+
+.editing {
+  color: #23a4a9;
+  & input {
+    width: 30px;
+    padding: 1px;
+    padding-left: 3px;
+  }
+}
+
+.draft {
+  font-style: italic;
+  font-size: 13px;
+  color: gray;
+  font-weight: normal !important;
+}
+
+#upload-input {
+  display: none;
+}
