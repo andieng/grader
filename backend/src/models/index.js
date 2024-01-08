@@ -46,6 +46,8 @@ function initModels(sequelize) {
     as: "gradePublications",
     foreignKey: "classId",
   });
+  GradeReview.belongsTo(Class, { as: "class", foreignKey: "classId" });
+  Class.hasMany(GradeReview, { as: "gradeReviews", foreignKey: "classId" });
   Grade.belongsTo(Class, { as: "class", foreignKey: "classId" });
   Class.hasMany(Grade, { as: "grades", foreignKey: "classId" });
   Invitation.belongsTo(Class, { as: "class", foreignKey: "classId" });

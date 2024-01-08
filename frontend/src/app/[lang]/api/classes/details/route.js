@@ -9,7 +9,7 @@ export const GET = async function getAClass(req) {
     const searchParams = new URLSearchParams(url.search);
     const classId = searchParams.get('classId');
 
-    const response = await fetch(`${process.env.API_BASE_URL}/api/classes/${classId}/details`, {
+    const response = await fetch(`${process.env.API_BASE_URL}/api/classes/${classId}`, {
       headers: {
         authorization: `Bearer ${accessToken}`,
       },

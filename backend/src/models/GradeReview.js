@@ -50,6 +50,15 @@ export default class GradeReview extends Model {
       allowNull: false,
       defaultValue: Sequelize.Sequelize.fn('now'),
       field: 'updated_at'
+    },
+    classId: {
+      type: DataTypes.UUID,
+      allowNull: true,
+      references: {
+        model: 'classes',
+        key: 'class_id'
+      },
+      field: 'class_id'
     }
   }, {
     sequelize,

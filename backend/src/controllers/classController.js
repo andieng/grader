@@ -2,19 +2,16 @@ import XLSX from "xlsx";
 import {
   ERROR_CLASS_MEMBER_NOT_FOUND,
   ERROR_CLASS_NOT_FOUND,
-  ERROR_CREATE_ASSIGNMENT,
   ERROR_CREATE_CLASS,
   ERROR_CREATE_CLASS_MEMBER,
   ERROR_CREATE_INVITATION,
   ERROR_INPUT_FILE_NOT_FOUND,
-  ERROR_INPUT_DATA_NOT_FOUND,
   ERROR_INVALID_INVITATION,
   MSG_INVITE_SUCCESSFULLY,
   ERROR_STUDENT_ID_ALREADY_MAPPED,
   ERROR_USER_ALREADY_MAPPED,
   ERROR_USER_ALREADY_JOINED_CLASS,
   ERROR_SOMETHING_WENT_WRONG,
-  ERROR_ASSIGNMENT_NOT_FOUND,
   ERROR_NOT_AUTHORIZED,
   ERROR_INVALID_MAPPING,
 } from "../constants";
@@ -26,20 +23,18 @@ import {
 } from "../helpers/invitationMailHelper";
 import { groupBy } from "../helpers/objectHelper";
 import {
-  Assignment,
   Class,
   ClassMember,
-  Grade,
   Invitation,
   User,
   StudentMapping,
+  GradePublication,
 } from "../models";
 import { sendMail } from "../services/sendGridMail";
 import {
   generateInvitationToken,
   generateInviteLink,
 } from "../helpers/generatorHelper";
-import { Op } from "sequelize";
 
 export const getClasses = async (req, res) => {
   if (req.user.role === "admin") {
@@ -314,7 +309,13 @@ export const getClassMembers = async (req, res) => {
 export const getClassDetails = async (req, res) => {
   const { classId } = req.params;
 
-  const classDetails = await Class.findByPk(classId);
+  const classDetails = await Class.findByPk(classId, {
+    include: {
+      model: GradePublication,
+      as: "gradePublications",
+      required: false,
+    },
+  });
 
   if (!classDetails) {
     res.status(400);
