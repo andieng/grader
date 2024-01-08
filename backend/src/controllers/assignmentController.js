@@ -1,5 +1,5 @@
 import { ERROR_CREATE_ASSIGNMENT } from "../constants";
-import { Assignment } from "../models";
+import { Assignment, GradePublication } from "../models";
 import { Op } from "sequelize";
 
 export const getAssignmentList = async (req, res) => {
@@ -56,6 +56,15 @@ export const addAssignment = async (req, res) => {
 export const updateAssignment = async (req, res) => {
   const { assignmentName, assignmentGradeScale, isPublished } = req.body;
   const { assignment } = req;
+
+  // Publish assignment / mark assignment as finalized
+  if (isPublished && !assignment.isPublished) {
+    await GradePublication.create({
+      assignmentId: assignment.assignmentId,
+      classId: assignment.classId,
+      teacherUserId: req.user.id,
+    });
+  }
 
   await assignment.update({
     assignmentName,

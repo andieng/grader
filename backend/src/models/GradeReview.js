@@ -59,6 +59,20 @@ export default class GradeReview extends Model {
         key: 'class_id'
       },
       field: 'class_id'
+    },
+    finalGrade: {
+      type: DataTypes.DECIMAL,
+      allowNull: true,
+      field: 'final_grade'
+    },
+    assignmentId: {
+      type: DataTypes.UUID,
+      allowNull: true,
+      references: {
+        model: 'assignments',
+        key: 'assignment_id'
+      },
+      field: 'assignment_id'
     }
   }, {
     sequelize,

@@ -10,6 +10,7 @@ import {
   getClassMembers,
   upsertStudentMapping,
   joinClassByClassCode,
+  checkClassRole,
   checkTeacherRole,
   mapStudent,
 } from "../controllers/classController";
@@ -25,19 +26,31 @@ import {
   upsertGradesByFile,
   getClassGrades,
 } from "../controllers/gradeController";
+import {
+  addGradeReview,
+  addGradeReviewComment,
+  getGradeReview,
+  getGradeReviewList,
+  updateGradeReview,
+} from "../controllers/gradeReviewController";
 
 const classRouter = express.Router();
 
+// Class routes
 classRouter.use(isVerified, saveUserInfo);
 classRouter.get("/", getClasses);
 classRouter.post("/", createClass);
 classRouter.post("/join", joinClassByClassCode);
-
 classRouter.get("/:classId", getClassDetails);
+
+// Class member routes
 classRouter.get("/:classId/members", getClassMembers);
 classRouter.post("/:classId/members", addMemberToClass);
+
+// Invitation routes
 classRouter.post("/:classId/invitations", inviteMember);
 
+// Student mapping routes
 classRouter.post(
   "/:classId/student-mapping",
   checkTeacherRole,
@@ -45,21 +58,45 @@ classRouter.post(
 );
 classRouter.post("/:classId/student-mapping/:studentId", mapStudent);
 
-classRouter.use("/:classId/assignments", checkTeacherRole);
-classRouter.get("/:classId/assignments", getAssignmentList);
-classRouter.post("/:classId/assignments", addAssignment);
-classRouter.put("/:classId/assignments", updateAssignmentList);
-
-classRouter.use("/:classId/assignments/:assignmentId", saveAssignment);
+// Assignment routes
+classRouter.get("/:classId/assignments", checkClassRole, getAssignmentList);
+classRouter.post("/:classId/assignments", checkTeacherRole, addAssignment);
+classRouter.put(
+  "/:classId/assignments",
+  checkTeacherRole,
+  updateAssignmentList
+);
+classRouter.use(
+  "/:classId/assignments/:assignmentId",
+  checkTeacherRole,
+  saveAssignment
+);
 classRouter.put("/:classId/assignments/:assignmentId", updateAssignment);
 classRouter.delete("/:classId/assignments/:assignmentId", deleteAssignment);
 
-classRouter.get("/:classId/grades", checkTeacherRole, getClassGrades);
+// Grade routes
+classRouter.get("/:classId/grades", getClassGrades);
 classRouter.post(
   "/:classId/grades/upload",
   checkTeacherRole,
   upsertGradesByFile
 );
 classRouter.post("/:classId/grades", checkTeacherRole, upsertGradesByJson);
+
+// Grade review routes
+classRouter.get("/:classId/grade-reviews", getGradeReviewList);
+classRouter.post("/:classId/grade-reviews", addGradeReview);
+classRouter.get("/:classId/grade-reviews/:gradeReviewId", getGradeReview);
+classRouter.put(
+  "/:classId/grade-reviews/:gradeReviewId",
+  checkTeacherRole,
+  updateGradeReview
+);
+
+// Grade review comment routes
+classRouter.post(
+  "/:classId/grade-reviews/:gradeReviewId/grade-review-comments",
+  addGradeReviewComment
+);
 
 export default classRouter;

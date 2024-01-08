@@ -5,16 +5,59 @@ import {
   ERROR_ASSIGNMENT_NOT_FOUND,
 } from "../constants";
 
-import { Assignment, Grade } from "../models";
+import { Assignment, ClassMember, Grade, StudentMapping } from "../models";
 
 export const getClassGrades = async (req, res) => {
   const { classId } = req.params;
-  const grades = await Grade.findAll({
+
+  if (req.user.role === "admin") {
+    const grades = await Grade.findAll({
+      where: {
+        classId,
+      },
+    });
+    return res.json(grades);
+  }
+
+  const member = await ClassMember.findOne({
     where: {
       classId,
+      memberId: req.user.id,
     },
   });
-  return res.json(grades);
+  if (!member) {
+    res.status(403);
+    throw new Error(ERROR_NOT_AUTHORIZED);
+  }
+
+  if (member?.role === "teacher") {
+    const grades = await Grade.findAll({
+      where: {
+        classId,
+      },
+    });
+    return res.json(grades);
+  }
+
+  const studentMapping = await StudentMapping.findOne({
+    where: {
+      classId,
+      userId: req.user.id,
+    },
+  });
+
+  if (studentMapping) {
+    const grades = await Grade.findAll({
+      where: {
+        classId,
+        studentId: studentMapping.studentId,
+      },
+    });
+    return res.json(grades);
+  }
+
+  res.status(403);
+  throw new Error(ERROR_NOT_AUTHORIZED);
 };
 
 export const upsertGradesByJson = async (req, res) => {

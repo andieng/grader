@@ -9,15 +9,15 @@ export default class GradeReviewComment extends Model {
       allowNull: false,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
-      references: {
-        model: 'grade_reviews',
-        key: 'grade_review_id'
-      },
       field: 'grade_review_comment_id'
     },
     gradeReviewId: {
       type: DataTypes.UUID,
       allowNull: true,
+      references: {
+        model: 'grade_reviews',
+        key: 'grade_review_id'
+      },
       field: 'grade_review_id'
     },
     userId: {

@@ -357,7 +357,7 @@ export const upsertStudentMapping = async (req, res) => {
   res.json(upsertedStudentMapping);
 };
 
-export const checkTeacherRole = async (req, res, next) => {
+export const checkClassRole = async (req, res, next) => {
   const { classId } = req.params;
   const member = await ClassMember.findOne({
     where: {
@@ -365,12 +365,40 @@ export const checkTeacherRole = async (req, res, next) => {
       memberId: req.user.id,
     },
   });
-  if (!member || member.role !== "teacher") {
-    res.status(403);
-    throw new Error(ERROR_NOT_AUTHORIZED);
+  const studentMapping = await StudentMapping.findOne({
+    where: {
+      classId,
+      userId: req.user.id,
+    },
+  });
+
+  if (
+    member?.role === "teacher" ||
+    req.user.role === "admin" ||
+    studentMapping
+  ) {
+    return next();
   }
 
-  return next();
+  res.status(403);
+  throw new Error(ERROR_NOT_AUTHORIZED);
+};
+
+export const checkTeacherRole = async (req, res) => {
+  const { classId } = req.params;
+  const member = await ClassMember.findOne({
+    where: {
+      classId,
+      memberId: req.user.id,
+    },
+  });
+
+  if (member?.role === "teacher") {
+    return next();
+  }
+
+  res.status(403);
+  throw new Error(ERROR_NOT_AUTHORIZED);
 };
 
 export const mapStudent = async (req, res) => {

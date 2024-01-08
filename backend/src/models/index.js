@@ -35,6 +35,14 @@ function initModels(sequelize) {
     foreignKey: "memberId",
     otherKey: "classId",
   });
+  GradeReview.belongsTo(Assignment, {
+    as: "assignment",
+    foreignKey: "assignmentId",
+  });
+  Assignment.hasMany(GradeReview, {
+    as: "gradeReviews",
+    foreignKey: "assignmentId",
+  });
   Grade.belongsTo(Assignment, { as: "assignment", foreignKey: "assignmentId" });
   Assignment.hasMany(Grade, { as: "grades", foreignKey: "assignmentId" });
   Assignment.belongsTo(Class, { as: "class", foreignKey: "classId" });
@@ -58,12 +66,12 @@ function initModels(sequelize) {
     foreignKey: "classId",
   });
   GradeReviewComment.belongsTo(GradeReview, {
-    as: "gradeReviewComment",
-    foreignKey: "gradeReviewCommentId",
+    as: "gradeReview",
+    foreignKey: "gradeReviewId",
   });
-  GradeReview.hasOne(GradeReviewComment, {
-    as: "gradeReviewComment",
-    foreignKey: "gradeReviewCommentId",
+  GradeReview.hasMany(GradeReviewComment, {
+    as: "gradeReviewComments",
+    foreignKey: "gradeReviewId",
   });
   ClassMember.belongsTo(User, { as: "member", foreignKey: "memberId" });
   User.hasMany(ClassMember, { as: "classMembers", foreignKey: "memberId" });
