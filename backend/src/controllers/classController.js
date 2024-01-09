@@ -384,7 +384,7 @@ export const checkClassRole = async (req, res, next) => {
   throw new Error(ERROR_NOT_AUTHORIZED);
 };
 
-export const checkTeacherRole = async (req, res) => {
+export const checkTeacherRole = async (req, res, next) => {
   const { classId } = req.params;
   const member = await ClassMember.findOne({
     where: {
