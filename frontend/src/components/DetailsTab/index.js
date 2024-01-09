@@ -20,6 +20,18 @@ const DUMMY_CARDS = [
     content: 'Hạnh Thư Nguyễn đã đăng một câu hỏi mới: Sông nào dài nhất Việt Nam?',
     time: '10:29',
   },
+  {
+    content: 'Hạnh Thư Nguyễn đã đăng một câu hỏi mới: Sông nào dài nhất Việt Nam?',
+    time: '10:29',
+  },
+  {
+    content: 'Hạnh Thư Nguyễn đã đăng một câu hỏi mới: Sông nào dài nhất Việt Nam?',
+    time: '10:29',
+  },
+  {
+    content: 'Hạnh Thư Nguyễn đã đăng một câu hỏi mới: Sông nào dài nhất Việt Nam?',
+    time: '10:29',
+  },
 ];
 
 const fetcher = async (url) => {
