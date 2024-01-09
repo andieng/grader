@@ -1,13 +1,7 @@
 .wrap {
-  margin: 100px;
-  margin-left: 400px;
-}
-
-// delete above later
-
-.wrap {
   width: 150px;
   border: solid 1px gray;
+  margin-right: -1px;
 }
 
 .header {
@@ -96,4 +90,76 @@
 
 #upload-input {
   display: none;
+}
+
+.modal {
+  font-family: 'Quicksand', sans-serif !important;
+  & input {
+    margin-top: 10px;
+  }
+  & button {
+    margin-top: 10px;
+  }
+}
+
+.modal-btn {
+  display: flex;
+  justify-content: flex-end;
+
+  & button {
+    margin-left: 20px;
+    border-radius: 20px;
+    min-width: 100px;
+    height: 31px;
+  }
+}
+
+.modal-title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.error-modal {
+  font-family: 'Quicksand', sans-serif !important;
+  width: 400px !important;
+  margin-top: 35px;
+
+  & input {
+    margin-top: 10px;
+  }
+
+  & button {
+    margin-top: 10px;
+  }
+
+  & .join-failed-ok {
+    border-radius: 20px;
+    min-width: 70px;
+    height: 31px;
+    margin-top: 20px;
+  }
+}
+
+.error-modal-title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 2.2rem;
+
+  & svg {
+    color: #ff4d4f;
+  }
+
+  & span {
+    margin-right: 10px;
+  }
+}
+
+.form {
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  & :last-child {
+    width: 270px;
+    margin-left: -15px;
+  }
 }

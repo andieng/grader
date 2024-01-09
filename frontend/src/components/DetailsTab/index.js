@@ -29,10 +29,9 @@ const fetcher = async (url) => {
 };
 
 const DetailsTab = ({ lang, classId }) => {
-  const params = {
-    classId,
-  };
-  const apiUrl = `/en/api/classes/details?${new URLSearchParams(params)}`;
+  console.log('0--------------------------------------');
+
+  const apiUrl = `/en/api/classes/${classId}`;
   const currentClass = useSWR(apiUrl, fetcher);
 
   return (

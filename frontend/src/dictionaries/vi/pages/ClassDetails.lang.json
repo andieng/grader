@@ -22,5 +22,14 @@
   "upload": "Cập nhật dữ liệu",
   "download": "Tải file mẫu",
   "public": "Công khai",
-  "draft": "Bản nháp"
+  "draft": "Bản nháp",
+  "edit": "Chỉnh sửa",
+  "uploadNoti": "Vui lòng upload file chứa thông tin StudentId và Full name theo đúng định dạng template để cập nhật điểm cho học sinh.",
+  "enterIdNoti": "Vui lòng nhập mã số sinh viên để xem điểm của bạn.",
+  "createAss": "Tạo bài tập",
+  "create": "Tạo",
+  "assNameRequired": "Tên bài tập không được bỏ trống.",
+  "enterAssName": "Nhập tên bài tập",
+  "change": "Chỉnh sửa",
+  "editAssignment": "Chỉnh sửa bài tập"
 }

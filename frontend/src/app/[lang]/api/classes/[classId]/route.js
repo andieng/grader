@@ -16,9 +16,9 @@ export const GET = async function getAClass(req) {
       },
     });
 
-    console.log(chalk.bgRed('-----------------------------'));
-    console.log(response);
     const data = await response.json();
+
+    console.log(data);
 
     return NextResponse.json(data);
   } catch (err) {

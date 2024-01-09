@@ -22,5 +22,14 @@
   "upload": "Upload file",
   "download": "Download template",
   "public": "Public",
-  "draft": "Draft"
+  "draft": "Draft",
+  "edit": "Edit",
+  "uploadNoti": "Please upload a file containing StudentId and Full name information in the specified template format to update student scores.",
+  "enterIdNoti": "Please enter your Student ID to access your grades.",
+  "createAss": "Create Assignment",
+  "create": "Create",
+  "assNameRequired": "Assignment name is required.",
+  "enterAssName": "Enter assignment name",
+  "change": "Change",
+  "editAssignment": "Edit Assignment"
 }

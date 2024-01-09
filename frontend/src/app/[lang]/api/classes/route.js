@@ -1,3 +1,4 @@
+import { DatabaseOutlined } from '@ant-design/icons';
 import { getAccessToken } from '@auth0/nextjs-auth0';
 import { NextResponse } from 'next/server';
 
@@ -9,7 +10,6 @@ export const GET = async function getClasses(req) {
         authorization: `Bearer ${accessToken}`,
       },
     });
-
     const data = await response.json();
 
     return NextResponse.json(data);

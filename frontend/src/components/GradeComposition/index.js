@@ -3,18 +3,27 @@
 import { useState, useMemo, useEffect, useRef } from 'react';
 import * as XLSX from 'xlsx';
 import getDictionary from '@/utils/language';
-import { Button, Input, Dropdown } from 'antd';
+import { Button, Dropdown, Modal, Input, Form } from 'antd';
 import { MoreOutlined } from '@ant-design/icons';
 import classnames from 'classnames/bind';
 import styles from '@/styles/components/GradeComposition.module.scss';
 
 const cx = classnames.bind(styles);
 
-const GradeComposition = ({ lang, students, setStudents, gradeCompostionInfo }) => {
+const GradeComposition = ({ lang, students, setStudents, gradeCompositionInfo }) => {
   const [editing, setEditing] = useState(Array(students.length).fill(false));
-  const [isPublic, setIsPublic] = useState(false);
+  const [isPublished, setisPublished] = useState(gradeCompositionInfo.isPublished);
   const gradeCompositionRefs = useRef([]);
   const fileInputRef = useRef(null);
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [editForm] = Form.useForm();
+  const [isChanging, setIsChanging] = useState(false);
+
+  const dateObj = new Date(gradeCompositionInfo.createdAt);
+  const year = dateObj.getFullYear();
+  const month = dateObj.getMonth() + 1;
+  const day = dateObj.getDate();
+  const formattedDate = `${year}\/${month < 10 ? '0' + month : month}\/${day < 10 ? '0' + day : day}`;
 
   const d = useMemo(() => {
     return getDictionary(lang, 'pages/ClassDetails');
@@ -61,19 +70,23 @@ const GradeComposition = ({ lang, students, setStudents, gradeCompostionInfo }) 
       setEditing(updatedEditing);
 
       const inputGrade = parseInt(event.target.value);
-      const updatedGrades = [...students];
-      updatedGrades[index].grade = inputGrade;
-      setStudents(updatedGrades);
+      if (typeof inputGrade === Number) {
+        const updatedGrades = [...students];
+        updatedGrades[index].grade = inputGrade;
+        setStudents(updatedGrades);
+        // call api
+      }
     }
   };
 
-  const handleDelete = () => {
-    // ...
-  };
-
-  const handlePublic = () => {
-    // call api, upload a post in general
-    setIsPublic(true);
+  const handleDelete = async () => {
+    await fetch(`/en/api/classes/${classId}/assignments/${gradeCompositionInfo.assignmentId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    mutate(`/en/api/classes/${classId}/assignments`);
   };
 
   const handleUploadClick = () => {
@@ -116,21 +129,57 @@ const GradeComposition = ({ lang, students, setStudents, gradeCompostionInfo }) 
     }
   };
 
+  const showCreateModal = () => {
+    setOpenEditModal(true);
+  };
+
+  const handleChangeCancel = () => {
+    setOpenEditModal(false);
+    editForm.resetFields();
+  };
+
+  const handleChange = async (values) => {
+    setIsChanging(true);
+    await fetch(`/en/api/classes/${classId}/assignments`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ assName: values.className, scale: values.scale, isPublished: isPublished }),
+    });
+    mutate(`/en/api/classes/${classId}/assignments`);
+  };
+
+  const onFinishFailed = (errorInfo) => {
+    console.error('Failed:', errorInfo);
+  };
+
   const items = [
     {
       key: '1',
       label: (
         <a
           className={cx('option')}
-          onClick={handlePublic}
+          onClick={() => showCreateModal()}
+        >
+          {d.edit}
+        </a>
+      ),
+    },
+    {
+      key: '2',
+      label: (
+        <a
+          className={cx('option')}
+          onClick={handleChange}
         >
           {d.public}
         </a>
       ),
-      disabled: isPublic,
+      disabled: isPublished,
     },
     {
-      key: '2',
+      key: '3',
       label: (
         <a
           className={cx('option')}
@@ -150,7 +199,7 @@ const GradeComposition = ({ lang, students, setStudents, gradeCompostionInfo }) 
       ),
     },
     {
-      key: '3',
+      key: '4',
       label: (
         <a
           className={cx('option')}
@@ -161,7 +210,7 @@ const GradeComposition = ({ lang, students, setStudents, gradeCompostionInfo }) 
       ),
     },
     {
-      key: '4',
+      key: '5',
       label: (
         <a
           className={cx('option')}
@@ -177,7 +226,7 @@ const GradeComposition = ({ lang, students, setStudents, gradeCompostionInfo }) 
     <div className={cx('wrap')}>
       <div className={cx('grade-information')}>
         <div className={cx('header')}>
-          <p>{gradeCompostionInfo.createdDate}</p>
+          <p>{formattedDate}</p>
           <Dropdown
             menu={{
               items,
@@ -191,11 +240,70 @@ const GradeComposition = ({ lang, students, setStudents, gradeCompostionInfo }) 
               <MoreOutlined />
             </Button>
           </Dropdown>
+          <Modal
+            className={cx('modal')}
+            open={openEditModal}
+            title={<h2 className={cx('modal-title')}>{d.editAssignment}</h2>}
+            onCancel={handleChangeCancel}
+            footer={[]}
+          >
+            <Form
+              name="editForm"
+              form={editForm}
+              onFinish={handleChange}
+              onFinishFailed={onFinishFailed}
+              autoComplete="off"
+            >
+              <Form.Item
+                className={cx('form')}
+                label="Assignment Name"
+                name="assName"
+                rules={[
+                  {
+                    required: true,
+                    message: d.assNameRequired,
+                  },
+                ]}
+              >
+                <Input defaultValue={gradeCompositionInfo.assignmentName} />
+              </Form.Item>
+              <Form.Item
+                className={cx('form')}
+                label="Grade Scale"
+                name="scale"
+                rules={[
+                  {
+                    required: true,
+                    message: d.assNameRequired,
+                  },
+                ]}
+              >
+                <Input defaultValue={gradeCompositionInfo.assignmentGradeScale} />
+              </Form.Item>
+              <Form.Item className={cx('modal-btn')}>
+                <Button
+                  key="cancel"
+                  type="white"
+                  onClick={handleChangeCancel}
+                >
+                  {d.cancel}
+                </Button>
+                <Button
+                  key="submit"
+                  htmlType="submit"
+                  type="primary"
+                  loading={isChanging}
+                >
+                  {d.change}
+                </Button>
+              </Form.Item>
+            </Form>
+          </Modal>
         </div>
-        <p className={cx('name')}>{gradeCompostionInfo.name}</p>
-        {!isPublic && <p className={cx('draft')}>{d.draft}</p>}
+        <p className={cx('name')}>{gradeCompositionInfo.assignmentName}</p>
+        {!isPublished && <p className={cx('draft')}>{d.draft}</p>}
         <hr />
-        <p>{gradeCompostionInfo.scale}%</p>
+        <p>{gradeCompositionInfo.assignmentGradeScale * 10}%</p>
       </div>
       <div className={cx('grades')}>
         <div className={cx('grades-avg')}>80</div>
