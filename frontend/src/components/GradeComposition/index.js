@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo, useEffect, useRef } from 'react';
+import { mutate } from 'swr';
 import * as XLSX from 'xlsx';
 import getDictionary from '@/utils/language';
 import { Button, Dropdown, Modal, Input, Form } from 'antd';
@@ -80,13 +81,13 @@ const GradeComposition = ({ lang, students, setStudents, gradeCompositionInfo })
   };
 
   const handleDelete = async () => {
-    await fetch(`/en/api/classes/${classId}/assignments/${gradeCompositionInfo.assignmentId}`, {
+    await fetch(`/en/api/classes/${gradeCompositionInfo.classId}/assignments/${gradeCompositionInfo.assignmentId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
       },
     });
-    mutate(`/en/api/classes/${classId}/assignments`);
+    mutate(`/en/api/classes/${gradeCompositionInfo.classId}/assignments`);
   };
 
   const handleUploadClick = () => {
@@ -140,14 +141,29 @@ const GradeComposition = ({ lang, students, setStudents, gradeCompositionInfo })
 
   const handleChange = async (values) => {
     setIsChanging(true);
-    await fetch(`/en/api/classes/${classId}/assignments`, {
+    await fetch(`/en/api/classes/${gradeCompositionInfo.classId}/assignments/${gradeCompositionInfo.assignmentId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ assName: values.className, scale: values.scale, isPublished: isPublished }),
+      body: JSON.stringify({ assName: values.assName, scale: values.scale, isPublished: isPublished }),
     });
-    mutate(`/en/api/classes/${classId}/assignments`);
+    setIsChanging(false);
+    setOpenEditModal(false);
+    editForm.resetFields();
+    mutate(`/en/api/classes/${gradeCompositionInfo.classId}/assignments`);
+  };
+
+  const handlePublish = async (values) => {
+    await fetch(`/en/api/classes/${gradeCompositionInfo.classId}/assignments/${gradeCompositionInfo.assignmentId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ assName: values.assName, scale: values.scale, isPublished: true }),
+    });
+    mutate(`/en/api/classes/${gradeCompositionInfo.classId}/assignments`);
+    setisPublished(true);
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -171,9 +187,9 @@ const GradeComposition = ({ lang, students, setStudents, gradeCompositionInfo })
       label: (
         <a
           className={cx('option')}
-          onClick={handleChange}
+          onClick={handlePublish}
         >
-          {d.public}
+          {d.publish}
         </a>
       ),
       disabled: isPublished,
@@ -258,6 +274,7 @@ const GradeComposition = ({ lang, students, setStudents, gradeCompositionInfo })
                 className={cx('form')}
                 label="Assignment Name"
                 name="assName"
+                initialValue={gradeCompositionInfo?.assignmentName}
                 rules={[
                   {
                     required: true,
@@ -265,20 +282,21 @@ const GradeComposition = ({ lang, students, setStudents, gradeCompositionInfo })
                   },
                 ]}
               >
-                <Input defaultValue={gradeCompositionInfo.assignmentName} />
+                <Input />
               </Form.Item>
               <Form.Item
                 className={cx('form')}
                 label="Grade Scale"
                 name="scale"
+                initialValue={gradeCompositionInfo?.assignmentGradeScale}
                 rules={[
                   {
                     required: true,
-                    message: d.assNameRequired,
+                    message: d.gradeScaleRequired,
                   },
                 ]}
               >
-                <Input defaultValue={gradeCompositionInfo.assignmentGradeScale} />
+                <Input />
               </Form.Item>
               <Form.Item className={cx('modal-btn')}>
                 <Button
@@ -302,6 +320,7 @@ const GradeComposition = ({ lang, students, setStudents, gradeCompositionInfo })
         </div>
         <p className={cx('name')}>{gradeCompositionInfo.assignmentName}</p>
         {!isPublished && <p className={cx('draft')}>{d.draft}</p>}
+        {isPublished && <p className={cx('draft')}>{d.published}</p>}
         <hr />
         <p>{gradeCompositionInfo.assignmentGradeScale * 10}%</p>
       </div>

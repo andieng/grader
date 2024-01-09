@@ -29,8 +29,6 @@ const fetcher = async (url) => {
 };
 
 const DetailsTab = ({ lang, classId }) => {
-  console.log('0--------------------------------------');
-
   const apiUrl = `/en/api/classes/${classId}`;
   const currentClass = useSWR(apiUrl, fetcher);
 

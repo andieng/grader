@@ -21,7 +21,8 @@
   "delete": "Xóa",
   "upload": "Cập nhật dữ liệu",
   "download": "Tải file mẫu",
-  "public": "Công khai",
+  "publish": "Công khai",
+  "published": "Đã công khai",
   "draft": "Bản nháp",
   "edit": "Chỉnh sửa",
   "uploadNoti": "Vui lòng upload file chứa thông tin StudentId và Full name theo đúng định dạng template để cập nhật điểm cho học sinh.",
@@ -29,6 +30,7 @@
   "createAss": "Tạo bài tập",
   "create": "Tạo",
   "assNameRequired": "Tên bài tập không được bỏ trống.",
+  "gradeScaleRequired": "Phần trăm điểm không được bỏ trống.",
   "enterAssName": "Nhập tên bài tập",
   "change": "Chỉnh sửa",
   "editAssignment": "Chỉnh sửa bài tập"

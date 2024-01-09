@@ -24,7 +24,7 @@ export const POST = async function createClass(req) {
 
     const { className } = await req.json();
 
-    const response = await fetch(`${process.env.API_BASE_URL}/api/classes/create`, {
+    const response = await fetch(`${process.env.API_BASE_URL}/api/classes`, {
       method: 'POST',
       headers: {
         authorization: `Bearer ${accessToken}`,

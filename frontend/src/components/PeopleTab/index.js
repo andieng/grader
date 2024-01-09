@@ -29,12 +29,13 @@ const PeopleTab = ({ lang, classId }) => {
     return getDictionary(lang, 'pages/ClassDetails');
   }, [lang]);
 
-  const apiUrl = useMemo(() => `/en/api/classes/members?${new URLSearchParams({ classId })}`, [classId]);
+  const apiUrl = useMemo(() => `/en/api/classes/${classId}/members`, [classId]);
 
-  const classes = useSWR('/api/classes', fetcher);
+  const classes = useSWR('/en/api/classes', fetcher);
   const members = useSWR(apiUrl, fetcher);
+
   const teachingClass = useMemo(() => {
-    const filterTeachingClass = classes.data.teaching?.filter((teaching) => teaching.classId === classId)[0];
+    const filterTeachingClass = classes.data?.teaching?.filter((teaching) => teaching.classId === classId)[0];
     if (!filterTeachingClass) {
       return null;
     }
@@ -155,7 +156,7 @@ const PeopleTab = ({ lang, classId }) => {
                     src={item.member.avatar}
                     alt="User"
                   />
-                  <p>{item.member.name}</p>
+                  <p>{item.member.email}</p>
                 </div>
               </Row>
               {index !== teachers.length - 1 && <Divider className={cx('user-divider')} />}
@@ -194,7 +195,7 @@ const PeopleTab = ({ lang, classId }) => {
                     src={item.member.avatar}
                     alt="User"
                   />
-                  <p>{item.member.name}</p>
+                  <p>{item.member.email}</p>
                 </div>
               </Row>
               {index !== students.length - 1 && <Divider className={cx('user-divider')} />}

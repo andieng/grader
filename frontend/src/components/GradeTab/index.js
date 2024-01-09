@@ -41,8 +41,6 @@ const GradeTab = ({ lang, classId }) => {
   const apiUrl = `/en/api/classes/${classId}/assignments`;
   const assignments = useSWR(apiUrl, fetcher);
 
-  console.log(assignments.data);
-
   const d = useMemo(() => {
     return getDictionary(lang, 'pages/ClassDetails');
   }, [lang]);
