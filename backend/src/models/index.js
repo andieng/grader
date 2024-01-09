@@ -96,8 +96,6 @@ function initModels(sequelize) {
     as: "gradeReviews",
     foreignKey: "studentUserId",
   });
-  StudentMapping.belongsTo(User, { as: "user", foreignKey: "userId" });
-  User.hasOne(StudentMapping, { as: "studentMapping", foreignKey: "userId" });
 
   return {
     Assignment,
