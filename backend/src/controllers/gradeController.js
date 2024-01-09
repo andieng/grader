@@ -43,7 +43,7 @@ export const getClassGrades = async (req, res) => {
   const studentMapping = await StudentMapping.findOne({
     where: {
       classId,
-      userId: req.user.id,
+      studentId: req.user.studentId,
     },
   });
 

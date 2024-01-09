@@ -378,7 +378,7 @@ export const checkClassRole = async (req, res, next) => {
   const studentMapping = await StudentMapping.findOne({
     where: {
       classId,
-      userId: req.user.id,
+      studentId: req.user.studentId,
     },
   });
 
@@ -416,13 +416,8 @@ export const checkTeacherRole = async (req, res, next) => {
 export const mapStudent = async (req, res) => {
   const { studentId, classId } = req.params;
 
-  const userAlreadyMapped = await StudentMapping.findOne({
-    where: {
-      userId: req.user.id,
-    },
-  });
-
-  if (userAlreadyMapped) {
+  // This user has already mapped
+  if (req.user.studentId) {
     res.status(400);
     throw new Error(ERROR_USER_ALREADY_MAPPED);
   }
@@ -439,13 +434,29 @@ export const mapStudent = async (req, res) => {
     throw new Error(ERROR_INVALID_MAPPING);
   }
 
-  if (studentMapping.userId) {
+  const studentIdAlreadyMapped = (await User.findOne({
+    where: {
+      studentId,
+    },
+  }))
+    ? true
+    : false;
+
+  if (studentIdAlreadyMapped) {
     res.status(400);
     throw new Error(ERROR_STUDENT_ID_ALREADY_MAPPED);
   }
 
-  studentMapping.userId = req.user.id;
-  await studentMapping.save();
+  await User.update(
+    {
+      studentId,
+    },
+    {
+      where: {
+        id: req.user.id,
+      },
+    }
+  );
 
   res.json(studentMapping);
 };
