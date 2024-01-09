@@ -43,11 +43,16 @@ const ClassMenu = ({ children, lang }) => {
       label: <Link href={`${redirectLocale}/g/${classId}`}>{d.grades}</Link>,
       key: 'grades',
     },
+    {
+      label: <Link href={`${redirectLocale}/r/${classId}`}>{d.review}</Link>,
+      key: 'review',
+    },
   ];
 
   if (pathname.includes('/p/') && current !== 'people') setCurrent('people');
   else if (pathname.includes('/g/') && current !== 'grades') setCurrent('grades');
   else if (pathname.includes('/d/') && current !== 'details') setCurrent('details');
+  else if (pathname.includes('/r/') && current !== 'review') setCurrent('review');
 
   return (
     <div className={cx('container')}>

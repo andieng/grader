@@ -5,6 +5,7 @@ import DetailsTab from '@/components/DetailsTab';
 import PeopleTab from '@/components/PeopleTab';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0/client';
 import GradeTab from '@/components/GradeTab';
+import ReviewTab from '@/components/ReviewTab';
 
 const cx = classnames.bind(styles);
 
@@ -20,8 +21,13 @@ export default withPageAuthRequired(
         lang={lang}
         classId={classId}
       />
-    ) : (
+    ) : tab === 'g' ? (
       <GradeTab
+        lang={lang}
+        classId={classId}
+      />
+    ) : (
+      <ReviewTab
         lang={lang}
         classId={classId}
       />
