@@ -353,13 +353,23 @@ export const upsertStudentMapping = async (req, res) => {
       return studentMapping;
     })
   );
+  await Class.update(
+    {
+      isMapped: true,
+    },
+    {
+      where: {
+        classId,
+      },
+    }
+  );
 
   res.json(upsertedStudentMapping);
 };
 
 export const checkClassRole = async (req, res, next) => {
   const { classId } = req.params;
-  const member = await ClassMember.findOne({
+  const classMember = await ClassMember.findOne({
     where: {
       classId,
       memberId: req.user.id,
@@ -373,10 +383,12 @@ export const checkClassRole = async (req, res, next) => {
   });
 
   if (
-    member?.role === "teacher" ||
+    classMember?.role === "teacher" ||
     req.user.role === "admin" ||
     studentMapping
   ) {
+    req.classMember = classMember;
+    req.studentMapping = studentMapping;
     return next();
   }
 

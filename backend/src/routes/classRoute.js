@@ -84,9 +84,13 @@ classRouter.post(
 classRouter.post("/:classId/grades", checkTeacherRole, upsertGradesByJson);
 
 // Grade review routes
-classRouter.get("/:classId/grade-reviews", getGradeReviewList);
-classRouter.post("/:classId/grade-reviews", addGradeReview);
-classRouter.get("/:classId/grade-reviews/:gradeReviewId", getGradeReview);
+classRouter.get("/:classId/grade-reviews", checkClassRole, getGradeReviewList);
+classRouter.post("/:classId/grade-reviews", checkClassRole, addGradeReview);
+classRouter.get(
+  "/:classId/grade-reviews/:gradeReviewId",
+  checkClassRole,
+  getGradeReview
+);
 classRouter.put(
   "/:classId/grade-reviews/:gradeReviewId",
   checkTeacherRole,
@@ -96,6 +100,7 @@ classRouter.put(
 // Grade review comment routes
 classRouter.post(
   "/:classId/grade-reviews/:gradeReviewId/grade-review-comments",
+  checkClassRole,
   addGradeReviewComment
 );
 

@@ -7,15 +7,9 @@ import { GradeReview, GradeReviewComment, ClassMember, Grade } from "../models";
 
 export const getGradeReviewList = async (req, res) => {
   const { classId } = req.params;
+  const { classMember } = req;
 
-  const classMember = await ClassMember.findOne({
-    where: {
-      classId,
-      memberId: req.user.id,
-    },
-  });
-
-  if (classMember.role === "student") {
+  if (classMember?.role === "student") {
     const gradeReviewList = await GradeReview.findAll({
       where: {
         classId,
