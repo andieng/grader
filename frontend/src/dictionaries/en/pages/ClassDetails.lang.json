@@ -35,5 +35,15 @@
   "gradeScaleRequired": "Grade scale is required.",
   "enterAssName": "Enter assignment name",
   "change": "Change",
-  "editAssignment": "Edit Assignment"
+  "editAssignment": "Edit Assignment",
+  "reviewDetails": "Grade review details",
+  "from": "From",
+  "status": "Status",
+  "reason": "Reason",
+  "currentGrade": "Current grade",
+  "expectedGrade": "Expected grade",
+  "finalGrade": "Final grade",
+  "finalGradeRequired": "Final grade required",
+  "finalize": "Finalize",
+  "comment": "Comment"
 }

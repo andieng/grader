@@ -35,5 +35,15 @@
   "gradeScaleRequired": "Phần trăm điểm không được bỏ trống.",
   "enterAssName": "Nhập tên bài tập",
   "change": "Chỉnh sửa",
-  "editAssignment": "Chỉnh sửa bài tập"
+  "editAssignment": "Chỉnh sửa bài tập",
+  "reviewDetails": "Thông tin phúc khảo",
+  "from": "Từ",
+  "status": "Trạng thái",
+  "reason": "Lý do",
+  "currentGrade": "Điểm hiện tại",
+  "expectedGrade": "Điểm mong muốn",
+  "finalGrade": "Điểm cuối cùng",
+  "finalGradeRequired": "Điểm cuối cùng không được bỏ trống",
+  "finalize": "Hoàn tất",
+  "comment": "Bình luận"
 }

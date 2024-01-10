@@ -4,7 +4,7 @@ import { useMemo, useRef, useState } from 'react';
 import useSWR from 'swr';
 import { mutate } from 'swr';
 import getDictionary from '@/utils/language';
-import { Button, Result, Modal, Input, Form } from 'antd';
+import { Button, Spin, Modal, Input, Form } from 'antd';
 import * as XLSX from 'xlsx';
 import classnames from 'classnames/bind';
 import styles from '@/styles/components/GradeTab.module.scss';
@@ -114,6 +114,8 @@ const GradeTab = ({ lang, classId }) => {
   const onFinishFailed = (errorInfo) => {
     console.error('Failed:', errorInfo);
   };
+
+  if (assignments.isLoading || d === null) return <Spin size="large" />;
 
   return (
     <div className={cx('wrap')}>
