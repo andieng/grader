@@ -13,6 +13,7 @@ import {
   checkClassRole,
   checkTeacherRole,
   mapStudent,
+  getStudentMappingList,
 } from "../controllers/classController";
 import {
   addAssignment,
@@ -51,6 +52,11 @@ classRouter.post("/:classId/members", addMemberToClass);
 classRouter.post("/:classId/invitations", inviteMember);
 
 // Student mapping routes
+classRouter.get(
+  "/:classId/student-mapping",
+  checkTeacherRole,
+  getStudentMappingList
+);
 classRouter.post(
   "/:classId/student-mapping",
   checkTeacherRole,

@@ -460,3 +460,15 @@ export const mapStudent = async (req, res) => {
 
   res.json(studentMapping);
 };
+
+export const getStudentMappingList = async (req, res) => {
+  const { classId } = req.params;
+
+  const studentMapping = await StudentMapping.findAll({
+    where: {
+      classId,
+    },
+  });
+
+  return res.json(studentMapping);
+};

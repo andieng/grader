@@ -1,5 +1,10 @@
 import { ERROR_CREATE_ASSIGNMENT } from "../constants";
-import { Assignment, GradePublication, GradeReviewComment } from "../models";
+import {
+  Assignment,
+  GradePublication,
+  GradeReview,
+  GradeReviewComment,
+} from "../models";
 import { Op } from "sequelize";
 
 export const getAssignmentList = async (req, res) => {
@@ -79,12 +84,28 @@ export const deleteAssignment = async (req, res) => {
   const { assignment } = req;
   const assignmentId = assignment.assignmentId;
 
-  // Delete
-  await GradeReviewComment.destroy({
+  // Delete associated rows from Grade Publication table
+  await GradePublication.destroy({
     where: {
       assignmentId,
     },
   });
+  const gradeReviews = await GradeReview.findAll({
+    where: {
+      assignmentId,
+    },
+  });
+  for (item of gradeReviews) {
+    // Delete associated rows from Grade Review Comment table
+    await GradeReviewComment.destroy({
+      where: {
+        gradeReviewId: item.gradeReviewId,
+      },
+    });
+  }
+  // Delete associated rows from Grade Review table
+  await gradeReviews.destroy();
+
   const assignmentList = await Assignment.findAll({
     where: {
       lineNumber: {
