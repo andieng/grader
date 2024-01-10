@@ -3,7 +3,7 @@ import {
   ERROR_INPUT_DATA_NOT_FOUND,
   ERROR_INVALID_INPUT_DATA,
 } from "../constants";
-import { GradeReview, GradeReviewComment, ClassMember, Grade } from "../models";
+import { GradeReview, GradeReviewComment, Grade } from "../models";
 
 export const getGradeReviewList = async (req, res) => {
   const { classId } = req.params;
@@ -95,15 +95,17 @@ export const updateGradeReview = async (req, res) => {
   }
 
   if (finalGrade !== gradeReview.finalGrade) {
-    const grade = await Grade.findOne({
-      where: {
-        assignmentId: gradeReview.assignmentId,
-        userId: gradeReview.studentUser.id,
+    await Grade.update(
+      {
+        gradeValue: finalGrade,
       },
-    });
-    await grade.update({
-      gradeValue: finalGrade,
-    });
+      {
+        where: {
+          assignmentId: gradeReview.assignmentId,
+          userId: gradeReview.studentUser.id,
+        },
+      }
+    );
   }
   await gradeReview.update(req.body);
 
