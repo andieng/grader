@@ -12,12 +12,34 @@ export const getClassGrades = async (req, res) => {
   const { classId } = req.params;
 
   if (req.user.role === "admin") {
-    const grades = await Grade.findAll({
+    const classMemberRole = "admin";
+    const assignmentGrades = await Assignment.findAll({
+      attributes: [
+        ["assignment_id", "assignmentId"],
+        ["assignment_name", "assignmentName"],
+        ["assignment_grade_scale", "assignmentGradeScale"],
+        ["line_number", "lineNumber"],
+        ["is_published", "isPublished"],
+        ["class_id", "classId"],
+      ],
       where: {
         classId,
       },
+      include: {
+        model: Grade,
+        as: "grades",
+        attributes: [
+          ["student_id", "studentId"],
+          ["grade_value", "gradeValue"],
+        ],
+        required: false,
+      },
     });
-    return res.json(grades);
+
+    return res.json({
+      classMemberRole,
+      assignmentGrades,
+    });
   }
 
   const member = await ClassMember.findOne({
@@ -32,12 +54,34 @@ export const getClassGrades = async (req, res) => {
   }
 
   if (member?.role === "teacher") {
-    const grades = await Grade.findAll({
+    const classMemberRole = member.role;
+    const assignmentGrades = await Assignment.findAll({
+      attributes: [
+        ["assignment_id", "assignmentId"],
+        ["assignment_name", "assignmentName"],
+        ["assignment_grade_scale", "assignmentGradeScale"],
+        ["line_number", "lineNumber"],
+        ["is_published", "isPublished"],
+        ["class_id", "classId"],
+      ],
       where: {
         classId,
       },
+      include: {
+        model: Grade,
+        as: "grades",
+        attributes: [
+          ["student_id", "studentId"],
+          ["grade_value", "gradeValue"],
+        ],
+        required: false,
+      },
     });
-    return res.json(grades);
+
+    return res.json({
+      classMemberRole,
+      assignmentGrades,
+    });
   }
 
   const studentMapping = await StudentMapping.findOne({
@@ -48,13 +92,35 @@ export const getClassGrades = async (req, res) => {
   });
 
   if (studentMapping) {
-    const grades = await Grade.findAll({
+    const classMemberRole = member.role;
+    const assignmentGrades = await Assignment.findAll({
+      attributes: [
+        ["assignment_id", "assignmentId"],
+        ["assignment_name", "assignmentName"],
+        ["assignment_grade_scale", "assignmentGradeScale"],
+        ["line_number", "lineNumber"],
+        ["is_published", "isPublished"],
+        ["class_id", "classId"],
+      ],
       where: {
         classId,
         studentId: studentMapping.studentId,
       },
+      include: {
+        model: Grade,
+        as: "grades",
+        attributes: [
+          ["student_id", "studentId"],
+          ["grade_value", "gradeValue"],
+        ],
+        required: false,
+      },
     });
-    return res.json(grades);
+
+    return res.json({
+      classMemberRole,
+      assignmentGrades,
+    });
   }
 
   res.status(403);
