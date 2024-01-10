@@ -1,5 +1,5 @@
 import { ERROR_CREATE_ASSIGNMENT } from "../constants";
-import { Assignment, GradePublication } from "../models";
+import { Assignment, GradePublication, GradeReviewComment } from "../models";
 import { Op } from "sequelize";
 
 export const getAssignmentList = async (req, res) => {
@@ -77,6 +77,14 @@ export const updateAssignment = async (req, res) => {
 
 export const deleteAssignment = async (req, res) => {
   const { assignment } = req;
+  const assignmentId = assignment.assignmentId;
+
+  // Delete
+  await GradeReviewComment.destroy({
+    where: {
+      assignmentId,
+    },
+  });
   const assignmentList = await Assignment.findAll({
     where: {
       lineNumber: {

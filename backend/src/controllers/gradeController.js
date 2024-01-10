@@ -21,6 +21,7 @@ export const getClassGrades = async (req, res) => {
         ["line_number", "lineNumber"],
         ["is_published", "isPublished"],
         ["class_id", "classId"],
+        ["created_at", "createdAt"],
       ],
       where: {
         classId,
@@ -38,6 +39,7 @@ export const getClassGrades = async (req, res) => {
 
     return res.json({
       classMemberRole,
+      mapped: null,
       assignmentGrades,
     });
   }
@@ -63,6 +65,7 @@ export const getClassGrades = async (req, res) => {
         ["line_number", "lineNumber"],
         ["is_published", "isPublished"],
         ["class_id", "classId"],
+        ["created_at", "createdAt"],
       ],
       where: {
         classId,
@@ -80,6 +83,7 @@ export const getClassGrades = async (req, res) => {
 
     return res.json({
       classMemberRole,
+      mapped: null,
       assignmentGrades,
     });
   }
@@ -91,36 +95,46 @@ export const getClassGrades = async (req, res) => {
     },
   });
 
-  if (studentMapping) {
-    const classMemberRole = member.role;
-    const assignmentGrades = await Assignment.findAll({
-      attributes: [
-        ["assignment_id", "assignmentId"],
-        ["assignment_name", "assignmentName"],
-        ["assignment_grade_scale", "assignmentGradeScale"],
-        ["line_number", "lineNumber"],
-        ["is_published", "isPublished"],
-        ["class_id", "classId"],
-      ],
-      where: {
-        classId,
-        studentId: studentMapping.studentId,
-      },
-      include: {
-        model: Grade,
-        as: "grades",
+  if (member.role === "student") {
+    if (studentMapping) {
+      const classMemberRole = member.role;
+      const assignmentGrades = await Assignment.findAll({
         attributes: [
-          ["student_id", "studentId"],
-          ["grade_value", "gradeValue"],
+          ["assignment_id", "assignmentId"],
+          ["assignment_name", "assignmentName"],
+          ["assignment_grade_scale", "assignmentGradeScale"],
+          ["line_number", "lineNumber"],
+          ["is_published", "isPublished"],
+          ["class_id", "classId"],
+          ["created_at", "createdAt"],
         ],
-        required: false,
-      },
-    });
+        where: {
+          classId,
+          studentId: studentMapping.studentId,
+        },
+        include: {
+          model: Grade,
+          as: "grades",
+          attributes: [
+            ["student_id", "studentId"],
+            ["grade_value", "gradeValue"],
+          ],
+          required: false,
+        },
+      });
 
-    return res.json({
-      classMemberRole,
-      assignmentGrades,
-    });
+      return res.json({
+        classMemberRole,
+        mapped: true,
+        assignmentGrades,
+      });
+    } else {
+      return res.json({
+        classMemberRole: member.role,
+        mapped: false,
+        assignmentGrades: [],
+      });
+    }
   }
 
   res.status(403);
