@@ -105,25 +105,18 @@ const GradeComposition = ({ lang, grades, gradeCompositionInfo }) => {
 
   const handleUpload = async (event) => {
     const file = event.target.files[0];
-    console.log(file);
     if (file) {
       const formData = new FormData();
-      formData.append('file', file);
+      formData.append('assignmentGradeFile', file);
       formData.append('assignmentId', gradeCompositionInfo.assignmentId);
-      for (var pair of formData.entries()) {
-        console.log(pair[1]);
-      }
       try {
         const response = await fetch(`/en/api/classes/${gradeCompositionInfo.classId}/grades`, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
           body: formData,
         });
-
         if (response.ok) {
           console.log(response);
+          // mutate to update list students component
         } else {
           throw new Error('Failed to upload file');
         }

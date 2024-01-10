@@ -39,8 +39,26 @@ const GradeTab = ({ lang, classId }) => {
     }
   };
 
-  const handleUpload = () => {
-    // map grade with student id
+  const handleUpload = async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const formData = new FormData();
+      formData.append('studentMappingFile', file);
+      try {
+        const response = await fetch(`/en/api/classes/${gradeCompositionInfo.classId}/grades`, {
+          method: 'POST',
+          body: formData,
+        });
+        if (response.ok) {
+          console.log(response);
+          // mutate to update list students component
+        } else {
+          throw new Error('Failed to upload file');
+        }
+      } catch (error) {
+        console.error('Error uploading file:', error);
+      }
+    }
   };
 
   const handleDownload = () => {
