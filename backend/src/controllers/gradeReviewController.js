@@ -3,7 +3,7 @@ import {
   ERROR_INPUT_DATA_NOT_FOUND,
   ERROR_INVALID_INPUT_DATA,
 } from "../constants";
-import { GradeReview, GradeReviewComment, Grade } from "../models";
+import { GradeReview, GradeReviewComment, Grade, User } from "../models";
 
 export const getGradeReviewList = async (req, res) => {
   const { classId } = req.params;
@@ -15,11 +15,19 @@ export const getGradeReviewList = async (req, res) => {
         classId,
         studentUserId: req.user.id,
       },
-      include: {
-        model: GradeReviewComment,
-        as: "gradeReviewComments",
-        required: false,
-      },
+      include: [
+        {
+          model: GradeReviewComment,
+          as: "gradeReviewComments",
+          required: false,
+        },
+        {
+          model: User,
+          as: "studentUser",
+          required: true,
+          attributes: [["student_id", "studentId"], "email", "avatar", "id"],
+        },
+      ],
     });
     return res.json(gradeReviewList);
   }
@@ -28,11 +36,19 @@ export const getGradeReviewList = async (req, res) => {
     where: {
       classId,
     },
-    include: {
-      model: GradeReviewComment,
-      as: "gradeReviewComments",
-      required: false,
-    },
+    include: [
+      {
+        model: GradeReviewComment,
+        as: "gradeReviewComments",
+        required: false,
+      },
+      {
+        model: User,
+        as: "studentUser",
+        required: true,
+        attributes: [["student_id", "studentId"], "email", "avatar", "id"],
+      },
+    ],
   });
   return res.json(gradeReviewList);
 };
@@ -102,7 +118,7 @@ export const updateGradeReview = async (req, res) => {
       {
         where: {
           assignmentId: gradeReview.assignmentId,
-          userId: gradeReview.studentUser.id,
+          studentId: gradeReview.studentUser.studentId,
         },
       }
     );
