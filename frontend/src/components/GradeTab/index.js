@@ -22,24 +22,12 @@ const fetcher = async (url) => {
 const GradeTab = ({ lang, classId }) => {
   const fileInputRef = useRef(null);
 
-  const [students, setStudents] = useState([
-    { studentId: '20120501', grade: 80 },
-    { studentId: '20120502', grade: 70 },
-    { studentId: '20120503', grade: 67 },
-    { studentId: '20120504', grade: 90 },
-    { studentId: '20120505', grade: 89 },
-    { studentId: '20120506', grade: 72 },
-    { studentId: '20120507', grade: 50 },
-    { studentId: '20120508', grade: 65 },
-    { studentId: '20120509', grade: 90 },
-    { studentId: '20120510', grade: 71 },
-  ]);
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [createForm] = Form.useForm();
   const [isCreating, setIsCreating] = useState(false);
 
-  const apiUrl = `/en/api/classes/${classId}/assignments`;
-  const assignments = useSWR(apiUrl, fetcher);
+  const apiUrl = `/en/api/classes/${classId}/grades`;
+  const grades = useSWR(apiUrl, fetcher);
 
   const d = useMemo(() => {
     return getDictionary(lang, 'pages/ClassDetails');
@@ -115,7 +103,7 @@ const GradeTab = ({ lang, classId }) => {
     console.error('Failed:', errorInfo);
   };
 
-  if (assignments.isLoading || d === null) return <Spin size="large" />;
+  if (grades.isLoading || d === null) return <Spin size="large" />;
 
   return (
     <div className={cx('wrap')}>
@@ -222,14 +210,21 @@ const GradeTab = ({ lang, classId }) => {
             lang={lang}
             classId={classId}
           /> */}
-          {assignments.data?.map((assignment) => {
+          {grades.data?.assignmentGrades.map((assignment) => {
             return (
               <GradeComposition
                 key={assignment.assignmentId}
                 lang={lang}
-                students={students}
-                setStudents={setStudents}
-                gradeCompositionInfo={assignment}
+                grades={assignment.grades}
+                gradeCompositionInfo={{
+                  assignmentId: assignment.assignmentId,
+                  assignmentName: assignment.assignmentName,
+                  assignmentGradeScale: assignment.assignmentGradeScale,
+                  isPublished: assignment.isPublished,
+                  lineNumber: assignment.lineNumber,
+                  classId: assignment.classId,
+                  createdAt: assignment.createdAt,
+                }}
               />
             );
           })}

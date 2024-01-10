@@ -279,7 +279,7 @@ const ReviewTab = ({ lang, classId }) => {
                     className={cx('cmt-Form')}
                   >
                     <Form.Item name="comment">
-                      <Input />
+                      <Input placeholder="Aa" />
                     </Form.Item>
                     <Form.Item className={cx('modal-btn')}>
                       <Button

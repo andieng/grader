@@ -11,14 +11,21 @@ import styles from '@/styles/components/GradeComposition.module.scss';
 
 const cx = classnames.bind(styles);
 
-const GradeComposition = ({ lang, students, setStudents, gradeCompositionInfo }) => {
-  const [editing, setEditing] = useState(Array(students.length).fill(false));
+const GradeComposition = ({ lang, grades, gradeCompositionInfo }) => {
+  const [editing, setEditing] = useState(Array(grades.length).fill(false));
   const [isPublished, setisPublished] = useState(gradeCompositionInfo.isPublished);
   const gradeCompositionRefs = useRef([]);
   const fileInputRef = useRef(null);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [editForm] = Form.useForm();
   const [isChanging, setIsChanging] = useState(false);
+
+  const [students, setStudents] = useState(grades);
+
+  let gradesAvg = 0;
+  if (students.length !== 0) {
+    gradesAvg = students.reduce((total, student) => total + student.gradeValue, 0) / students.length;
+  }
 
   const dateObj = new Date(gradeCompositionInfo.createdAt);
   const year = dateObj.getFullYear();
@@ -96,8 +103,34 @@ const GradeComposition = ({ lang, students, setStudents, gradeCompositionInfo })
     }
   };
 
-  const handleUpload = () => {
-    // map grade with student id
+  const handleUpload = async (event) => {
+    const file = event.target.files[0];
+    console.log(file);
+    if (file) {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('assignmentId', gradeCompositionInfo.assignmentId);
+      for (var pair of formData.entries()) {
+        console.log(pair[1]);
+      }
+      try {
+        const response = await fetch(`/en/api/classes/${gradeCompositionInfo.classId}/grades`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+          body: formData,
+        });
+
+        if (response.ok) {
+          console.log(response);
+        } else {
+          throw new Error('Failed to upload file');
+        }
+      } catch (error) {
+        console.error('Error uploading file:', error);
+      }
+    }
   };
 
   const handleDownload = () => {
@@ -325,7 +358,7 @@ const GradeComposition = ({ lang, students, setStudents, gradeCompositionInfo })
         <p>{gradeCompositionInfo.assignmentGradeScale * 10}%</p>
       </div>
       <div className={cx('grades')}>
-        <div className={cx('grades-avg')}>80</div>
+        <div className={cx('grades-avg')}>{gradesAvg}</div>
         {students.map((student, index) => {
           return (
             <div
