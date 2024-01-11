@@ -11,7 +11,7 @@ import styles from '@/styles/components/GradeComposition.module.scss';
 
 const cx = classnames.bind(styles);
 
-const GradeComposition = ({ lang, grades, gradeCompositionInfo }) => {
+const GradeComposition = ({ lang, grades, gradeCompositionInfo, mutate }) => {
   const [editing, setEditing] = useState(Array(grades.length).fill(false));
   const [isPublished, setisPublished] = useState(gradeCompositionInfo.isPublished);
   const gradeCompositionRefs = useRef([]);
@@ -22,7 +22,7 @@ const GradeComposition = ({ lang, grades, gradeCompositionInfo }) => {
 
   const [students, setStudents] = useState(grades);
 
-  console.log(students);
+  // console.log(students);
 
   let gradesAvg = 0;
   if (students.length !== 0) {
@@ -99,7 +99,8 @@ const GradeComposition = ({ lang, grades, gradeCompositionInfo }) => {
         'Content-Type': 'application/json',
       },
     });
-    mutate(`/en/api/classes/${gradeCompositionInfo.classId}/assignments`);
+    mutate();
+    //mutate(`/en/api/classes/${gradeCompositionInfo.classId}/assignments`);
   };
 
   const handleUploadClick = () => {
@@ -120,7 +121,8 @@ const GradeComposition = ({ lang, grades, gradeCompositionInfo }) => {
           body: formData,
         });
         if (response.ok) {
-          mutate(`/en/api/classes/${gradeCompositionInfo.classId}/grades`);
+          mutate();
+          //mutate(`/en/api/classes/${gradeCompositionInfo.classId}/grades`);
         } else {
           throw new Error('Failed to upload file');
         }
@@ -181,7 +183,8 @@ const GradeComposition = ({ lang, grades, gradeCompositionInfo }) => {
     setIsChanging(false);
     setOpenEditModal(false);
     editForm.resetFields();
-    mutate(`/en/api/classes/${gradeCompositionInfo.classId}/assignments`);
+    mutate();
+    //mutate(`/en/api/classes/${gradeCompositionInfo.classId}/assignments`);
   };
 
   const handlePublish = async (values) => {
@@ -192,7 +195,8 @@ const GradeComposition = ({ lang, grades, gradeCompositionInfo }) => {
       },
       body: JSON.stringify({ assName: values.assName, scale: values.scale, isPublished: true }),
     });
-    mutate(`/en/api/classes/${gradeCompositionInfo.classId}/assignments`);
+    mutate();
+    //mutate(`/en/api/classes/${gradeCompositionInfo.classId}/assignments`);
     setisPublished(true);
   };
 

@@ -2,7 +2,6 @@
 
 import { useMemo, useRef, useState, useEffect } from 'react';
 import useSWR from 'swr';
-import { mutate } from 'swr';
 import getDictionary from '@/utils/language';
 import { Button, Spin, Modal, Input, Form } from 'antd';
 import * as XLSX from 'xlsx';
@@ -22,14 +21,30 @@ const fetcher = async (url) => {
 const GradeTab = ({ lang, classId }) => {
   const fileInputRef = useRef(null);
 
+  const [assignmentGrades, setAssignmentGrades] = useState([]);
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [createForm] = Form.useForm();
   const [isCreating, setIsCreating] = useState(false);
-
+  // const [changedTime, setChangedTime] = useState(0);
   const apiUrl = `/en/api/classes/${classId}/grades`;
   const grades = useSWR(apiUrl, fetcher);
+  const { data, isLoading, mutate: gradesMutate } = useSWR(apiUrl, fetcher);
 
-  console.log('Assignment grades changed:', grades.data?.assignmentGrades);
+  useEffect(() => {
+    if (data?.assignmentGrades) {
+      setAssignmentGrades([...data.assignmentGrades]);
+    }
+  }, [data]);
+
+  console.log('Assignment grades changed:', data?.assignmentGrades);
+
+  const mutate = () => {
+    // grades.mutate();
+    gradesMutate();
+
+    //setAssignmentGrades([...grades.data?.assignmentGrades]);
+    //setChangedTime(changedTime + 1);
+  };
 
   const d = useMemo(() => {
     return getDictionary(lang, 'pages/ClassDetails');
@@ -116,14 +131,14 @@ const GradeTab = ({ lang, classId }) => {
     setIsCreating(false);
     setOpenCreateModal(false);
     createForm.resetFields();
-    mutate(`/en/api/classes/${classId}/assignments`);
+    mutate();
   };
 
   const onFinishFailed = (errorInfo) => {
     console.error('Failed:', errorInfo);
   };
 
-  if (grades.isLoading || d === null) return <Spin size="large" />;
+  if (isLoading || d === null) return <Spin size="large" />;
 
   return (
     <div className={cx('wrap')}>
@@ -230,11 +245,12 @@ const GradeTab = ({ lang, classId }) => {
             lang={lang}
             classId={classId}
           /> */}
-          {grades.data?.assignmentGrades.map((assignment) => {
+          {assignmentGrades.map((assignment) => {
             return (
               <GradeComposition
                 key={assignment.assignmentId}
                 lang={lang}
+                mutate={mutate}
                 grades={assignment.grades}
                 gradeCompositionInfo={{
                   assignmentId: assignment.assignmentId,
