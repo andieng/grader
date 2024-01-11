@@ -34,7 +34,7 @@ export const getClassGrades = async (req, res) => {
           ["grade_value", "gradeValue"],
         ],
         required: false,
-        order: [["gradeValue", "ASC"]],
+        order: [["studentId", "ASC"]],
       },
       order: [["lineNumber", "ASC"]],
     });
@@ -80,7 +80,7 @@ export const getClassGrades = async (req, res) => {
           ["grade_value", "gradeValue"],
         ],
         required: false,
-        order: [["gradeValue", "ASC"]],
+        order: [["studentId", "ASC"]],
       },
       order: [["lineNumber", "ASC"]],
     });
@@ -124,7 +124,7 @@ export const getClassGrades = async (req, res) => {
             ["grade_value", "gradeValue"],
           ],
           required: false,
-          order: [["gradeValue", "ASC"]],
+          order: [["studentId", "ASC"]],
         },
         order: [["lineNumber", "ASC"]],
       });
