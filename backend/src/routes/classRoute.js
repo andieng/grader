@@ -63,7 +63,11 @@ classRouter.post(
   checkTeacherRole,
   upsertStudentMapping
 );
-classRouter.get("/:classId/student-mapping/:studentId", getStudentMapping);
+classRouter.get(
+  "/:classId/student-mapping/:studentId",
+  checkClassRole,
+  getStudentMapping
+);
 classRouter.post("/:classId/student-mapping/:studentId", mapStudent);
 
 // Assignment routes

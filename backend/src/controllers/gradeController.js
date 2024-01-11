@@ -116,7 +116,6 @@ export const getClassGrades = async (req, res) => {
         ],
         where: {
           classId,
-          studentId: studentMapping.studentId,
         },
         include: {
           model: Grade,
@@ -125,9 +124,12 @@ export const getClassGrades = async (req, res) => {
             ["student_id", "studentId"],
             ["grade_value", "gradeValue"],
           ],
+          where: {
+            studentId: studentMapping.studentId,
+          },
+          order: [["studentId", "ASC"]],
           required: false,
           separate: true,
-          order: [["studentId", "ASC"]],
         },
         order: [["lineNumber", "ASC"]],
       });
