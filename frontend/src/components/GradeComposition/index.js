@@ -22,16 +22,19 @@ const GradeComposition = ({ lang, grades, gradeCompositionInfo }) => {
 
   const [students, setStudents] = useState(grades);
 
+  console.log(students);
+
   let gradesAvg = 0;
   if (students.length !== 0) {
-    gradesAvg = students.reduce((total, student) => total + student.gradeValue, 0) / students.length;
+    const totalGrade = students.reduce((total, student) => total + (parseFloat(student.gradeValue) || 0), 0);
+    gradesAvg = totalGrade / students.length;
   }
 
   const dateObj = new Date(gradeCompositionInfo.createdAt);
   const year = dateObj.getFullYear();
   const month = dateObj.getMonth() + 1;
   const day = dateObj.getDate();
-  const formattedDate = `${year}\/${month < 10 ? '0' + month : month}\/${day < 10 ? '0' + day : day}`;
+  const formattedDate = `${month < 10 ? '0' + month : month}\/${day < 10 ? '0' + day : day}\/${year}`;
 
   const d = useMemo(() => {
     return getDictionary(lang, 'pages/ClassDetails');
@@ -77,12 +80,14 @@ const GradeComposition = ({ lang, grades, gradeCompositionInfo }) => {
       updatedEditing[index] = false;
       setEditing(updatedEditing);
 
-      const inputGrade = parseInt(event.target.value);
-      if (typeof inputGrade === Number) {
-        const updatedGrades = [...students];
-        updatedGrades[index].grade = inputGrade;
-        setStudents(updatedGrades);
-        // call api
+      if (!isNaN(event.target.value)) {
+        const inputGrade = parseFloat(event.target.value);
+        if (inputGrade >= 0 && inputGrade <= 10) {
+          const updatedGrades = [...students];
+          updatedGrades[index].gradeValue = inputGrade;
+          setStudents(updatedGrades);
+          // call api
+        }
       }
     }
   };
@@ -115,8 +120,7 @@ const GradeComposition = ({ lang, grades, gradeCompositionInfo }) => {
           body: formData,
         });
         if (response.ok) {
-          console.log(response);
-          // mutate to update list students component
+          mutate(`/en/api/classes/${gradeCompositionInfo.classId}/grades`);
         } else {
           throw new Error('Failed to upload file');
         }
@@ -360,11 +364,11 @@ const GradeComposition = ({ lang, grades, gradeCompositionInfo }) => {
               onClick={() => handleClickAGrade(index)}
               ref={(node) => (gradeCompositionRefs.current[index] = node)}
             >
-              {!editing[index] && <p>{student.grade}</p>}
+              {!editing[index] && <p>{parseFloat(student.gradeValue)}</p>}
               {editing[index] && (
                 <p className={cx('editing')}>
                   <Input onKeyDown={(event) => handleChangeEnter(event, index)} />
-                  /100
+                  /10
                 </p>
               )}
             </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState, useEffect } from 'react';
 import useSWR from 'swr';
 import { mutate } from 'swr';
 import getDictionary from '@/utils/language';
@@ -28,6 +28,8 @@ const GradeTab = ({ lang, classId }) => {
 
   const apiUrl = `/en/api/classes/${classId}/grades`;
   const grades = useSWR(apiUrl, fetcher);
+
+  console.log('Assignment grades changed:', grades.data?.assignmentGrades);
 
   const d = useMemo(() => {
     return getDictionary(lang, 'pages/ClassDetails');
