@@ -35,6 +35,7 @@ export const getClassGrades = async (req, res) => {
         ],
         required: false,
       },
+      order: [["lineNumber", "ASC"]],
     });
 
     return res.json({
@@ -79,6 +80,7 @@ export const getClassGrades = async (req, res) => {
         ],
         required: false,
       },
+      order: [["lineNumber", "ASC"]],
     });
 
     return res.json({
@@ -121,6 +123,7 @@ export const getClassGrades = async (req, res) => {
           ],
           required: false,
         },
+        order: [["lineNumber", "ASC"]],
       });
 
       return res.json({
