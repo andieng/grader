@@ -19,7 +19,12 @@
 }
 
 .grade-information {
-  padding: 10px 20px 10px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 20px;
+  height: 141px;
+
   & p {
     color: gray;
     &:last-of-type {
@@ -35,6 +40,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     margin-bottom: 10px;
+    font-size: 1.5rem;
   }
 
   & hr {
@@ -54,6 +60,7 @@
   flex-direction: column;
   padding: 5px 20px 5px 20px;
   justify-content: center;
+  font-size: 1.5rem;
   & p {
     font-weight: 600;
   }
@@ -68,8 +75,16 @@
   padding: 5px 20px 5px 20px;
   justify-content: center;
   border-top: 1px solid grey;
-  font-weight: 700;
+
   color: #e21414;
+
+  & > p {
+    font-weight: 700;
+    font-size: 1.5rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
 
 .editing {
@@ -161,5 +176,23 @@
   & :last-child {
     width: 270px;
     margin-left: -15px;
+  }
+}
+
+.date-created {
+  font-size: 1.4rem;
+  width: 100%;
+}
+
+.grade-scale {
+  margin: 3px 0;
+  font-size: 1.4rem;
+}
+
+.more-btn {
+  margin-left: 10px !important;
+
+  & svg {
+    font-size: 2rem;
   }
 }

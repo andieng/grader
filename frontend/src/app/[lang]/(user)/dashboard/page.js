@@ -62,8 +62,8 @@ export default withPageAuthRequired(
                 height="200"
               />
             }
-            title="No data"
-            subTitle="Oops! Seem like you haven't joined any classes"
+            title={d.noData}
+            subTitle={d.noJoinedClasses}
           />
         ) : (
           <Space className={cx('wrapper')}>

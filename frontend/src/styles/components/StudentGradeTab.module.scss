@@ -1,0 +1,50 @@
+.wrap {
+    width: 960px;
+    height: 80vh;
+    overflow-y: hidden;
+}
+  
+.no-data {
+    padding-bottom: 0;
+
+    & > div {
+        margin: 20px 0;
+        margin-top: 0;
+    }
+    & > div:first-child {
+        margin-bottom: 0px;
+    }
+    & button {
+        margin: 0 20px;
+    }
+}
+ 
+.form-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 30px;
+}
+
+.form {
+    width: fit-content;
+    margin-top: 10px;
+    
+    & input {
+        height: 40px;
+        width: 250px;
+    }
+
+    & button {
+        align-self: flex-start;
+        border-radius: 20px;
+        padding: 5px 22px;
+    }
+}
+
+.alert {
+    width: 100%;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    margin-top: 25px;
+}

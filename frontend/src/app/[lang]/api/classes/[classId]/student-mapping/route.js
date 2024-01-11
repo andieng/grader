@@ -1,7 +1,7 @@
 import { getAccessToken } from '@auth0/nextjs-auth0';
 import { NextResponse } from 'next/server';
 
-export const GET = async function getMembers(req) {
+export const GET = async function getStudentMapping(req) {
   try {
     const urlParts = req.nextUrl.pathname.split('/');
     const classIdIndex = urlParts.indexOf('classes') + 1;
@@ -23,7 +23,7 @@ export const GET = async function getMembers(req) {
   }
 };
 
-export const POST = async function upsertGrade(req) {
+export const POST = async function upsertStudentMapping(req) {
   try {
     const { accessToken } = await getAccessToken();
     const urlParts = req.nextUrl.pathname.split('/');
