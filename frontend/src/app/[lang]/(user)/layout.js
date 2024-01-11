@@ -7,11 +7,14 @@ import { Result, Button } from 'antd';
 import classnames from 'classnames/bind';
 import getDictionary from '@/utils/language';
 import styles from '@/styles/layouts/UserLayout.module.scss';
+import { CLAIM_ROLES } from '@/constants/auth';
+import { useRouter } from 'next/navigation';
 
 const cx = classnames.bind(styles);
 
 export default function UserLayout({ children, params: { lang } }) {
   const { user } = useUser();
+  const router = useRouter();
 
   const d = useMemo(() => {
     return getDictionary(lang, 'layouts/User');
@@ -36,6 +39,10 @@ export default function UserLayout({ children, params: { lang } }) {
         }
       />
     );
+  }
+
+  if (user && user[CLAIM_ROLES].includes('admin')) {
+    router.push('/admin/dashboard');
   }
 
   return <div>{children}</div>;

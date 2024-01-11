@@ -16,6 +16,7 @@ import getDictionary from '@/utils/language';
 import HomeButton from '@/components/HomeButton';
 import styles from '@/styles/components/Header.module.scss';
 import Link from 'next/link';
+import { CLAIM_ROLES } from '@/constants/auth';
 
 const cx = classnames.bind(styles);
 
@@ -116,8 +117,11 @@ export default function Header({ user, lang, isInDashboard }) {
 
   let redirectLocale = '';
 
-  if (pathname.includes('/en')) redirectLocale = '/en/dashboard';
-  else redirectLocale = '/vi/dashboard';
+  if (user && user[CLAIM_ROLES]?.includes('admin')) {
+    redirectLocale = `/${lang}/admin/dashboard`;
+  } else {
+    redirectLocale = `/${lang}/dashboard`;
+  }
 
   const d = useMemo(() => {
     return getDictionary(lang, 'components/Header');
