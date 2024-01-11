@@ -14,6 +14,7 @@ import {
   checkTeacherRole,
   mapStudent,
   getStudentMappingList,
+  getStudentMapping,
 } from "../controllers/classController";
 import {
   addAssignment,
@@ -62,6 +63,7 @@ classRouter.post(
   checkTeacherRole,
   upsertStudentMapping
 );
+classRouter.get("/:classId/student-mapping/:studentId", getStudentMapping);
 classRouter.post("/:classId/student-mapping/:studentId", mapStudent);
 
 // Assignment routes
