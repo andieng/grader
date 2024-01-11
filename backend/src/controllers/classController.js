@@ -476,6 +476,11 @@ export const getStudentMappingList = async (req, res) => {
 export const getStudentMapping = async (req, res) => {
   const { classId, studentId } = req.params;
 
+  if (req.user.studentId !== studentId) {
+    res.status(403);
+    throw new Error(ERROR_NOT_AUTHORIZED);
+  }
+
   const studentMapping = await StudentMapping.findOne({
     where: {
       classId,
