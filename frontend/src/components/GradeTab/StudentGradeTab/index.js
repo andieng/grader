@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import getDictionary from '@/utils/language';
 import { Button, Result, Form, Input, Alert } from 'antd';
 import classnames from 'classnames/bind';
@@ -19,6 +19,27 @@ const StudentGradeTab = ({ lang, classId, member }) => {
   const d = useMemo(() => {
     return getDictionary(lang, 'pages/ClassDetails');
   }, [lang]);
+
+  useEffect(() => {
+    async function fetchStudent() {
+      if (member.studentId) {
+        const response = await fetch(`/en/api/classes/${classId}/student-mapping/${member.studentId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (!data.error) {
+            setStudent(data);
+          }
+        }
+      }
+    }
+    fetchStudent();
+  }, [member]);
 
   const onFinish = async (values) => {
     setIsMapping(true);
@@ -44,16 +65,7 @@ const StudentGradeTab = ({ lang, classId, member }) => {
     console.error('Failed:', errorInfo);
   };
 
-  if (member.studentId) {
-    const response = await fetch(`/en/api/classes/${classId}/student-mapping/${values.studentId}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-  }
-
-  if (student || member.studentId) {
+  if (student) {
     return (
       <GradeBoard
         lang={lang}
