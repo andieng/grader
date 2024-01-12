@@ -201,7 +201,17 @@ const ReviewTab = ({ lang, classId }) => {
                     <p>{item.assignmentName}</p>
                     <p>{item.studentId}</p>
                   </div>
-                  <p>{item.status}</p>
+                  <p
+                    className={
+                      item.status === 'Pending'
+                        ? cx('pending-on-row')
+                        : item.status === 'Finalized'
+                        ? cx('finalized-on-row')
+                        : ''
+                    }
+                  >
+                    {item.status}
+                  </p>
                 </div>
               </Card>
             </Row>
@@ -215,21 +225,19 @@ const ReviewTab = ({ lang, classId }) => {
         >
           {selectedItem && (
             <>
-              <h2>
-                {d.reviewDetails}: {selectedItem.assignmentName}
-              </h2>
+              <h2 className={cx('header')}>{selectedItem.assignmentName}</h2>
               <div className={cx('review-header')}>
                 <p>
-                  {d.from}: {selectedItem.studentId} - {selectedItem.fullName}
+                  <span className={cx('fw-500')}>{d.from}: </span>
+                  {selectedItem.studentId} - {selectedItem.fullName}
                 </p>
                 <p>
-                  {d.status}:{' '}
                   <span
                     className={
                       selectedItem.status === 'Pending'
-                        ? cx('redStatus')
+                        ? cx('pending')
                         : selectedItem.status === 'Finalized'
-                        ? cx('greenStatus')
+                        ? cx('finalized')
                         : ''
                     }
                   >
@@ -237,17 +245,18 @@ const ReviewTab = ({ lang, classId }) => {
                   </span>
                 </p>
               </div>
-              <p>
-                {d.reason}: {selectedItem.studentExplanation}
+              <p className={cx('explanation')}>
+                <span className={cx('fw-500')}>{d.reason}: </span>
+                {selectedItem.studentExplanation}
               </p>
-              <div className={cx('review-header')}>
-                <p>
-                  {d.currentGrade}: {selectedItem.currentGrade}
-                </p>
-                <p>
-                  {d.expectedGrade}: {selectedItem.expectedGrade}
-                </p>
-              </div>
+              <p>
+                <span className={cx('fw-500')}>{d.currentGrade}: </span>
+                {selectedItem.currentGrade}
+              </p>
+              <p>
+                <span className={cx('fw-500')}>{d.expectedGrade}: </span>
+                {selectedItem.expectedGrade}
+              </p>
               <div className={cx('comments')}>
                 <Col className={cx('comment')}>
                   {selectedItem.comments.map((cmt, index) => (
@@ -317,7 +326,7 @@ const ReviewTab = ({ lang, classId }) => {
                       },
                     ]}
                   >
-                    <Input />
+                    <Input placeholder={d.enterFinalGrade} />
                   </Form.Item>
                   <Form.Item className={cx('modal-btn')}>
                     <Button

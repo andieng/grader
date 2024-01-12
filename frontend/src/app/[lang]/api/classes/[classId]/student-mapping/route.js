@@ -43,7 +43,6 @@ export const POST = async function upsertStudentMapping(req) {
     });
 
     const data = await response.json();
-    console.log(data);
     return NextResponse.json(data);
   } catch (err) {
     return NextResponse.json({ error: err }, { status: 500 });

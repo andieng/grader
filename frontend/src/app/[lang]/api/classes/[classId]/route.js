@@ -17,9 +17,6 @@ export const GET = async function getAClass(req) {
     });
 
     const data = await response.json();
-
-    console.log(data);
-
     return NextResponse.json(data);
   } catch (err) {
     return NextResponse.json({ error: err }, { status: 200 });

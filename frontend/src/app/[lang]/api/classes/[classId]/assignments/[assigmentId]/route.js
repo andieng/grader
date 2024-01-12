@@ -4,10 +4,7 @@ import { NextResponse } from 'next/server';
 export const PUT = async function editAssignment(req) {
   try {
     const { accessToken } = await getAccessToken();
-
     const reqData = await req.json();
-
-    console.log(req.params, req.query);
 
     const urlParts = req.nextUrl.pathname.split('/');
     const classIdIndex = urlParts.indexOf('classes') + 1;
@@ -54,7 +51,6 @@ export const DELETE = async function deleteAssignment(req) {
     });
 
     const data = await response.json();
-    console.log(data);
     return NextResponse.json(data);
   } catch (err) {
     return NextResponse.json({ error: err }, { status: 200 });

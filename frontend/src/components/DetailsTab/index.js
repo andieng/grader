@@ -69,24 +69,24 @@ const DetailsTab = ({ lang, classId }) => {
             <Row>
               <Card className={cx('class-code')}>
                 <div className={cx('card-class-code')}>
-                  <div>
-                    <p>{d.classCode}</p>
+                  <p>{d.classCode}</p>
+                  <div className={cx('copy-class-code')}>
                     <h2>{currentClass.data?.classCode}</h2>
+                    <Button
+                      type="white"
+                      className={cx('copy-btn')}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleCopyClassCode(currentClass.data?.classCode);
+                      }}
+                      icon={
+                        <CopyOutlined
+                          key="copy"
+                          className={cx('copy')}
+                        />
+                      }
+                    />
                   </div>
-                  <Button
-                    type="white"
-                    className={cx('copy-btn')}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleCopyClassCode(currentClass.data?.classCode);
-                    }}
-                    icon={
-                      <CopyOutlined
-                        key="copy"
-                        className={cx('copy')}
-                      />
-                    }
-                  />
                 </div>
               </Card>
             </Row>

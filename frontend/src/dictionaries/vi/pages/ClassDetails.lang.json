@@ -49,6 +49,7 @@
   "currentGrade": "Điểm hiện tại",
   "expectedGrade": "Điểm mong muốn",
   "finalGrade": "Điểm cuối cùng",
+  "enterFinalGrade": "Nhập điểm cuối cùng",
   "finalGradeRequired": "Điểm cuối cùng không được bỏ trống",
   "finalize": "Hoàn tất",
   "comment": "Bình luận",
