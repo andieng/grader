@@ -2,7 +2,7 @@
 
 import { useMemo, useState, useEffect } from 'react';
 import getDictionary from '@/utils/language';
-import { Button, Result, Form, Input, Alert } from 'antd';
+import { Button, Result, Form, Input, Alert, Spin } from 'antd';
 import classnames from 'classnames/bind';
 import ClassMenu from '@/components/ClassMenu';
 import GradeBoard from '@/components/GradeBoard';
@@ -64,6 +64,11 @@ const StudentGradeTab = ({ lang, classId, member }) => {
   const onFinishFailed = (errorInfo) => {
     console.error('Failed:', errorInfo);
   };
+
+  // Loading
+  if (member.studentId && !student) {
+    return <Spin size="large" />;
+  }
 
   if (student) {
     return (

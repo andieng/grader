@@ -43,7 +43,6 @@ const TeacherGradeTab = ({ lang, classId }) => {
           body: formData,
         });
         if (response.ok) {
-          console.log(response);
           mutate();
         } else {
           throw new Error('Failed to upload file');

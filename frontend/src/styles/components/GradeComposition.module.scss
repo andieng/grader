@@ -2,6 +2,7 @@
   width: 150px;
   border: solid 1px gray;
   margin-bottom: 40px;
+  background-color: #fff;
 }
 
 .header {
@@ -9,6 +10,7 @@
   max-width: 100%;
   align-items: center;
   gap: 5px;
+
   & * {
     margin: 0 !important;
   }
