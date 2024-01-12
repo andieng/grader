@@ -18,14 +18,17 @@ export const ERROR_CLASS_MEMBER_NOT_FOUND = "Class member not found";
 export const ERROR_SEND_INVITATIONS_FAILED =
   "Something went wrong when sending invitations";
 export const ERROR_INPUT_DATA_NOT_FOUND = "Input data not found";
+export const ERROR_INVALID_INPUT_DATA = "Invalid input data";
 export const ERROR_INPUT_FILE_NOT_FOUND = "Input file not found";
-export const ERROR_MAPPING_NOT_FOUND = "Mapping not found";
+export const ERROR_INVALID_MAPPING = "Invalid mapping";
 export const ERROR_STUDENT_ID_ALREADY_MAPPED =
   "This student id has already been mapped";
 export const ERROR_USER_ALREADY_MAPPED = "User has already been mapped";
 export const ERROR_USER_ALREADY_JOINED_CLASS =
   "User has already joined this class";
 export const ERROR_SOMETHING_WENT_WRONG = "Something went wrong";
+export const ERROR_ASSIGNMENT_NOT_FOUND = "Assignment not found";
+export const ERROR_GRADE_REVIEW_NOT_FOUND = "Grade review not found";
 
 // Success message
 export const MSG_INVITE_SUCCESSFULLY = "Invite members via email successfully";

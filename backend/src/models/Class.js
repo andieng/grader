@@ -39,10 +39,11 @@ export default class Class extends Model {
       defaultValue: Sequelize.Sequelize.fn('now'),
       field: 'updated_at'
     },
-    studentMappingFile: {
-      type: DataTypes.TEXT,
+    isMapped: {
+      type: DataTypes.BOOLEAN,
       allowNull: true,
-      field: 'student_mapping_file'
+      defaultValue: false,
+      field: 'is_mapped'
     }
   }, {
     sequelize,

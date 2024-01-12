@@ -8,6 +8,10 @@ export default class Grade extends Model {
       type: DataTypes.UUID,
       allowNull: false,
       primaryKey: true,
+      references: {
+        model: 'assignments',
+        key: 'assignment_id'
+      },
       field: 'assignment_id'
     },
     studentId: {
@@ -32,6 +36,15 @@ export default class Grade extends Model {
       allowNull: false,
       defaultValue: Sequelize.Sequelize.fn('now'),
       field: 'updated_at'
+    },
+    classId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: {
+        model: 'classes',
+        key: 'class_id'
+      },
+      field: 'class_id'
     }
   }, {
     sequelize,

@@ -30,6 +30,11 @@ export default class Assignment extends Model {
       allowNull: true,
       field: 'assignment_grade_scale'
     },
+    isPublished: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+      field: 'is_published'
+    },
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
@@ -42,15 +47,16 @@ export default class Assignment extends Model {
       defaultValue: Sequelize.Sequelize.fn('now'),
       field: 'updated_at'
     },
-    viewerRole: {
-      type: DataTypes.STRING(255),
+    lineNumber: {
+      type: DataTypes.INTEGER,
       allowNull: true,
-      field: 'viewer_role'
+      field: 'line_number'
     }
   }, {
     sequelize,
     tableName: 'assignments',
     schema: 'public',
+    hasTrigger: true,
     timestamps: false,
     indexes: [
       {

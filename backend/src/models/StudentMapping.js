@@ -20,15 +20,6 @@ export default class StudentMapping extends Model {
       primaryKey: true,
       field: 'student_id'
     },
-    userId: {
-      type: DataTypes.UUID,
-      allowNull: true,
-      references: {
-        model: 'users',
-        key: 'id'
-      },
-      field: 'user_id'
-    },
     fullName: {
       type: DataTypes.STRING(255),
       allowNull: true,
