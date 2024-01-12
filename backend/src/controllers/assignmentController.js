@@ -102,9 +102,9 @@ export const deleteAssignment = async (req, res) => {
         gradeReviewId: item.gradeReviewId,
       },
     });
+    // Delete associated rows from Grade Review table
+    await item.destroy();
   }
-  // Delete associated rows from Grade Review table
-  await gradeReviews.destroy();
 
   const assignmentList = await Assignment.findAll({
     where: {
