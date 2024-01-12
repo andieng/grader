@@ -4,9 +4,9 @@ import { NextResponse } from 'next/server';
 
 export const GET = async function getMembers(req) {
   try {
-    const url = new URL(req.url);
-    const searchParams = new URLSearchParams(url.search);
-    const classId = searchParams.get('classId');
+    const urlParts = req.nextUrl.pathname.split('/');
+    const classIdIndex = urlParts.indexOf('classes') + 1;
+    const classId = urlParts[classIdIndex];
 
     const { accessToken } = await getAccessToken();
     const response = await fetch(`${process.env.API_BASE_URL}/api/classes/${classId}/members`, {
@@ -17,7 +17,6 @@ export const GET = async function getMembers(req) {
     });
 
     const data = await response.json();
-
     return NextResponse.json(data);
   } catch (err) {
     console.error(err);

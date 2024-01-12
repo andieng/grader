@@ -2,5 +2,7 @@
   "dashboard": "Tổng quan",
   "classCodeCopied": "Đã sao chép mã lớp học",
   "students": "học sinh",
-  "teachers": "giáo viên"
+  "teachers": "giáo viên",
+  "noData": "Không có dữ liệu",
+  "noJoinedClasses": "Ối! Có vẻ như bạn chưa tham gia lớp học nào."
 }

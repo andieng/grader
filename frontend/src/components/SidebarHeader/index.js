@@ -109,7 +109,7 @@ const SidebarHeader = ({ children, lang, isInDashboard, isLoggedIn }) => {
     return (
       <div>
         {error?.message}
-        {classes?.error.message}
+        {classes?.error?.message}
       </div>
     );
   return (

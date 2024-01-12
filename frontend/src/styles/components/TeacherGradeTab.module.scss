@@ -1,0 +1,22 @@
+.wrap {
+    width: 960px;
+    height: 80vh;
+    overflow-y: hidden;
+}
+  
+.no-data {
+    & > div {
+        margin: 20px 0;
+    }
+    & > div:first-child {
+        margin-bottom: 0px;
+    }
+    & button {
+        margin: 0 20px;
+    }
+}
+  
+#upload-input {
+    display: none;
+}
+  

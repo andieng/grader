@@ -11,6 +11,7 @@
   display: flex;
   justify-content: center;
   overflow: hidden;
+  align-items: center;
 }
 
 .image-container {
@@ -25,17 +26,17 @@
 }
 
 .introduction {
-  margin-top: 8vw;
   padding-left: 130px;
   padding-left: 8vw;
   padding-right: 82px;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  margin-bottom: 80px;
 }
 
 .slogan-first-sentence {
-  font-size: 4.6rem;
-  margin-top: 20px;
+  font-size: 4.3rem;
   font-weight: 800;
   width: 100%;
   font-family: $font-family-default;

@@ -1,3 +1,4 @@
+import { DatabaseOutlined } from '@ant-design/icons';
 import { getAccessToken } from '@auth0/nextjs-auth0';
 import { NextResponse } from 'next/server';
 
@@ -9,7 +10,6 @@ export const GET = async function getClasses(req) {
         authorization: `Bearer ${accessToken}`,
       },
     });
-
     const data = await response.json();
 
     return NextResponse.json(data);
@@ -24,7 +24,7 @@ export const POST = async function createClass(req) {
 
     const { className } = await req.json();
 
-    const response = await fetch(`${process.env.API_BASE_URL}/api/classes/create`, {
+    const response = await fetch(`${process.env.API_BASE_URL}/api/classes`, {
       method: 'POST',
       headers: {
         authorization: `Bearer ${accessToken}`,
