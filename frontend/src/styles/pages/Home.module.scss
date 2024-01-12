@@ -27,7 +27,8 @@
 
 .introduction {
   padding-left: 130px;
-  padding-right: 50px;
+  padding-left: 8vw;
+  padding-right: 82px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -43,17 +44,17 @@
 
 .slogan-second-sentence {
   font-weight: 400;
-  margin-top: 15px;
+  margin-top: 1vw;
   width: 100%;
-  font-size: 1.9rem;
+  font-size: 1.8rem;
   font-style: italic;
   font-family: $font-family-default;
 }
 
 .get-started {
-  width: fit-content;
-  padding: 7px 25px;
   border-radius: 30px;
-  margin-top: 50px;
-  font-size: 1.7rem;
+  margin-top: 2.5vw;
+  font-size: 1.6rem;
+  width: fit-content;
+  padding: 5px 25px;
 }

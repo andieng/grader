@@ -2,19 +2,18 @@ import XLSX from "xlsx";
 import {
   ERROR_CLASS_MEMBER_NOT_FOUND,
   ERROR_CLASS_NOT_FOUND,
-  ERROR_CREATE_ASSIGNMENT,
   ERROR_CREATE_CLASS,
   ERROR_CREATE_CLASS_MEMBER,
   ERROR_CREATE_INVITATION,
   ERROR_INPUT_FILE_NOT_FOUND,
-  ERROR_INPUT_DATA_NOT_FOUND,
   ERROR_INVALID_INVITATION,
   MSG_INVITE_SUCCESSFULLY,
-  ERROR_MAPPING_NOT_FOUND,
   ERROR_STUDENT_ID_ALREADY_MAPPED,
   ERROR_USER_ALREADY_MAPPED,
   ERROR_USER_ALREADY_JOINED_CLASS,
   ERROR_SOMETHING_WENT_WRONG,
+  ERROR_NOT_AUTHORIZED,
+  ERROR_INVALID_MAPPING,
 } from "../constants";
 import {
   generateSubject,
@@ -24,13 +23,12 @@ import {
 } from "../helpers/invitationMailHelper";
 import { groupBy } from "../helpers/objectHelper";
 import {
-  Assignment,
   Class,
   ClassMember,
-  Grade,
   Invitation,
   User,
   StudentMapping,
+  GradePublication,
 } from "../models";
 import { sendMail } from "../services/sendGridMail";
 import {
@@ -311,7 +309,13 @@ export const getClassMembers = async (req, res) => {
 export const getClassDetails = async (req, res) => {
   const { classId } = req.params;
 
-  const classDetails = await Class.findByPk(classId);
+  const classDetails = await Class.findByPk(classId, {
+    include: {
+      model: GradePublication,
+      as: "gradePublications",
+      required: false,
+    },
+  });
 
   if (!classDetails) {
     res.status(400);
@@ -321,92 +325,11 @@ export const getClassDetails = async (req, res) => {
   return res.json(classDetails);
 };
 
-export const getAssignments = async (req, res) => {
-  const { classId } = req.params;
-
-  const assignments = await Assignment.findAll({
-    where: {
-      classId,
-    },
-  });
-
-  return res.json(assignments);
-};
-
-export const addAssignment = async (req, res) => {
-  const { assignmentName, assignmentGradeScale } = req.body;
-  const { classId } = req.params;
-
-  const createdAssignment = await Assignment.create({
-    classId,
-    assignmentName,
-    assignmentGradeScale,
-    viewerRole: "teacher",
-  });
-
-  if (!createdAssignment) {
-    res.status(500);
-    throw new Error(ERROR_CREATE_ASSIGNMENT);
-  }
-
-  return res.json(createdAssignment);
-};
-
-export const upsertGradesByJson = async (req, res) => {
-  const { grades } = req.body;
-  const { assignmentId } = req.params;
-
-  if (!grades) {
-    res.status(400);
-    throw new Error(ERROR_INPUT_DATA_NOT_FOUND);
-  }
-
-  const upsertedGrades = await Promise.all(
-    grades.map(async (gradeItem) => {
-      const [grade] = await Grade.upsert({
-        assignmentId,
-        studentId: isNaN(gradeItem.StudentId)
-          ? gradeItem.StudentId
-          : gradeItem.StudentId.toString(),
-        gradeValue: gradeItem.Grade,
-      });
-
-      return grade;
-    })
-  );
-
-  res.json(upsertedGrades);
-};
-
-export const upsertGradesByFile = async (req, res) => {
-  const { assignmentGradeFile } = req.files;
-  const { assignmentId } = req.params;
-
-  if (!assignmentGradeFile) {
+export const upsertStudentMapping = async (req, res) => {
+  if (!req.files) {
     res.status(400);
     throw new Error(ERROR_INPUT_FILE_NOT_FOUND);
   }
-  const xlsxData = XLSX.read(assignmentGradeFile.data);
-  const jsonData = XLSX.utils.sheet_to_json(xlsxData.Sheets.Sheet1);
-
-  const upsertedGrades = await Promise.all(
-    jsonData.map(async (gradeItem) => {
-      const [grade] = await Grade.upsert({
-        assignmentId,
-        studentId: isNaN(gradeItem.StudentId)
-          ? gradeItem.StudentId
-          : gradeItem.StudentId.toString(),
-        gradeValue: gradeItem.Grade,
-      });
-
-      return grade;
-    })
-  );
-
-  res.json(upsertedGrades);
-};
-
-export const upsertStudentMapping = async (req, res) => {
   const { studentMappingFile } = req.files;
   const { classId } = req.params;
 
@@ -430,20 +353,71 @@ export const upsertStudentMapping = async (req, res) => {
       return studentMapping;
     })
   );
+  await Class.update(
+    {
+      isMapped: true,
+    },
+    {
+      where: {
+        classId,
+      },
+    }
+  );
 
   res.json(upsertedStudentMapping);
 };
 
-export const mapStudent = async (req, res) => {
-  const { classId, studentId } = req.params;
-
-  const userAlreadyMapped = await StudentMapping.findOne({
+export const checkClassRole = async (req, res, next) => {
+  const { classId } = req.params;
+  const classMember = await ClassMember.findOne({
     where: {
-      userId: req.user.id,
+      classId,
+      memberId: req.user.id,
+    },
+  });
+  const studentMapping = await StudentMapping.findOne({
+    where: {
+      classId,
+      studentId: req.user.studentId,
     },
   });
 
-  if (userAlreadyMapped) {
+  if (
+    classMember?.role === "teacher" ||
+    req.user.role === "admin" ||
+    studentMapping
+  ) {
+    req.classMember = classMember;
+    req.studentMapping = studentMapping;
+    return next();
+  }
+
+  res.status(403);
+  throw new Error(ERROR_NOT_AUTHORIZED);
+};
+
+export const checkTeacherRole = async (req, res, next) => {
+  const { classId } = req.params;
+  const member = await ClassMember.findOne({
+    where: {
+      classId,
+      memberId: req.user.id,
+    },
+  });
+
+  if (member?.role === "teacher") {
+    return next();
+  }
+
+  res.status(403);
+  throw new Error(ERROR_NOT_AUTHORIZED);
+};
+
+export const mapStudent = async (req, res) => {
+  const { studentId, classId } = req.params;
+
+  // This user has already mapped
+  if (req.user.studentId) {
     res.status(400);
     throw new Error(ERROR_USER_ALREADY_MAPPED);
   }
@@ -457,16 +431,61 @@ export const mapStudent = async (req, res) => {
 
   if (!studentMapping) {
     res.status(400);
-    throw new Error(ERROR_MAPPING_NOT_FOUND);
+    throw new Error(ERROR_INVALID_MAPPING);
   }
 
-  if (studentMapping.userId) {
+  const studentIdAlreadyMapped = (await User.findOne({
+    where: {
+      studentId,
+    },
+  }))
+    ? true
+    : false;
+
+  if (studentIdAlreadyMapped) {
     res.status(400);
     throw new Error(ERROR_STUDENT_ID_ALREADY_MAPPED);
   }
 
-  studentMapping.userId = req.user.id;
-  await studentMapping.save();
+  await User.update(
+    {
+      studentId,
+    },
+    {
+      where: {
+        id: req.user.id,
+      },
+    }
+  );
 
   res.json(studentMapping);
+};
+
+export const getStudentMappingList = async (req, res) => {
+  const { classId } = req.params;
+
+  const studentMapping = await StudentMapping.findAll({
+    where: {
+      classId,
+    },
+  });
+
+  return res.json(studentMapping);
+};
+
+export const getStudentMapping = async (req, res) => {
+  const { classId, studentId } = req.params;
+
+  if (req.classMember.role === "student") {
+    return res.json(req.studentMapping);
+  }
+
+  const studentMapping = await StudentMapping.findOne({
+    where: {
+      classId,
+      studentId,
+    },
+  });
+
+  return res.json(studentMapping);
 };

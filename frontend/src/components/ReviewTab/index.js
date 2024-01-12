@@ -285,7 +285,7 @@ const ReviewTab = ({ lang, classId }) => {
                       <Button
                         key="submit"
                         htmlType="submit"
-                        type="primary"
+                        type="default"
                         loading={isChanging}
                       >
                         {d.comment}

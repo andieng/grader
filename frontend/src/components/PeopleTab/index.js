@@ -47,7 +47,7 @@ const PeopleTab = ({ lang, classId }) => {
         filterTeachingClass.classCode,
       ),
     };
-  }, [classes]);
+  }, [classes, lang, classId]);
   const isStudent = useMemo(() => (teachingClass ? false : true), [teachingClass]);
 
   const { students, teachers } = useMemo(() => {

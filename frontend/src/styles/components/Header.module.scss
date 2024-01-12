@@ -14,38 +14,23 @@
   background-color: $color-background;
 }
 
-.home-btn {
-  display: flex;
-  align-items: center;
-}
-
-.logo {
-  color: $color-primary;
-  margin-left: 10px;
-  font-size: 3rem;
-}
-
 .login-btn, .dashboard-btn {
   font-size: 1.6rem;
   text-align: center;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  width: 104px;
+  padding: 5px 22px;
   border-radius: 20px;
 }
 
 .dashboard-btn {
   margin-right: 6px;
-  width: 135px;
+  padding: 5px 22px;
 }
 
 .signup-btn {
   border-radius: 20px;
   font-size: 1.6rem;
   margin-right: 10px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  width: 104px;
+  padding: 5px 22px;
 }
 
 .auth {

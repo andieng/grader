@@ -1,15 +1,14 @@
 import { getAccessToken } from '@auth0/nextjs-auth0';
-import chalk from 'chalk';
 import { NextResponse } from 'next/server';
 
-export const GET = async function getMembers(req) {
+export const GET = async function getStudentMapping(req) {
   try {
     const urlParts = req.nextUrl.pathname.split('/');
     const classIdIndex = urlParts.indexOf('classes') + 1;
     const classId = urlParts[classIdIndex];
 
     const { accessToken } = await getAccessToken();
-    const response = await fetch(`${process.env.API_BASE_URL}/api/classes/${classId}/members`, {
+    const response = await fetch(`${process.env.API_BASE_URL}/api/classes/${classId}/student-mapping`, {
       headers: {
         'Content-Type': 'application/json',
         authorization: `Bearer ${accessToken}`,
@@ -24,26 +23,29 @@ export const GET = async function getMembers(req) {
   }
 };
 
-export const POST = async function addMember(req) {
+export const POST = async function upsertStudentMapping(req) {
   try {
     const { accessToken } = await getAccessToken();
+    const urlParts = req.nextUrl.pathname.split('/');
+    const classIdIndex = urlParts.indexOf('classes') + 1;
+    const classId = urlParts[classIdIndex];
 
-    const reqData = await req.json();
-    const response = await fetch(`${process.env.API_BASE_URL}/api/classes/${reqData.classId}/members`, {
+    const formData = await req.formData();
+
+    const uploadUrl = `${process.env.API_BASE_URL}/api/classes/${classId}/student-mapping`;
+
+    const response = await fetch(uploadUrl, {
       method: 'POST',
       headers: {
         authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        token: reqData.token,
-      }),
+      body: formData,
     });
 
     const data = await response.json();
+    console.log(data);
     return NextResponse.json(data);
   } catch (err) {
-    console.error(err);
-    return NextResponse.json({ error: err }, { status: 404 });
+    return NextResponse.json({ error: err }, { status: 500 });
   }
 };

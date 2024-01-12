@@ -125,12 +125,8 @@
   & p:last-of-type {
     color: black;
     font-weight: 500 !important;
-    font-weight: normal;
     display: flex;
     align-items: center;
-  }
-  &:hover {
-    background-color: rgb(241, 243, 244);
   }
 }
 

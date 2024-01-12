@@ -1,15 +1,19 @@
 import { getAccessToken } from '@auth0/nextjs-auth0';
 import { NextResponse } from 'next/server';
 
-export const GET = async function getGrades(req) {
+export const GET = async function getStudentMapping(req) {
   try {
     const { accessToken } = await getAccessToken();
-
     const urlParts = req.nextUrl.pathname.split('/');
     const classIdIndex = urlParts.indexOf('classes') + 1;
     const classId = urlParts[classIdIndex];
+    const studentIdIndex = urlParts.indexOf('student-mapping') + 1;
+    const studentId = urlParts[studentIdIndex];
 
-    const response = await fetch(`${process.env.API_BASE_URL}/api/classes/${classId}/grades`, {
+    const apiUrl = `${process.env.API_BASE_URL}/api/classes/${classId}/student-mapping/${studentId}`;
+
+    const response = await fetch(apiUrl, {
+      method: 'GET',
       headers: {
         authorization: `Bearer ${accessToken}`,
       },
@@ -18,34 +22,31 @@ export const GET = async function getGrades(req) {
     const data = await response.json();
     return NextResponse.json(data);
   } catch (err) {
-    return NextResponse.json({ error: err }, { status: 200 });
+    return NextResponse.json({ error: err });
   }
 };
 
-export const POST = async function upsertGrade(req) {
+export const POST = async function mapStudent(req) {
   try {
     const { accessToken } = await getAccessToken();
-    const reqData = await req.json();
-
     const urlParts = req.nextUrl.pathname.split('/');
     const classIdIndex = urlParts.indexOf('classes') + 1;
     const classId = urlParts[classIdIndex];
+    const studentIdIndex = urlParts.indexOf('student-mapping') + 1;
+    const studentId = urlParts[studentIdIndex];
 
-    const response = await fetch(`${process.env.API_BASE_URL}/api/classes/${classId}/grades`, {
+    const apiUrl = `${process.env.API_BASE_URL}/api/classes/${classId}/student-mapping/${studentId}`;
+
+    const response = await fetch(apiUrl, {
       method: 'POST',
       headers: {
         authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        assignmentId: reqData.assignmentId,
-        grades: [{ studentId: reqData.studentId, gradeValue: reqData.gradeValue }],
-      }),
     });
 
     const data = await response.json();
     return NextResponse.json(data);
   } catch (err) {
-    return NextResponse.json({ error: err }, { status: 500 });
+    return NextResponse.json({ error: err });
   }
 };

@@ -159,7 +159,7 @@ export default function Header({ user, lang, isInDashboard }) {
         icon: <LogoutOutlined className={cx('dropdown-icon')} />,
       },
     ],
-    [d, lang],
+    [d, lang, redirectLocale],
   );
 
   const switchLanguagesHandler = useCallback(

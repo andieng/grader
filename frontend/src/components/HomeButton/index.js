@@ -22,8 +22,8 @@ export default function HomeButton() {
         <img
           src="/icon-64x64.png"
           alt="grader-logo"
-          width="38"
-          height="38"
+          width="35"
+          height="35"
         />
         <h1 className={cx('logo')}>Grader</h1>
       </Button>

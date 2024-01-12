@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useMemo, useEffect, useRef } from 'react';
-import { mutate } from 'swr';
 import * as XLSX from 'xlsx';
 import getDictionary from '@/utils/language';
 import { Button, Dropdown, Modal, Input, Form } from 'antd';
@@ -11,7 +10,7 @@ import styles from '@/styles/components/GradeComposition.module.scss';
 
 const cx = classnames.bind(styles);
 
-const GradeComposition = ({ lang, grades, gradeCompositionInfo }) => {
+const GradeComposition = ({ lang, grades, gradeCompositionInfo, mutate, role }) => {
   const [editing, setEditing] = useState(Array(grades.length).fill(false));
   const [isPublished, setisPublished] = useState(gradeCompositionInfo.isPublished);
   const gradeCompositionRefs = useRef([]);
@@ -20,18 +19,22 @@ const GradeComposition = ({ lang, grades, gradeCompositionInfo }) => {
   const [editForm] = Form.useForm();
   const [isChanging, setIsChanging] = useState(false);
 
-  const [students, setStudents] = useState(grades);
+  const [assignmentGrades, setAssignmentGrades] = useState(grades);
 
   let gradesAvg = 0;
-  if (students.length !== 0) {
-    gradesAvg = students.reduce((total, student) => total + student.gradeValue, 0) / students.length;
+  if (assignmentGrades.length !== 0) {
+    const totalGrade = assignmentGrades.reduce(
+      (total, assignmentGrade) => total + (parseFloat(assignmentGrade.gradeValue) || 0),
+      0,
+    );
+    gradesAvg = totalGrade / assignmentGrades.length;
   }
 
   const dateObj = new Date(gradeCompositionInfo.createdAt);
   const year = dateObj.getFullYear();
   const month = dateObj.getMonth() + 1;
   const day = dateObj.getDate();
-  const formattedDate = `${year}\/${month < 10 ? '0' + month : month}\/${day < 10 ? '0' + day : day}`;
+  const formattedDate = `${month < 10 ? '0' + month : month}\/${day < 10 ? '0' + day : day}\/${year}`;
 
   const d = useMemo(() => {
     return getDictionary(lang, 'pages/ClassDetails');
@@ -50,7 +53,7 @@ const GradeComposition = ({ lang, grades, gradeCompositionInfo }) => {
       }
     };
 
-    const divClickListeners = students.map((_, index) => {
+    const divClickListeners = assignmentGrades.map((_, index) => {
       return (event) => handleClickOutside(event, index);
     });
 
@@ -63,7 +66,7 @@ const GradeComposition = ({ lang, grades, gradeCompositionInfo }) => {
         document.removeEventListener('click', listener);
       });
     };
-  }, [editing, students]);
+  }, [editing, assignmentGrades]);
 
   const handleClickAGrade = (index) => {
     const updatedEditing = [...editing];
@@ -71,18 +74,31 @@ const GradeComposition = ({ lang, grades, gradeCompositionInfo }) => {
     setEditing(updatedEditing);
   };
 
-  const handleChangeEnter = (event, index) => {
+  const handleChangeEnter = async (event, index) => {
     if (event.key === 'Enter') {
       const updatedEditing = [...editing];
       updatedEditing[index] = false;
       setEditing(updatedEditing);
 
-      const inputGrade = parseInt(event.target.value);
-      if (typeof inputGrade === Number) {
-        const updatedGrades = [...students];
-        updatedGrades[index].grade = inputGrade;
-        setStudents(updatedGrades);
-        // call api
+      if (!isNaN(event.target.value)) {
+        const inputGrade = parseFloat(event.target.value);
+        if (inputGrade >= 0 && inputGrade <= 10) {
+          const updatedGrades = [...assignmentGrades];
+          updatedGrades[index].gradeValue = inputGrade;
+          setAssignmentGrades(updatedGrades);
+
+          await fetch(`/en/api/classes/${gradeCompositionInfo.classId}/grades`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              assignmentId: gradeCompositionInfo.assignmentId,
+              studentId: updatedGrades[index].studentId,
+              gradeValue: inputGrade,
+            }),
+          });
+        }
       }
     }
   };
@@ -94,7 +110,7 @@ const GradeComposition = ({ lang, grades, gradeCompositionInfo }) => {
         'Content-Type': 'application/json',
       },
     });
-    mutate(`/en/api/classes/${gradeCompositionInfo.classId}/assignments`);
+    mutate();
   };
 
   const handleUploadClick = () => {
@@ -110,13 +126,12 @@ const GradeComposition = ({ lang, grades, gradeCompositionInfo }) => {
       formData.append('assignmentGradeFile', file);
       formData.append('assignmentId', gradeCompositionInfo.assignmentId);
       try {
-        const response = await fetch(`/en/api/classes/${gradeCompositionInfo.classId}/grades`, {
+        const response = await fetch(`/en/api/classes/${gradeCompositionInfo.classId}/grades/upload`, {
           method: 'POST',
           body: formData,
         });
         if (response.ok) {
-          console.log(response);
-          // mutate to update list students component
+          mutate();
         } else {
           throw new Error('Failed to upload file');
         }
@@ -177,7 +192,7 @@ const GradeComposition = ({ lang, grades, gradeCompositionInfo }) => {
     setIsChanging(false);
     setOpenEditModal(false);
     editForm.resetFields();
-    mutate(`/en/api/classes/${gradeCompositionInfo.classId}/assignments`);
+    mutate();
   };
 
   const handlePublish = async (values) => {
@@ -188,7 +203,7 @@ const GradeComposition = ({ lang, grades, gradeCompositionInfo }) => {
       },
       body: JSON.stringify({ assName: values.assName, scale: values.scale, isPublished: true }),
     });
-    mutate(`/en/api/classes/${gradeCompositionInfo.classId}/assignments`);
+    mutate();
     setisPublished(true);
   };
 
@@ -268,8 +283,9 @@ const GradeComposition = ({ lang, grades, gradeCompositionInfo }) => {
     <div className={cx('wrap')}>
       <div className={cx('grade-information')}>
         <div className={cx('header')}>
-          <p>{formattedDate}</p>
+          <p className={cx('date-created')}>{formattedDate}</p>
           <Dropdown
+            className={role === 'student' && cx('hidden')}
             menu={{
               items,
             }}
@@ -278,6 +294,7 @@ const GradeComposition = ({ lang, grades, gradeCompositionInfo }) => {
             <Button
               type="text"
               shape="circle"
+              className={cx('more-btn')}
             >
               <MoreOutlined />
             </Button>
@@ -345,27 +362,39 @@ const GradeComposition = ({ lang, grades, gradeCompositionInfo }) => {
           </Modal>
         </div>
         <p className={cx('name')}>{gradeCompositionInfo.assignmentName}</p>
-        {!isPublished && <p className={cx('draft')}>{d.draft}</p>}
-        {isPublished && <p className={cx('draft')}>{d.published}</p>}
         <hr />
-        <p>{gradeCompositionInfo.assignmentGradeScale * 10}%</p>
+        <p className={cx('grade-scale')}>{gradeCompositionInfo.assignmentGradeScale * 10}%</p>
+        {!isPublished && role === 'teacher' && <p className={cx('draft')}>{d.draft}</p>}
+        {isPublished && role === 'teacher' && <p className={cx('draft')}>{d.published}</p>}
       </div>
       <div className={cx('grades')}>
-        <div className={cx('grades-avg')}>{gradesAvg}</div>
-        {students.map((student, index) => {
+        {role === 'teacher' && (
+          <div className={cx('grades-avg')}>
+            <p>{Math.round((gradesAvg + Number.EPSILON) * 100) / 100}</p>
+          </div>
+        )}
+        {role === 'student' && <hr />}
+
+        {assignmentGrades.map((assignmentGrade, index) => {
           return (
             <div
-              key={student.studentId}
+              key={assignmentGrade.studentId}
               className={cx('grade-row')}
               onClick={() => handleClickAGrade(index)}
               ref={(node) => (gradeCompositionRefs.current[index] = node)}
             >
-              {!editing[index] && <p>{student.grade}</p>}
-              {editing[index] && (
+              {editing[index] ? (
                 <p className={cx('editing')}>
-                  <Input onKeyDown={(event) => handleChangeEnter(event, index)} />
-                  /100
+                  <Input
+                    onKeyDown={(event) => handleChangeEnter(event, index)}
+                    readOnly={role === 'student'}
+                  />
+                  /10
                 </p>
+              ) : (
+                assignmentGrade.gradeValue && (
+                  <p>{Math.round((parseFloat(assignmentGrade.gradeValue) + Number.EPSILON) * 100) / 100}</p>
+                )
               )}
             </div>
           );
