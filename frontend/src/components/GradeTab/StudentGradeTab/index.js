@@ -71,6 +71,7 @@ const StudentGradeTab = ({ lang, classId, member }) => {
         lang={lang}
         classId={classId}
         students={[student]}
+        role="student"
       />
     );
   }

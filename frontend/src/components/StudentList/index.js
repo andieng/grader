@@ -14,7 +14,7 @@ const fetcher = async (url) => {
   return response.json();
 };
 
-const StudentList = ({ lang, students }) => {
+const StudentList = ({ lang, students, role }) => {
   const d = useMemo(() => {
     return getDictionary(lang, 'components/StudentList');
   }, [lang]);
@@ -23,7 +23,8 @@ const StudentList = ({ lang, students }) => {
     <div className={cx('wrap')}>
       <div className={cx('grade-information')}></div>
       <div className={cx('grades')}>
-        <div className={cx('grades-avg')}>{d.classAverage}</div>
+        {role === 'teacher' && <div className={cx('grades-avg')}>{d.classAverage}</div>}
+        {role === 'student' && <hr />}
         {students?.map((student) => {
           return (
             <div

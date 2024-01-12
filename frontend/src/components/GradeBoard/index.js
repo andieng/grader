@@ -31,7 +31,7 @@ const formatAssignmentGrades = (assignmentGrades, students) => {
   });
 };
 
-const GradeBoard = ({ lang, classId, students }) => {
+const GradeBoard = ({ lang, classId, students, role }) => {
   const [assignmentGrades, setAssignmentGrades] = useState([]);
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [createForm] = Form.useForm();
@@ -95,73 +95,78 @@ const GradeBoard = ({ lang, classId, students }) => {
     <div className={cx('wrap')}>
       <ClassMenu lang={lang}></ClassMenu>
       <div className={cx('container')}>
-        <Button
-          className={cx('create-ass')}
-          type="primary"
-          key="console"
-          onClick={() => showCreateModal()}
-        >
-          {d.createAss}
-        </Button>
-        <Modal
-          className={cx('modal')}
-          open={openCreateModal}
-          title={<h2 className={cx('modal-title')}>{d.createAss}</h2>}
-          onCancel={handleCreateCancel}
-          footer={[]}
-        >
-          <Form
-            name="createForm"
-            form={createForm}
-            onFinish={handleCreate}
-            onFinishFailed={onFinishFailed}
-            autoComplete="off"
-          >
-            <Form.Item
-              className={cx('form')}
-              label={d.assignmentName}
-              name="assName"
-              rules={[
-                {
-                  required: true,
-                  message: d.assNameRequired,
-                },
-              ]}
+        {role === 'teacher' && (
+          <>
+            <Button
+              className={cx('create-ass')}
+              type="primary"
+              key="console"
+              onClick={() => showCreateModal()}
             >
-              <Input placeholder={d.enterAssName} />
-            </Form.Item>
-            <Form.Item
-              className={cx('form')}
-              label={d.gradeScale}
-              name="scale"
-              rules={[
-                {
-                  required: true,
-                  message: d.gradeScaleRequired,
-                },
-              ]}
+              {d.createAss}
+            </Button>
+            <Modal
+              className={cx('modal')}
+              open={openCreateModal}
+              title={<h2 className={cx('modal-title')}>{d.createAss}</h2>}
+              onCancel={handleCreateCancel}
+              footer={[]}
             >
-              <Input placeholder={d.enterGradeScale} />
-            </Form.Item>
-            <Form.Item className={cx('modal-btn')}>
-              <Button
-                key="cancel"
-                type="white"
-                onClick={handleCreateCancel}
+              <Form
+                name="createForm"
+                form={createForm}
+                onFinish={handleCreate}
+                onFinishFailed={onFinishFailed}
+                autoComplete="off"
               >
-                {d.cancel}
-              </Button>
-              <Button
-                key="submit"
-                htmlType="submit"
-                type="primary"
-                loading={isCreating}
-              >
-                {d.create}
-              </Button>
-            </Form.Item>
-          </Form>
-        </Modal>
+                <Form.Item
+                  className={cx('form')}
+                  label={d.assignmentName}
+                  name="assName"
+                  rules={[
+                    {
+                      required: true,
+                      message: d.assNameRequired,
+                    },
+                  ]}
+                >
+                  <Input placeholder={d.enterAssName} />
+                </Form.Item>
+                <Form.Item
+                  className={cx('form')}
+                  label={d.gradeScale}
+                  name="scale"
+                  rules={[
+                    {
+                      required: true,
+                      message: d.gradeScaleRequired,
+                    },
+                  ]}
+                >
+                  <Input placeholder={d.enterGradeScale} />
+                </Form.Item>
+                <Form.Item className={cx('modal-btn')}>
+                  <Button
+                    key="cancel"
+                    type="white"
+                    onClick={handleCreateCancel}
+                  >
+                    {d.cancel}
+                  </Button>
+                  <Button
+                    key="submit"
+                    htmlType="submit"
+                    type="primary"
+                    loading={isCreating}
+                  >
+                    {d.create}
+                  </Button>
+                </Form.Item>
+              </Form>
+            </Modal>
+          </>
+        )}
+
         <div
           className={cx('assignments')}
           key={numRefetch}
@@ -169,6 +174,7 @@ const GradeBoard = ({ lang, classId, students }) => {
           <StudentList
             lang={lang}
             students={students}
+            role={role}
           />
           {assignmentGrades.map((assignment) => {
             return (
@@ -177,6 +183,7 @@ const GradeBoard = ({ lang, classId, students }) => {
                 lang={lang}
                 mutate={mutate}
                 refetch
+                role={role}
                 grades={assignment.grades}
                 gradeCompositionInfo={{
                   assignmentId: assignment.assignmentId,

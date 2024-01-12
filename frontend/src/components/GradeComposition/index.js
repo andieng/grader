@@ -10,7 +10,7 @@ import styles from '@/styles/components/GradeComposition.module.scss';
 
 const cx = classnames.bind(styles);
 
-const GradeComposition = ({ lang, grades, gradeCompositionInfo, mutate }) => {
+const GradeComposition = ({ lang, grades, gradeCompositionInfo, mutate, role }) => {
   const [editing, setEditing] = useState(Array(grades.length).fill(false));
   const [isPublished, setisPublished] = useState(gradeCompositionInfo.isPublished);
   const gradeCompositionRefs = useRef([]);
@@ -356,9 +356,13 @@ const GradeComposition = ({ lang, grades, gradeCompositionInfo, mutate }) => {
         {isPublished && <p className={cx('draft')}>{d.published}</p>}
       </div>
       <div className={cx('grades')}>
-        <div className={cx('grades-avg')}>
-          <p>{Math.round((gradesAvg + Number.EPSILON) * 100) / 100}</p>
-        </div>
+        {role === 'teacher' && (
+          <div className={cx('grades-avg')}>
+            <p>{Math.round((gradesAvg + Number.EPSILON) * 100) / 100}</p>
+          </div>
+        )}
+        {role === 'student' && <hr />}
+
         {assignmentGrades.map((assignmentGrade, index) => {
           return (
             <div
@@ -369,7 +373,10 @@ const GradeComposition = ({ lang, grades, gradeCompositionInfo, mutate }) => {
             >
               {editing[index] ? (
                 <p className={cx('editing')}>
-                  <Input onKeyDown={(event) => handleChangeEnter(event, index)} />
+                  <Input
+                    onKeyDown={(event) => handleChangeEnter(event, index)}
+                    readOnly={role === 'student'}
+                  />
                   /10
                 </p>
               ) : (

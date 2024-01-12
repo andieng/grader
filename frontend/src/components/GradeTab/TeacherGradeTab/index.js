@@ -100,6 +100,7 @@ const TeacherGradeTab = ({ lang, classId }) => {
         lang={lang}
         classId={classId}
         students={data}
+        role="teacher"
       />
     );
   }
