@@ -38,6 +38,12 @@ export default class Class extends Model {
       allowNull: false,
       defaultValue: Sequelize.Sequelize.fn('now'),
       field: 'updated_at'
+    },
+    isMapped: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+      defaultValue: false,
+      field: 'is_mapped'
     }
   }, {
     sequelize,

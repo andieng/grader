@@ -2,13 +2,14 @@
 
 import useSWR from 'swr';
 import { useMemo } from 'react';
-import { Spin } from 'antd';
+import { Spin, Button, Col, Row } from 'antd';
 import { NextResponse } from 'next/server';
 import classnames from 'classnames/bind';
 import Header from '@/components/Header';
 import styles from '@/styles/pages/Home.module.scss';
 import getDictionary from '@/utils/language';
 import { ERROR_ROLE_NOT_FOUND } from '@/constants/messages';
+import { Connection } from '@/assets/vectors';
 
 const cx = classnames.bind(styles);
 
@@ -34,26 +35,65 @@ export default function Home({ params: { lang } }) {
 
   if (data?.error) {
     return (
-      <div className={cx('wrapper')}>
-        <Header lang={lang} />
-        <div className={cx('main')}>
-          <h1 className={cx('welcome')}>{d.welcome}</h1>
-          <h3 className={cx('description')}>{d.introduce}</h3>
-        </div>
+      <div className={cx('wrapper') + ' overflow-hidden'}>
+        <Header
+          lang={lang}
+          user={data?.user}
+        />
+        <Row className={cx('main')}>
+          <Col
+            span={12}
+            className={cx('image-container')}
+          >
+            <Connection className={cx('connection')} />
+          </Col>
+          <Col
+            span={12}
+            className={cx('introduction')}
+          >
+            <h2 className={cx('slogan-first-sentence')}>{d.slogan_first_sentence}</h2>
+            <h2 className={cx('slogan-second-sentence')}>{d.slogan_second_sentence}</h2>
+            <Button
+              className={cx('get-started')}
+              type="primary"
+              href={`${lang}/dashboard`}
+            >
+              {d.get_started}
+            </Button>
+          </Col>
+        </Row>
       </div>
     );
   }
 
   return (
-    <div className={cx('wrapper')}>
+    <div className={cx('wrapper') + ' overflow-hidden'}>
       <Header
-        user={data?.user}
         lang={lang}
+        user={data?.user}
       />
-      <div className={cx('main')}>
-        <h1 className={cx('welcome')}>{d.welcome}</h1>
-        <h3 className={cx('description')}>{d.introduce}</h3>
-      </div>
+      <Row className={cx('main')}>
+        <Col
+          span={12}
+          className={cx('image-container')}
+        >
+          <Connection className={cx('connection')} />
+        </Col>
+        <Col
+          span={12}
+          className={cx('introduction')}
+        >
+          <h2 className={cx('slogan-first-sentence')}>{d.slogan_first_sentence}</h2>
+          <h2 className={cx('slogan-second-sentence')}>{d.slogan_second_sentence}</h2>
+          <Button
+            className={cx('get-started')}
+            type="primary"
+            href={`${lang}/dashboard`}
+          >
+            {d.get_started}
+          </Button>
+        </Col>
+      </Row>
     </div>
   );
 }

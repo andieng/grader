@@ -4,7 +4,7 @@
 $color-text-normal: #000;
 $color-background: #fff;
 $font-family-default: "Quicksand", sans-serif;
-$color-primary: #3ac5c9;
+$color-primary: rgb(58, 197, 201);
 
 // primary button
 $color-btn-primary-bg: $color-primary;
@@ -15,9 +15,7 @@ $color-btn-primary-text: #fff;
 $color-btn-default-bg: #ebf0f5;
 $color-btn-default-text: #000;
 $color-btn-default-border: #ebf0f5;
-$color-btn-default-bg-hover: $color-primary;
-$color-btn-default-text-hover: #fff;
-$color-btn-default-border-hover: $color-primary;
+$color-btn-default-bg-hover: #dee1e3;
 
 // transparent button
 $color-btn-transparent-bg: transparent;

@@ -1,19 +1,19 @@
 .container {
   display: flex;
   flex-direction: row;
-  height: 88vh;
+  min-height: calc(100vh - 72px);
 }
 
 .container > :last-child {
   flex-grow: 1;
-  min-height: 100%;
+  min-height: calc(100vh - 72px);
 }
 
 .menu {
-  height: 100%;
   overflow: auto;
   font-size: 16px;
   width: 256px;
+  height: 100%;
 
   & > li:first-child {
     margin: 4px;

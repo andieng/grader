@@ -31,11 +31,24 @@ export default class Invitation extends Model {
     role: {
       type: DataTypes.STRING(255),
       allowNull: true
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.Sequelize.fn('now'),
+      field: 'updated_at'
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.Sequelize.fn('now'),
+      field: 'created_at'
     }
   }, {
     sequelize,
     tableName: 'invitations',
     schema: 'public',
+    hasTrigger: true,
     timestamps: false,
     indexes: [
       {

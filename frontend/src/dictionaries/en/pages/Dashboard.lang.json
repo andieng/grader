@@ -2,5 +2,7 @@
   "dashboard": "Dashboard",
   "classCodeCopied": "Class code copied",
   "students": "students",
-  "teachers": "teachers"
+  "teachers": "teachers",
+  "noData": "No data",
+  "noJoinedClasses": "Oops! Seem like you haven't joined any classes"
 }

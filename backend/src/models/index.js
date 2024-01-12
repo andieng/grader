@@ -1,14 +1,15 @@
 import pg from "pg";
 import { Sequelize, DataTypes } from "sequelize";
-import _Assignment from "./Assignment.js";
-import _ClassMember from "./ClassMember.js";
-import _Class from "./Class.js";
-import _GradePublication from "./GradePublication.js";
-import _GradeReviewComment from "./GradeReviewComment.js";
-import _GradeReview from "./GradeReview.js";
-import _Grade from "./Grade.js";
-import _User from "./User.js";
-import _Invitation from "./Invitation.js";
+import _Assignment from "./Assignment";
+import _ClassMember from "./ClassMember";
+import _Class from "./Class";
+import _GradePublication from "./GradePublication";
+import _GradeReviewComment from "./GradeReviewComment";
+import _GradeReview from "./GradeReview";
+import _Grade from "./Grade";
+import _Invitation from "./Invitation";
+import _StudentMapping from "./StudentMapping";
+import _User from "./User";
 
 function initModels(sequelize) {
   const Assignment = _Assignment.init(sequelize, DataTypes);
@@ -19,31 +20,28 @@ function initModels(sequelize) {
   const GradeReview = _GradeReview.init(sequelize, DataTypes);
   const Grade = _Grade.init(sequelize, DataTypes);
   const Invitation = _Invitation.init(sequelize, DataTypes);
+  const StudentMapping = _StudentMapping.init(sequelize, DataTypes);
   const User = _User.init(sequelize, DataTypes);
 
-  Assignment.belongsToMany(User, {
-    as: "studentIdUsers",
-    through: Grade,
-    foreignKey: "assignmentId",
-    otherKey: "studentId",
-  });
   Class.belongsToMany(User, {
     as: "memberIdUsers",
     through: ClassMember,
     foreignKey: "classId",
     otherKey: "memberId",
   });
-  User.belongsToMany(Assignment, {
-    as: "assignmentIdAssignments",
-    through: Grade,
-    foreignKey: "studentId",
-    otherKey: "assignmentId",
-  });
   User.belongsToMany(Class, {
     as: "classIdClasses",
     through: ClassMember,
     foreignKey: "memberId",
     otherKey: "classId",
+  });
+  GradeReview.belongsTo(Assignment, {
+    as: "assignment",
+    foreignKey: "assignmentId",
+  });
+  Assignment.hasMany(GradeReview, {
+    as: "gradeReviews",
+    foreignKey: "assignmentId",
   });
   Grade.belongsTo(Assignment, { as: "assignment", foreignKey: "assignmentId" });
   Assignment.hasMany(Grade, { as: "grades", foreignKey: "assignmentId" });
@@ -56,48 +54,48 @@ function initModels(sequelize) {
     as: "gradePublications",
     foreignKey: "classId",
   });
+  GradeReview.belongsTo(Class, { as: "class", foreignKey: "classId" });
+  Class.hasMany(GradeReview, { as: "gradeReviews", foreignKey: "classId" });
+  Grade.belongsTo(Class, { as: "class", foreignKey: "classId" });
+  Class.hasMany(Grade, { as: "grades", foreignKey: "classId" });
   Invitation.belongsTo(Class, { as: "class", foreignKey: "classId" });
   Class.hasMany(Invitation, { as: "invitations", foreignKey: "classId" });
-  GradeReview.belongsTo(GradePublication, {
-    as: "gradePublication",
-    foreignKey: "gradePublicationId",
-  });
-  GradePublication.hasMany(GradeReview, {
-    as: "gradeReviews",
-    foreignKey: "gradePublicationId",
+  StudentMapping.belongsTo(Class, { as: "class", foreignKey: "classId" });
+  Class.hasMany(StudentMapping, {
+    as: "studentMappings",
+    foreignKey: "classId",
   });
   GradeReviewComment.belongsTo(GradeReview, {
-    as: "gradeReviewComment",
-    foreignKey: "gradeReviewCommentId",
+    as: "gradeReview",
+    foreignKey: "gradeReviewId",
   });
-  GradeReview.hasOne(GradeReviewComment, {
-    as: "gradeReviewComment",
-    foreignKey: "gradeReviewCommentId",
+  GradeReview.hasMany(GradeReviewComment, {
+    as: "gradeReviewComments",
+    foreignKey: "gradeReviewId",
   });
   ClassMember.belongsTo(User, { as: "member", foreignKey: "memberId" });
   User.hasMany(ClassMember, { as: "classMembers", foreignKey: "memberId" });
   GradePublication.belongsTo(User, {
-    as: "publisher",
-    foreignKey: "publisherId",
+    as: "teacherUser",
+    foreignKey: "teacherUserId",
   });
   User.hasMany(GradePublication, {
     as: "gradePublications",
-    foreignKey: "publisherId",
+    foreignKey: "teacherUserId",
   });
   GradeReviewComment.belongsTo(User, { as: "user", foreignKey: "userId" });
   User.hasMany(GradeReviewComment, {
     as: "gradeReviewComments",
     foreignKey: "userId",
   });
-  GradeReview.belongsTo(User, { as: "student", foreignKey: "studentId" });
-  User.hasMany(GradeReview, { as: "gradeReviews", foreignKey: "studentId" });
-  GradeReview.belongsTo(User, { as: "teacher", foreignKey: "teacherId" });
-  User.hasMany(GradeReview, {
-    as: "teacherGradeReviews",
-    foreignKey: "teacherId",
+  GradeReview.belongsTo(User, {
+    as: "studentUser",
+    foreignKey: "studentUserId",
   });
-  Grade.belongsTo(User, { as: "student", foreignKey: "studentId" });
-  User.hasMany(Grade, { as: "grades", foreignKey: "studentId" });
+  User.hasMany(GradeReview, {
+    as: "gradeReviews",
+    foreignKey: "studentUserId",
+  });
 
   return {
     Assignment,
@@ -108,6 +106,7 @@ function initModels(sequelize) {
     GradeReview,
     Grade,
     Invitation,
+    StudentMapping,
     User,
   };
 }
@@ -148,6 +147,7 @@ export const {
   GradeReviewComment,
   Invitation,
   Assignment,
+  StudentMapping,
 } = initModels(sequelize);
 
 export default sequelize;

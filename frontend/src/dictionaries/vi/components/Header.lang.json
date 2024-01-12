@@ -4,9 +4,20 @@
   "logout": "Đăng xuất",
   "my_classes": "Lớp học",
   "notifications": "Thông báo",
-  "createClass": "Tạo Lớp",
+  "createClass": "Tạo lớp",
+  "joinClass": "Tham gia lớp",
+  "join": "Tham gia",
   "className": "Tên lớp học",
-  "create": "Tạo",
+  "create": "Tạo lớp",
   "cancel": "Hủy",
-  "classNameRequired": "Tên lớp không được bỏ trống"
+  "error": "Xảy ra lỗi",
+  "classCode": "Mã lớp",
+  "ok": "OK",
+  "somethingWentWrong": "Đã có lỗi xảy ra, xin hãy kiểm tra mã lớp và thử lại.",
+  "alreadyJoined": "Bạn đã tham gia lớp học này trước đó.",
+  "enterClassCode": "Nhập mã lớp",
+  "enterClassName": "Nhập tên lớp",
+  "classCodeRequired": "Mã lớp không được bỏ trống.",
+  "classNameRequired": "Tên lớp không được bỏ trống.",
+  "dashboard": "Tổng quan"
 }

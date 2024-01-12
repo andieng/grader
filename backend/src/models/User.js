@@ -21,10 +21,6 @@ export default class User extends Model {
       allowNull: false,
       unique: "users_email_key"
     },
-    name: {
-      type: DataTypes.STRING(255),
-      allowNull: true
-    },
     avatar: {
       type: DataTypes.TEXT,
       allowNull: true,
@@ -41,6 +37,12 @@ export default class User extends Model {
       allowNull: false,
       defaultValue: Sequelize.Sequelize.fn('now'),
       field: 'updated_at'
+    },
+    studentId: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+      unique: "users_student_id_key",
+      field: 'student_id'
     }
   }, {
     sequelize,
@@ -61,6 +63,13 @@ export default class User extends Model {
         unique: true,
         fields: [
           { name: "id" },
+        ]
+      },
+      {
+        name: "users_student_id_key",
+        unique: true,
+        fields: [
+          { name: "student_id" },
         ]
       },
       {

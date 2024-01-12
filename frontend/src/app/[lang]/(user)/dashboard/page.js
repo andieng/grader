@@ -28,7 +28,7 @@ export default withPageAuthRequired(
     const classes = useSWR('/api/classes', fetcher);
 
     const allClasses = useMemo(() => {
-      const allClasses = [...classes.data.teaching, ...classes.data.enrolled];
+      const allClasses = classes.data ? [...classes.data.teaching, ...classes.data.enrolled] : [];
       allClasses.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
       return allClasses;
     }, [classes]);
@@ -62,8 +62,8 @@ export default withPageAuthRequired(
                 height="200"
               />
             }
-            title="No data"
-            subTitle="Oops! Seem like you haven't joined any classes"
+            title={d.noData}
+            subTitle={d.noJoinedClasses}
           />
         ) : (
           <Space className={cx('wrapper')}>

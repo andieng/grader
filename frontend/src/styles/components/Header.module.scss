@@ -7,7 +7,6 @@
   top: 0;
   z-index: 1000;
   max-width: 100%;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   height: 72px;
   justify-content: space-between;
   padding: 0 10px;
@@ -15,29 +14,23 @@
   background-color: $color-background;
 }
 
-.home-btn {
-  display: flex;
-  align-items: center;
-}
-
-.logo {
-  color: $color-primary;
-  margin-left: 10px;
-  font-size: 3rem;
-}
-
-.login-btn {
-  font-size: 1.7rem;
+.login-btn, .dashboard-btn {
+  font-size: 1.6rem;
   text-align: center;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding: 5px 22px;
+  border-radius: 20px;
+}
+
+.dashboard-btn {
+  margin-right: 6px;
+  padding: 5px 22px;
 }
 
 .signup-btn {
-  font-size: 1.7rem;
-  margin-left: 8px;
-  padding-left: 20px;
-  padding-right: 20px;
+  border-radius: 20px;
+  font-size: 1.6rem;
+  margin-right: 10px;
+  padding: 5px 22px;
 }
 
 .auth {
@@ -82,6 +75,7 @@
 .language-item {
   display: inline-block;
   font-weight: 500;
+  text-align: left;
   font-size: 1.6rem;
   margin-left: 5px;
 }
@@ -91,12 +85,19 @@
   height: 16px;
 }
 
-.create-class-btn {
+.join-class-btn, .create-class-btn {
   margin-right: 25px;
   font-size: 1.5rem;
+  width: 125px;
+  height: 34px;
+  border-radius: 30px;
 }
 
-.create-modal {
+.create-class-btn {
+  margin-right: 0;
+}
+
+.modal {
   font-family: 'Quicksand', sans-serif !important;
   & input {
     margin-top: 10px;
@@ -109,7 +110,52 @@
 .modal-btn {
   display: flex;
   justify-content: flex-end;
+  
   & button {
     margin-left: 20px;
+    border-radius: 20px;
+    min-width: 100px;
+    height: 31px;  
   }
 }
+
+.modal-title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.error-modal {
+  font-family: 'Quicksand', sans-serif !important;
+  width: 400px !important;
+  margin-top: 35px;
+
+  & input {
+    margin-top: 10px;
+  }
+
+  & button {
+    margin-top: 10px;
+  }
+
+  & .join-failed-ok {
+    border-radius: 20px;
+    min-width: 70px;
+    height: 31px;  
+    margin-top: 20px;
+  }
+}
+
+.error-modal-title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 2.2rem;
+
+  & svg {
+    color: #ff4d4f;
+  }
+
+  & span {
+    margin-right: 10px;
+  }
+}
+

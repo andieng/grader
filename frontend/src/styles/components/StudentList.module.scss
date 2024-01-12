@@ -1,0 +1,62 @@
+.wrap {
+  width: 250px;
+  border: solid 1px gray;
+  margin-bottom: 40px;
+}
+
+
+.grade-information {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0 20px;
+    height: 141px;
+
+  & p {
+    color: gray;
+    &:last-of-type {
+      margin-bottom: 10px;
+    }
+  }
+}
+
+.grades {
+  & div {
+    border-bottom: 1px solid grey;
+    height: 60px;
+  }
+}
+
+.grade-row {
+  display: flex;
+  flex-direction: column;
+  padding: 5px 20px 5px 20px;
+  justify-content: center;
+  font-size: 1.5rem;
+  
+  & p {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  & p:first-child {
+    font-weight: 600;
+  }
+
+  :hover {
+    cursor: text;
+  }
+}
+
+.grades-avg {
+  display: flex;
+  flex-direction: column;
+  padding: 5px 20px 5px 20px;
+  justify-content: center;
+  border-top: 1px solid grey;
+  font-weight: 700;
+  color: #e21414;
+  font-size: 1.5rem;
+}

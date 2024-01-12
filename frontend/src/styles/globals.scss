@@ -8,15 +8,21 @@
 
 html {
   font-size: 62.5%;
+  height: 100%;
 }
 
 body {
+  height: 100%;
   font-family: $font-family-default;
   font-size: 1.6rem;
   font-weight: 500;
   color: $color-text-normal;
   line-height: 1.5;
   background-color: $color-background;
+}
+
+body:has(.overflow-hidden) {
+  overflow: hidden;
 }
 
 a {
@@ -65,8 +71,8 @@ span {
 
   &:not(:disabled):not(.ant-btn-disabled):hover {
     background-color: $color-btn-default-bg-hover;
-    color: $color-btn-default-text-hover;
-    border-color: $color-btn-default-border-hover;
+    color: $color-btn-default-text;
+    border-color: $color-btn-default-border;
   }
 }
 

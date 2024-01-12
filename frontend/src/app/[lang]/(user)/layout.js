@@ -26,7 +26,12 @@ export default function UserLayout({ children, params: { lang } }) {
         subTitle={d.error_not_verified}
         extra={
           <Link href="/">
-            <Button type="primary">{d.back_home}</Button>
+            <Button
+              type="primary"
+              className={cx('back-home-btn')}
+            >
+              {d.back_home}
+            </Button>
           </Link>
         }
       />

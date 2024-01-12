@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon --experimental-specifier-resolution=node src/index.js",
+    "dev": "netlify dev",
     "start": "node --experimental-specifier-resolution=node src/index.js"
   },
   "keywords": [],
@@ -23,12 +23,14 @@
     "@netlify/functions": "^2.3.0",
     "cors": "^2.8.5",
     "express-async-errors": "^3.1.1",
+    "express-fileupload": "^1.4.3",
     "express-oauth2-jwt-bearer": "^1.6.0",
     "nanoid": "^5.0.4",
     "pg": "^8.11.3",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.34.0",
     "serverless-http": "^3.2.0",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "xlsx": "^0.18.5"
   }
 }

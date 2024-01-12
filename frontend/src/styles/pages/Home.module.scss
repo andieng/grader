@@ -8,20 +8,53 @@
 .main {
   height: calc(100vh - 72px);
   width: 100%;
-  background-color: #f6f6f6;
   display: flex;
-  align-items: center;
   justify-content: center;
+  overflow: hidden;
+  align-items: center;
+}
+
+.image-container {
+  position: relative;
+}
+
+.connection {
+  margin-top: -48px;
+  height: 100%;
+  margin-left: 35px;
+  width: 100%;
+}
+
+.introduction {
+  padding-left: 130px;
+  padding-left: 8vw;
+  padding-right: 82px;
+  display: flex;
   flex-direction: column;
+  justify-content: center;
+  margin-bottom: 80px;
 }
 
-.welcome {
-  margin-top: -80px;
-  font-size: 4.5rem;
+.slogan-first-sentence {
+  font-size: 4.3rem;
+  font-weight: 800;
+  width: 100%;
+  font-family: $font-family-default;
 }
 
-.description {
-  font-size: 2.2rem;
-  margin-top: 20px;
-  font-weight: 500;
+.slogan-second-sentence {
+  font-weight: 400;
+  margin-top: 1vw;
+  width: 100%;
+  font-size: 1.8rem;
+  font-style: italic;
+  font-family: $font-family-default;
+}
+
+.get-started {
+  border-radius: 30px;
+  margin-top: 2.5vw;
+  font-size: 1.6rem;
+  width: fit-content;
+  padding: 5px 25px;
 }
