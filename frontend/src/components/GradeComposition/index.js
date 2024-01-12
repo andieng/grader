@@ -74,7 +74,7 @@ const GradeComposition = ({ lang, grades, gradeCompositionInfo, mutate, role }) 
     setEditing(updatedEditing);
   };
 
-  const handleChangeEnter = (event, index) => {
+  const handleChangeEnter = async (event, index) => {
     if (event.key === 'Enter') {
       const updatedEditing = [...editing];
       updatedEditing[index] = false;
@@ -86,7 +86,18 @@ const GradeComposition = ({ lang, grades, gradeCompositionInfo, mutate, role }) 
           const updatedGrades = [...assignmentGrades];
           updatedGrades[index].gradeValue = inputGrade;
           setAssignmentGrades(updatedGrades);
-          // call api
+
+          await fetch(`/en/api/classes/${gradeCompositionInfo.classId}/grades`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              assignmentId: gradeCompositionInfo.assignmentId,
+              studentId: updatedGrades[index].studentId,
+              gradeValue: inputGrade,
+            }),
+          });
         }
       }
     }
@@ -115,7 +126,7 @@ const GradeComposition = ({ lang, grades, gradeCompositionInfo, mutate, role }) 
       formData.append('assignmentGradeFile', file);
       formData.append('assignmentId', gradeCompositionInfo.assignmentId);
       try {
-        const response = await fetch(`/en/api/classes/${gradeCompositionInfo.classId}/grades`, {
+        const response = await fetch(`/en/api/classes/${gradeCompositionInfo.classId}/grades/upload`, {
           method: 'POST',
           body: formData,
         });

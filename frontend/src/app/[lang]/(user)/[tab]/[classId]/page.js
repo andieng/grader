@@ -24,6 +24,7 @@ export default withPageAuthRequired(
     const { data, isLoading, error } = useSWR(apiUrl, fetcher);
 
     const member = useMemo(() => {
+      if (!data || data.length === 0) return null;
       const result = data?.find((member) => member.member.email === user.email);
       return {
         classId: result?.classId,

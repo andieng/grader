@@ -17,7 +17,6 @@ export const GET = async function getMembers(req) {
     });
 
     const data = await response.json();
-
     return NextResponse.json(data);
   } catch (err) {
     console.error(err);

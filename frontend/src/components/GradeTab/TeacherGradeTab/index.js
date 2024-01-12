@@ -20,7 +20,7 @@ const fetcher = async (url) => {
 const TeacherGradeTab = ({ lang, classId }) => {
   const fileInputRef = useRef(null);
   const apiUrl = useMemo(() => `/en/api/classes/${classId}/student-mapping`, [classId]);
-  const { data, isLoading, error } = useSWR(apiUrl, fetcher);
+  const { data, isLoading, error, mutate } = useSWR(apiUrl, fetcher);
 
   const d = useMemo(() => {
     return getDictionary(lang, 'pages/ClassDetails');
@@ -44,7 +44,7 @@ const TeacherGradeTab = ({ lang, classId }) => {
         });
         if (response.ok) {
           console.log(response);
-          // mutate to update list students component
+          mutate();
         } else {
           throw new Error('Failed to upload file');
         }

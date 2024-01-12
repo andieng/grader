@@ -25,24 +25,25 @@ export const GET = async function getGrades(req) {
 export const POST = async function upsertGrade(req) {
   try {
     const { accessToken } = await getAccessToken();
+    const reqData = await req.json();
+
     const urlParts = req.nextUrl.pathname.split('/');
     const classIdIndex = urlParts.indexOf('classes') + 1;
     const classId = urlParts[classIdIndex];
 
-    const formData = await req.formData();
-
-    const uploadUrl = `${process.env.API_BASE_URL}/api/classes/${classId}/grades/upload`;
-
-    const response = await fetch(uploadUrl, {
+    const response = await fetch(`${process.env.API_BASE_URL}/api/classes/${classId}/grades`, {
       method: 'POST',
       headers: {
         authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
       },
-      body: formData,
+      body: JSON.stringify({
+        assignmentId: reqData.assignmentId,
+        grades: [{ studentId: reqData.studentId, gradeValue: reqData.gradeValue }],
+      }),
     });
 
     const data = await response.json();
-    console.log(data);
     return NextResponse.json(data);
   } catch (err) {
     return NextResponse.json({ error: err }, { status: 500 });
