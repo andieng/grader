@@ -45,7 +45,6 @@ const GradeBoard = ({ lang, classId, students, role }) => {
     if (data?.assignmentGrades) {
       setAssignmentGrades((prev) => [...data.assignmentGrades]);
       formatAssignmentGrades(data.assignmentGrades, students);
-      console.log(data.assignmentGrades);
       setNumRefetch(numRefetch + 1);
     }
   }, [refetch, data?.assignmentGrades]);
