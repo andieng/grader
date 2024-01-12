@@ -1,6 +1,7 @@
 import { ERROR_CREATE_ASSIGNMENT } from "../constants";
 import {
   Assignment,
+  Grade,
   GradePublication,
   GradeReview,
   GradeReviewComment,
@@ -105,6 +106,13 @@ export const deleteAssignment = async (req, res) => {
     // Delete associated rows from Grade Review table
     await item.destroy();
   }
+
+  // Delete associated rows from Grade table
+  await Grade.destroy({
+    where: {
+      assignmentId,
+    },
+  });
 
   const assignmentList = await Assignment.findAll({
     where: {
