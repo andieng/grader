@@ -84,7 +84,8 @@ const TeacherGradeTab = ({ lang, classId }) => {
     }
   };
 
-  if (isLoading) return <Spin size="large" />;
+  if (isLoading || data?.length < 0) return <Spin size="large" />;
+
   if (error) {
     console.error(error);
     return (

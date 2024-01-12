@@ -285,6 +285,7 @@ const GradeComposition = ({ lang, grades, gradeCompositionInfo, mutate, role }) 
         <div className={cx('header')}>
           <p className={cx('date-created')}>{formattedDate}</p>
           <Dropdown
+            className={role === 'student' && cx('hidden')}
             menu={{
               items,
             }}
@@ -363,8 +364,8 @@ const GradeComposition = ({ lang, grades, gradeCompositionInfo, mutate, role }) 
         <p className={cx('name')}>{gradeCompositionInfo.assignmentName}</p>
         <hr />
         <p className={cx('grade-scale')}>{gradeCompositionInfo.assignmentGradeScale * 10}%</p>
-        {!isPublished && <p className={cx('draft')}>{d.draft}</p>}
-        {isPublished && <p className={cx('draft')}>{d.published}</p>}
+        {!isPublished && role === 'teacher' && <p className={cx('draft')}>{d.draft}</p>}
+        {isPublished && role === 'teacher' && <p className={cx('draft')}>{d.published}</p>}
       </div>
       <div className={cx('grades')}>
         {role === 'teacher' && (
