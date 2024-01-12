@@ -1,5 +1,5 @@
 'use client';
-import { Spin } from 'antd';
+import { Spin, Result } from 'antd';
 import { useMemo } from 'react';
 import useSWR from 'swr';
 import DetailsTab from '@/components/DetailsTab';
