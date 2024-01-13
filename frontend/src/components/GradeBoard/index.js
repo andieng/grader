@@ -93,7 +93,6 @@ const GradeBoard = ({ lang, classId, students, role }) => {
 
     const headerLine = ['StudentId', ...assignmentNames].join(', ');
 
-    // Creating lines for each student
     const studentLines = students.map((student) => {
       const studentGrades = assignmentGrades.map((assignment) => {
         const grade = assignment.grades.find((gradeItem) => gradeItem.studentId === student.studentId);

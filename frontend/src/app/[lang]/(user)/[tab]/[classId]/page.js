@@ -65,6 +65,7 @@ export default withPageAuthRequired(
       <ReviewTab
         lang={lang}
         classId={classId}
+        role={member.role}
       />
     );
   },
