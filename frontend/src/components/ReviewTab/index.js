@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import useSWR from 'swr';
 import getDictionary from '@/utils/language';
 import { Card, Button, Row, Col, Spin, Modal, Form, Input } from 'antd';
 import { QuestionOutlined } from '@ant-design/icons';
@@ -10,145 +11,32 @@ import ClassMenu from '../ClassMenu';
 
 const cx = classnames.bind(styles);
 
-const DUMMY_CARDS = [
-  {
-    assignmentName: 'Exam 1',
-    studentId: '20120206',
-    status: 'Pending',
-    currentGrade: 6,
-    expectedGrade: 6.5,
-    finalGrade: null,
-    studentExplanation: 'Chấm sai câu 1',
-    avatar: '/user.png',
-    fullName: 'Nguyễn Ngọc Thùy',
-    comments: [
-      {
-        avatar: '/user.png',
-        fullName: 'Nguyễn Ngọc Thùy',
-        content: 'Xin hãy giúp em!',
-        createdAt: '2024/1/10',
-      },
-      {
-        avatar: '/user.png',
-        fullName: 'You',
-        content: 'Okay!',
-        createdAt: '2024/1/11',
-      },
-    ],
-  },
-  {
-    assignmentName: 'Exam 2',
-    studentId: '20120206',
-    status: 'Finalized',
-    currentGrade: 6,
-    expectedGrade: 6.5,
-    finalGrade: 6.5,
-    studentExplanation: 'Chấm sai câu 1',
-    avatar: '/user.png',
-    fullName: 'Nguyễn Ngọc Thùy',
-    comments: [
-      {
-        avatar: '/user.png',
-        fullName: 'Nguyễn Ngọc Thùy',
-        content: 'Xin hãy giúp em!',
-        createdAt: '2024/1/10',
-      },
-      {
-        avatar: '/user.png',
-        fullName: 'You',
-        content: 'Okay!',
-        createdAt: '2024/1/11',
-      },
-    ],
-  },
-  {
-    assignmentName: 'Exam 3',
-    studentId: '20120206',
-    status: 'Pending',
-    currentGrade: 6,
-    expectedGrade: 6.5,
-    finalGrade: null,
-    studentExplanation: 'Chấm sai câu 1',
-    avatar: '/user.png',
-    fullName: 'Nguyễn Ngọc Thùy',
-    comments: [
-      {
-        avatar: '/user.png',
-        fullName: 'Nguyễn Ngọc Thùy',
-        content: 'Xin hãy giúp em!',
-      },
-    ],
-  },
-  {
-    assignmentName: 'Exam 2',
-    studentId: '20120589',
-    status: 'Pending',
-    currentGrade: 6,
-    expectedGrade: 6.5,
-    finalGrade: null,
-    studentExplanation: 'Chấm sai câu 1',
-    avatar: '/user.png',
-    fullName: 'Nguyễn Ngọc Thùy',
-    comments: [
-      {
-        avatar: '/user.png',
-        fullName: 'Nguyễn Ngọc Thùy',
-        content: 'Xin hãy giúp em!',
-      },
-    ],
-  },
-  {
-    assignmentName: 'Exam 1',
-    studentId: '20120589',
-    status: 'Pending',
-    currentGrade: 6,
-    expectedGrade: 6.5,
-    finalGrade: null,
-    studentExplanation: 'Chấm sai câu 1',
-    avatar: '/user.png',
-    fullName: 'Nguyễn Ngọc Thùy',
-    comments: [
-      {
-        avatar: '/user.png',
-        fullName: 'Nguyễn Ngọc Thùy',
-        content: 'Xin hãy giúp em!',
-      },
-    ],
-  },
-  {
-    assignmentName: 'Exam 1',
-    studentId: '20120581',
-    status: 'Pending',
-    currentGrade: 6,
-    expectedGrade: 6.5,
-    finalGrade: null,
-    studentExplanation: 'Chấm sai câu 1',
-    avatar: '/user.png',
-    fullName: 'Nguyễn Ngọc Thùy',
-    comments: [
-      {
-        avatar: '/user.png',
-        fullName: 'Nguyễn Ngọc Thùy',
-        content: 'Xin hãy giúp em!',
-      },
-    ],
-  },
-];
+const fetcher = async (url) => {
+  const response = await fetch(url);
+  return response.json();
+};
 
-const ReviewTab = ({ lang, classId }) => {
+const ReviewTab = ({ lang, classId, role }) => {
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
-  const [isChanging, setIsChanging] = useState(false);
+  const [isCommenting, setIsCommenting] = useState(false);
+  const [isSendingFinal, setIsSendingFinal] = useState(false);
   const [reviewForm] = Form.useForm();
   const [commentForm] = Form.useForm();
+
+  const reviews = useSWR(`/en/api/classes/${classId}/grades/review`, fetcher);
+
+  console.log(reviews.data);
 
   const d = useMemo(() => {
     return getDictionary(lang, 'pages/ClassDetails');
   }, [lang]);
 
-  const handleOpenCard = (item) => {
+  const handleOpenCard = async (item) => {
     setIsDetailOpen(true);
-    setSelectedItem(item);
+    const response = await fetch(`/en/api/classes/${classId}/grades/review/${item.gradeReviewId}`);
+    const responseData = await response.json();
+    setSelectedItem(responseData);
   };
 
   const handleCloseCard = () => {
@@ -156,12 +44,22 @@ const ReviewTab = ({ lang, classId }) => {
     reviewForm.resetFields();
   };
 
-  const handleFinalize = (values) => {
-    setIsChanging(true);
-    // change status, update final grade
-
-    setIsChanging(false);
+  const handleFinalize = async (values) => {
+    setIsSendingFinal(true);
+    await fetch(`/en/api/classes/${classId}/grades/review`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        finalGrade: values.finalGrade,
+        status: 'finalized',
+        gradeReviewId: selectedItem.gradeReviewId,
+      }),
+    });
+    setIsSendingFinal(false);
     setIsDetailOpen(false);
+    reviews.mutate();
     reviewForm.resetFields();
   };
 
@@ -169,9 +67,18 @@ const ReviewTab = ({ lang, classId }) => {
     console.error('Failed:', errorInfo);
   };
 
-  const handleComment = (values) => {
+  const handleComment = async (values) => {
     if (values.comment !== '') {
-      // mutate cmts
+      setIsCommenting(true);
+      await fetch(`/en/api/classes/${classId}/grades/review/comments`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ content: values.comment, gradeReviewId: selectedItem.gradeReviewId }),
+      });
+      setIsCommenting(false);
+      reviews.mutate();
     }
     commentForm.resetFields();
   };
@@ -180,12 +87,14 @@ const ReviewTab = ({ lang, classId }) => {
     console.error('Failed:', errorInfo);
   };
 
+  if (reviews.isLoading) return <Spin size="large" />;
+
   return (
     <div className={cx('wrap')}>
       <ClassMenu lang={lang}></ClassMenu>
       <div className={cx('container')}>
         <Col className={cx('posts')}>
-          {DUMMY_CARDS.map((item, index) => (
+          {reviews.data.map((item, index) => (
             <Row key={index}>
               <Card
                 className={cx('card-post')}
@@ -198,14 +107,14 @@ const ReviewTab = ({ lang, classId }) => {
                     icon={<QuestionOutlined />}
                   />
                   <div>
-                    <p>{item.assignmentName}</p>
-                    <p>{item.studentId}</p>
+                    <p>{item.assignment.assignmentName}</p>
+                    <p>{item.studentUser.studentId}</p>
                   </div>
                   <p
                     className={
-                      item.status === 'Pending'
+                      item.status === 'pending'
                         ? cx('pending-on-row')
-                        : item.status === 'Finalized'
+                        : item.status === 'finalized'
                         ? cx('finalized-on-row')
                         : ''
                     }
@@ -225,18 +134,18 @@ const ReviewTab = ({ lang, classId }) => {
         >
           {selectedItem && (
             <>
-              <h2 className={cx('header')}>{selectedItem.assignmentName}</h2>
+              <h2 className={cx('header')}>{selectedItem.assignment.assignmentName}</h2>
               <div className={cx('review-header')}>
                 <p>
                   <span className={cx('fw-500')}>{d.from}: </span>
-                  {selectedItem.studentId} - {selectedItem.fullName}
+                  {selectedItem.studentUser.studentId}
                 </p>
                 <p>
                   <span
                     className={
-                      selectedItem.status === 'Pending'
+                      selectedItem.status === 'pending'
                         ? cx('pending')
-                        : selectedItem.status === 'Finalized'
+                        : selectedItem.status === 'finalized'
                         ? cx('finalized')
                         : ''
                     }
@@ -259,26 +168,33 @@ const ReviewTab = ({ lang, classId }) => {
               </p>
               <div className={cx('comments')}>
                 <Col className={cx('comment')}>
-                  {selectedItem.comments.map((cmt, index) => (
-                    <Row key={index}>
-                      <Card className={cx('comment-line')}>
-                        <div className={cx('comment-line-info')}>
-                          <img
-                            className={cx('cmt-avatar')}
-                            src={cmt.avatar}
-                            alt="User"
-                          />
-                          <div>
-                            <p>{cmt.fullName}</p>
-                            <p>{cmt.content}</p>
+                  {selectedItem.gradeReviewComments.map((cmt, index) => {
+                    const createdAtDate = new Date(cmt.createdAt);
+                    const day = createdAtDate.getDate();
+                    const month = createdAtDate.getMonth() + 1;
+                    const year = createdAtDate.getFullYear();
+                    const formattedDate = `${month}/${day}/${year}`;
+                    return (
+                      <Row key={index}>
+                        <Card className={cx('comment-line')}>
+                          <div className={cx('comment-line-info')}>
+                            <img
+                              className={cx('cmt-avatar')}
+                              src={cmt.user.avatar}
+                              alt="User"
+                            />
+                            <div>
+                              <p>{cmt.user.fullName}</p>
+                              <p>{cmt.content}</p>
+                            </div>
+                            <p>{formattedDate}</p>
                           </div>
-                          <p>{cmt.createdAt}</p>
-                        </div>
-                      </Card>
-                    </Row>
-                  ))}
+                        </Card>
+                      </Row>
+                    );
+                  })}
                 </Col>
-                {selectedItem.status === 'Pending' && (
+                {selectedItem.status === 'pending' && (
                   <Form
                     name="commentForm"
                     form={commentForm}
@@ -295,7 +211,7 @@ const ReviewTab = ({ lang, classId }) => {
                         key="submit"
                         htmlType="submit"
                         type="default"
-                        loading={isChanging}
+                        loading={isCommenting}
                       >
                         {d.comment}
                       </Button>
@@ -303,12 +219,12 @@ const ReviewTab = ({ lang, classId }) => {
                   </Form>
                 )}
               </div>
-              {selectedItem.status === 'Finalized' && (
+              {selectedItem.status === 'finalized' && (
                 <p className={cx('final-grade')}>
                   {d.finalGrade}: {selectedItem.finalGrade}
                 </p>
               )}
-              {selectedItem.status === 'Pending' && (
+              {selectedItem.status === 'pending' && role === 'teacher' && (
                 <Form
                   name="reviewForm"
                   form={reviewForm}
@@ -333,7 +249,7 @@ const ReviewTab = ({ lang, classId }) => {
                       key="submit"
                       htmlType="submit"
                       type="primary"
-                      loading={isChanging}
+                      loading={isSendingFinal}
                     >
                       {d.finalize}
                     </Button>

@@ -88,6 +88,29 @@ const GradeBoard = ({ lang, classId, students, role }) => {
     console.error('Failed:', errorInfo);
   };
 
+  const handleExportGrades = () => {
+    const assignmentNames = assignmentGrades.map((assignment) => assignment.assignmentName);
+
+    const headerLine = ['StudentId', ...assignmentNames].join(', ');
+
+    const studentLines = students.map((student) => {
+      const studentGrades = assignmentGrades.map((assignment) => {
+        const grade = assignment.grades.find((gradeItem) => gradeItem.studentId === student.studentId);
+        return grade ? grade.gradeValue : 'N/A';
+      });
+
+      return [student.studentId, ...studentGrades].join(', ');
+    });
+
+    const exportData = [headerLine, ...studentLines].join('\n');
+
+    const blob = new Blob([exportData], { type: 'text/csv' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'grades_export.csv';
+    link.click();
+  };
+
   if (isLoading || d === null) return <Spin size="large" />;
 
   return (
@@ -103,6 +126,14 @@ const GradeBoard = ({ lang, classId, students, role }) => {
               onClick={() => showCreateModal()}
             >
               {d.createAss}
+            </Button>
+            <Button
+              className={cx('create-ass')}
+              type="default"
+              key="console"
+              onClick={handleExportGrades}
+            >
+              {d.exportGrades}
             </Button>
             <Modal
               className={cx('modal')}
@@ -176,6 +207,9 @@ const GradeBoard = ({ lang, classId, students, role }) => {
             role={role}
           />
           {assignmentGrades.map((assignment) => {
+            if (role === 'student' && !assignment.isPublished) {
+              return null;
+            }
             return (
               <GradeComposition
                 key={assignment.assignmentId}

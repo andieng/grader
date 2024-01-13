@@ -3,7 +3,7 @@
 import { useMemo } from 'react';
 import useSWR from 'swr';
 import { Card, Button, Row, Col, message } from 'antd';
-import { MoreOutlined, QuestionOutlined, CopyOutlined } from '@ant-design/icons';
+import { MoreOutlined, FileTextOutlined, CopyOutlined } from '@ant-design/icons';
 import getDictionary from '@/utils/language';
 import classnames from 'classnames/bind';
 import styles from '@/styles/components/DetailsTab.module.scss';
@@ -43,6 +43,8 @@ const DetailsTab = ({ lang, classId }) => {
   const apiUrl = `/en/api/classes/${classId}`;
   const currentClass = useSWR(apiUrl, fetcher);
   const [messageApi, contextHolder] = message.useMessage();
+
+  const publicList = useSWR(`/en/api/classes/${classId}/grades`, fetcher);
 
   const d = useMemo(() => {
     return getDictionary(lang, 'pages/ClassDetails');
@@ -92,29 +94,42 @@ const DetailsTab = ({ lang, classId }) => {
             </Row>
           </Col>
           <Col className={cx('posts')}>
-            {DUMMY_CARDS.map((item, index) => (
-              <Row key={index}>
-                <Card className={cx('card-post')}>
-                  <div className={cx('card-post-info')}>
-                    <Button
-                      type="primary"
-                      shape="circle"
-                      icon={<QuestionOutlined />}
-                    />
-                    <div>
-                      <p>{item.content}</p>
-                      <p>{item.time}</p>
-                    </div>
-                    <Button
+            {publicList?.data?.assignmentGrades.map((item, index) => {
+              const createdAtDate = new Date(item.createdAt);
+
+              const day = createdAtDate.getDate();
+              const month = createdAtDate.getMonth() + 1;
+              const year = createdAtDate.getFullYear();
+
+              const formattedDate = `${month}/${day}/${year}`;
+              if (item.isPublished)
+                return (
+                  <Row key={index}>
+                    <Card className={cx('card-post')}>
+                      <div className={cx('card-post-info')}>
+                        <Button
+                          type="primary"
+                          shape="circle"
+                          icon={<FileTextOutlined />}
+                        />
+                        <div>
+                          <p>
+                            {d.publicNoti}
+                            {item.assignmentName}
+                          </p>
+                          <p>{formattedDate}</p>
+                        </div>
+                        {/* <Button
                       type="text"
                       shape="circle"
                       size="large"
                       icon={<MoreOutlined className={cx('more-btn')} />}
-                    />
-                  </div>
-                </Card>
-              </Row>
-            ))}
+                    /> */}
+                      </div>
+                    </Card>
+                  </Row>
+                );
+            })}
           </Col>
         </div>
       </div>
