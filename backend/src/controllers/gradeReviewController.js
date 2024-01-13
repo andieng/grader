@@ -23,11 +23,6 @@ export const getGradeReviewList = async (req, res) => {
       },
       include: [
         {
-          model: GradeReviewComment,
-          as: "gradeReviewComments",
-          required: false,
-        },
-        {
           model: User,
           as: "studentUser",
           required: true,
@@ -48,11 +43,6 @@ export const getGradeReviewList = async (req, res) => {
       classId,
     },
     include: [
-      {
-        model: GradeReviewComment,
-        as: "gradeReviewComments",
-        required: false,
-      },
       {
         model: User,
         as: "studentUser",
@@ -102,6 +92,12 @@ export const getGradeReview = async (req, res) => {
         model: GradeReviewComment,
         as: "gradeReviewComments",
         required: false,
+        include: {
+          model: User,
+          as: "user",
+          required: true,
+          attributes: ["email", "avatar", "id"],
+        },
       },
       {
         model: Assignment,
