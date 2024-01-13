@@ -57,5 +57,10 @@
   "somethingWentWrong": "Something went wrong",
   "studentIdRequired": "Student id is required.",
   "enterStudentId": "Enter student id",
-  "map": "Map"
+  "map": "Map",
+  "reviewReq": "Review request",
+  "reasonRequired": "Reason is required",
+  "expectedGradeRequired": "Expected grade is required",
+  "send": "Send",
+  "exportGrades": "Export grade board"
 }

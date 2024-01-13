@@ -88,6 +88,8 @@ const GradeBoard = ({ lang, classId, students, role }) => {
     console.error('Failed:', errorInfo);
   };
 
+  const handleExportGrades = () => {};
+
   if (isLoading || d === null) return <Spin size="large" />;
 
   return (
@@ -103,6 +105,14 @@ const GradeBoard = ({ lang, classId, students, role }) => {
               onClick={() => showCreateModal()}
             >
               {d.createAss}
+            </Button>
+            <Button
+              className={cx('create-ass')}
+              type="default"
+              key="console"
+              onClick={handleExportGrades}
+            >
+              {d.exportGrades}
             </Button>
             <Modal
               className={cx('modal')}

@@ -202,3 +202,12 @@
 .hidden {
   visibility: hidden;
 }
+
+.grade-cell {
+  display: flex;
+  justify-content: space-between;
+
+  & button {
+    cursor: pointer !important;
+  }
+}

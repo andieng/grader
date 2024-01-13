@@ -21,6 +21,11 @@ const GradeComposition = ({ lang, grades, gradeCompositionInfo, mutate, role }) 
 
   const [assignmentGrades, setAssignmentGrades] = useState(grades);
 
+  const [openReviewModal, setOpenReviewModal] = useState(false);
+  const [reviewForm] = Form.useForm();
+
+  const [currentAssignment, setCurrentAssignment] = useState({});
+
   let gradesAvg = 0;
   if (assignmentGrades.length !== 0) {
     const totalGrade = assignmentGrades.reduce(
@@ -281,6 +286,50 @@ const GradeComposition = ({ lang, grades, gradeCompositionInfo, mutate, role }) 
     },
   ];
 
+  const showReviewModal = () => {
+    setOpenReviewModal(true);
+  };
+
+  const handleReviewCancel = () => {
+    setOpenReviewModal(false);
+    reviewForm.resetFields();
+  };
+
+  const handleSendReview = async (values) => {
+    setIsChanging(true);
+    await fetch(`/en/api/classes/${gradeCompositionInfo.classId}/grades/review`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        reason: values.reason,
+        expectedGrade: values.expectedGrade,
+        currentGrade: currentAssignment.gradeValue,
+        assignmentId: gradeCompositionInfo.assignmentId,
+      }),
+    });
+
+    setIsChanging(false);
+    setOpenReviewModal(false);
+    reviewForm.resetFields();
+    // mutate(); ???
+  };
+
+  const studentItems = [
+    {
+      key: '1',
+      label: (
+        <a
+          className={cx('option')}
+          onClick={() => showReviewModal()}
+        >
+          {d.reviewReq}
+        </a>
+      ),
+    },
+  ];
+
   return (
     <div className={cx('wrap')}>
       <div className={cx('grade-information')}>
@@ -387,17 +436,94 @@ const GradeComposition = ({ lang, grades, gradeCompositionInfo, mutate, role }) 
             >
               {editing[index] ? (
                 <p className={cx('editing')}>
-                  <Input
-                    onKeyDown={(event) => handleChangeEnter(event, index)}
-                    // disabled={role === 'student'}
-                  />
+                  <Input onKeyDown={(event) => handleChangeEnter(event, index)} />
                   /10
                 </p>
               ) : (
                 assignmentGrade.gradeValue && (
-                  <p>{Math.round((parseFloat(assignmentGrade.gradeValue) + Number.EPSILON) * 100) / 100}</p>
+                  <span className={cx('grade-cell')}>
+                    <p>{Math.round((parseFloat(assignmentGrade.gradeValue) + Number.EPSILON) * 100) / 100}</p>
+                    <Dropdown
+                      className={role === 'teacher' && cx('hidden')}
+                      menu={{
+                        items: studentItems,
+                      }}
+                      placement="bottomRight"
+                    >
+                      <Button
+                        type="text"
+                        shape="circle"
+                        className={cx('more-btn')}
+                        onClick={() => setCurrentAssignment(assignmentGrade)}
+                      >
+                        <MoreOutlined />
+                      </Button>
+                    </Dropdown>
+                  </span>
                 )
               )}
+              <Modal
+                className={cx('modal')}
+                open={openReviewModal}
+                title={
+                  <h2 className={cx('modal-title')}>
+                    {d.reviewReq}: {gradeCompositionInfo?.assignmentName}
+                  </h2>
+                }
+                onCancel={handleReviewCancel}
+                footer={[]}
+              >
+                <Form
+                  name="reviewForm"
+                  form={reviewForm}
+                  onFinish={handleSendReview}
+                  onFinishFailed={onFinishFailed}
+                  autoComplete="off"
+                  labelCol={{
+                    span: 8,
+                  }}
+                  wrapperCol={{
+                    span: 16,
+                  }}
+                >
+                  <Form.Item
+                    className={cx('review-form')}
+                    name="reason"
+                    label={d.reason}
+                    rules={[
+                      {
+                        required: true,
+                        message: d.reasonRequired,
+                      },
+                    ]}
+                  >
+                    <Input placeholder="Aa" />
+                  </Form.Item>
+                  <Form.Item
+                    className={cx('review-form')}
+                    name="expectedGrade"
+                    label={d.expectedGrade}
+                    rules={[
+                      {
+                        required: true,
+                        message: d.expectedGradeRequired,
+                      },
+                    ]}
+                  >
+                    <Input />
+                  </Form.Item>
+                  <Form.Item className={cx('modal-btn')}>
+                    <Button
+                      key="submit"
+                      htmlType="submit"
+                      type="primary"
+                      loading={isChanging}
+                    >
+                      {d.send}
+                    </Button>
+                  </Form.Item>
+                </Form>
+              </Modal>
             </div>
           );
         })}

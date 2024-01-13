@@ -57,5 +57,10 @@
   "somethingWentWrong": "Có lỗi xảy ra",
   "studentIdRequired": "Mã số học sinh không được bỏ trống.",
   "enterStudentId": "Nhập mã số học sinh",
-  "map": "Map"
+  "map": "Map",
+  "reviewReq": "Yêu cầu phúc khảo",
+  "reasonRequired": "Lý do không được bỏ trống",
+  "expectedGradeRequired": "Điểm không được bỏ trống",
+  "send": "Gửi",
+  "exportGrades": "Xuất bảng điểm"
 }
