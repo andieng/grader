@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server';
 import { getSession } from '@auth0/nextjs-auth0';
-import { CLAIMS_ROLES } from '@/constants/auth';
+import { CLAIM_ROLES } from '@/constants/auth';
 
 export const GET = async function getRole(req) {
   try {
     const session = await getSession();
-    if (session?.user[CLAIMS_ROLES]?.includes('admin')) {
+    if (session?.user[CLAIM_ROLES]?.includes('admin')) {
       return NextResponse.json({ role: 'admin' });
     }
 

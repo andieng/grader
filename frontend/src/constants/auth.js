@@ -1,1 +1,1 @@
-export const CLAIMS_ROLES = 'https://grader.com/claims/roles';
+export const CLAIM_ROLES = 'https://grader.com/claims/roles';

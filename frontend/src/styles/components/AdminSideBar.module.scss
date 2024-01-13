@@ -1,0 +1,13 @@
+.menu {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 72px);
+  overflow: auto;
+  font-size: 16px;
+  width: 256px;
+
+  & > li {
+    margin: 4px !important;
+  } 
+}
