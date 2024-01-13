@@ -176,6 +176,9 @@ const GradeBoard = ({ lang, classId, students, role }) => {
             role={role}
           />
           {assignmentGrades.map((assignment) => {
+            if (role === 'student' && !assignment.isPublished) {
+              return null;
+            }
             return (
               <GradeComposition
                 key={assignment.assignmentId}

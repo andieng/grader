@@ -69,9 +69,11 @@ const GradeComposition = ({ lang, grades, gradeCompositionInfo, mutate, role }) 
   }, [editing, assignmentGrades]);
 
   const handleClickAGrade = (index) => {
-    const updatedEditing = [...editing];
-    updatedEditing[index] = true;
-    setEditing(updatedEditing);
+    if (role === 'teacher') {
+      const updatedEditing = [...editing];
+      updatedEditing[index] = true;
+      setEditing(updatedEditing);
+    }
   };
 
   const handleChangeEnter = async (event, index) => {
@@ -387,7 +389,7 @@ const GradeComposition = ({ lang, grades, gradeCompositionInfo, mutate, role }) 
                 <p className={cx('editing')}>
                   <Input
                     onKeyDown={(event) => handleChangeEnter(event, index)}
-                    readOnly={role === 'student'}
+                    // disabled={role === 'student'}
                   />
                   /10
                 </p>
