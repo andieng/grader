@@ -3,7 +3,13 @@ import {
   ERROR_INPUT_DATA_NOT_FOUND,
   ERROR_INVALID_INPUT_DATA,
 } from "../constants";
-import { GradeReview, GradeReviewComment, Grade, User } from "../models";
+import {
+  GradeReview,
+  GradeReviewComment,
+  Grade,
+  User,
+  Assignment,
+} from "../models";
 
 export const getGradeReviewList = async (req, res) => {
   const { classId } = req.params;
@@ -27,6 +33,11 @@ export const getGradeReviewList = async (req, res) => {
           required: true,
           attributes: [["student_id", "studentId"], "email", "avatar", "id"],
         },
+        {
+          model: Assignment,
+          as: "assignment",
+          required: true,
+        },
       ],
     });
     return res.json(gradeReviewList);
@@ -47,6 +58,11 @@ export const getGradeReviewList = async (req, res) => {
         as: "studentUser",
         required: true,
         attributes: [["student_id", "studentId"], "email", "avatar", "id"],
+      },
+      {
+        model: Assignment,
+        as: "assignment",
+        required: true,
       },
     ],
   });
@@ -81,11 +97,18 @@ export const addGradeReview = async (req, res) => {
 export const getGradeReview = async (req, res) => {
   const { gradeReviewId } = req.params;
   const gradeReview = await GradeReview.findByPk(gradeReviewId, {
-    include: {
-      model: GradeReviewComment,
-      as: "gradeReviewComments",
-      required: false,
-    },
+    include: [
+      {
+        model: GradeReviewComment,
+        as: "gradeReviewComments",
+        required: false,
+      },
+      {
+        model: Assignment,
+        as: "assignment",
+        required: true,
+      },
+    ],
   });
   if (!gradeReview) {
     res.status(404);
