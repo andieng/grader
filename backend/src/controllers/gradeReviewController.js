@@ -104,6 +104,12 @@ export const getGradeReview = async (req, res) => {
         as: "assignment",
         required: true,
       },
+      {
+        model: User,
+        as: "studentUser",
+        required: true,
+        attributes: [["student_id", "studentId"], "email", "avatar", "id"],
+      },
     ],
   });
   if (!gradeReview) {
