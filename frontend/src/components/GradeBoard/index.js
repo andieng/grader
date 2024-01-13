@@ -88,7 +88,29 @@ const GradeBoard = ({ lang, classId, students, role }) => {
     console.error('Failed:', errorInfo);
   };
 
-  const handleExportGrades = () => {};
+  const handleExportGrades = () => {
+    const assignmentNames = assignmentGrades.map((assignment) => assignment.assignmentName);
+
+    const headerLine = ['StudentId', ...assignmentNames].join(', ');
+
+    // Creating lines for each student
+    const studentLines = students.map((student) => {
+      const studentGrades = assignmentGrades.map((assignment) => {
+        const grade = assignment.grades.find((gradeItem) => gradeItem.studentId === student.studentId);
+        return grade ? grade.gradeValue : 'N/A';
+      });
+
+      return [student.studentId, ...studentGrades].join(', ');
+    });
+
+    const exportData = [headerLine, ...studentLines].join('\n');
+
+    const blob = new Blob([exportData], { type: 'text/csv' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'grades_export.csv';
+    link.click();
+  };
 
   if (isLoading || d === null) return <Spin size="large" />;
 
