@@ -1,4 +1,6 @@
 {
     "classAverage": "Class average",
-    "somethingWentWrong": "Something went wrong"
+    "somethingWentWrong": "Something went wrong",
+    "totalGradeColumns": "Total grade columns",
+    "totalStudents": "Total students"
 }

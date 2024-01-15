@@ -205,6 +205,7 @@ const GradeBoard = ({ lang, classId, students, role }) => {
             lang={lang}
             students={students}
             role={role}
+            totalGradeColumns={assignmentGrades.length}
           />
           {assignmentGrades.map((assignment) => {
             if (role === 'student' && !assignment.isPublished) {

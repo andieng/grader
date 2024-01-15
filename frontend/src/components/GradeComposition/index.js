@@ -26,7 +26,6 @@ const GradeComposition = ({ lang, grades, gradeCompositionInfo, mutate, role }) 
 
   const [currentAssignment, setCurrentAssignment] = useState({});
 
-  console.log(assignmentGrades);
   let gradesAvg = 0;
   if (assignmentGrades.length !== 0) {
     const totalGrade = assignmentGrades.reduce(
@@ -298,6 +297,7 @@ const GradeComposition = ({ lang, grades, gradeCompositionInfo, mutate, role }) 
 
   const handleSendReview = async (values) => {
     setIsChanging(true);
+
     await fetch(`/en/api/classes/${gradeCompositionInfo.classId}/grades/review`, {
       method: 'POST',
       headers: {
@@ -314,7 +314,6 @@ const GradeComposition = ({ lang, grades, gradeCompositionInfo, mutate, role }) 
     setIsChanging(false);
     setOpenReviewModal(false);
     reviewForm.resetFields();
-    // mutate(); ???
   };
 
   const studentItems = [
@@ -335,7 +334,7 @@ const GradeComposition = ({ lang, grades, gradeCompositionInfo, mutate, role }) 
     <div className={cx('wrap')}>
       <div className={cx('grade-information')}>
         <div className={cx('header')}>
-          <p className={cx('date-created')}>{formattedDate}</p>
+          <p className={cx('date-created')}>{new Date(gradeCompositionInfo.createdAt).toLocaleDateString('en-GB')}</p>
           <Dropdown
             className={role === 'student' && cx('hidden')}
             menu={{

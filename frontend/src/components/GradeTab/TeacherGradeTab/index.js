@@ -21,7 +21,6 @@ const TeacherGradeTab = ({ lang, classId }) => {
   const fileInputRef = useRef(null);
   const apiUrl = useMemo(() => `/en/api/classes/${classId}/student-mapping`, [classId]);
   const { data, isLoading, error, mutate } = useSWR(apiUrl, fetcher);
-
   const d = useMemo(() => {
     return getDictionary(lang, 'pages/ClassDetails');
   }, [lang]);
