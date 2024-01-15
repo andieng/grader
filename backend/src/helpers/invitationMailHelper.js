@@ -118,12 +118,12 @@ export const generateInvitationHtml = ({
                                                                                 <td
                                                                                     align="center"
                                                                                     style="
-                                                                                        font-family: Roboto, Helvetica, Arial, sans-serif;
-                                                                                        font-size: 12px;
-                                                                                        font-weight: 400;
-                                                                                        letter-spacing: 0.3px;
-                                                                                        line-height: 16px;
-                                                                                        color: #5f6368;
+                                                                                        font-family: Google Sans, Roboto, Helvetica, Arial, sans-serif;
+                                                                                        font-size: 14px;
+                                                                                        font-weight: 500;
+                                                                                        letter-spacing: 0.25px;
+                                                                                        line-height: 20px;
+                                                                                        color: #3c4043;
                                                                                         padding-top: 4px;
                                                                                     "
                                                                                 >
