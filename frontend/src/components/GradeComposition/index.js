@@ -26,6 +26,7 @@ const GradeComposition = ({ lang, grades, gradeCompositionInfo, mutate, role }) 
 
   const [currentAssignment, setCurrentAssignment] = useState({});
 
+  console.log(assignmentGrades);
   let gradesAvg = 0;
   if (assignmentGrades.length !== 0) {
     const totalGrade = assignmentGrades.reduce(

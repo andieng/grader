@@ -122,7 +122,7 @@ const GradeBoard = ({ lang, classId, students, role }) => {
             <Button
               className={cx('create-ass')}
               type="primary"
-              key="console"
+              key="create"
               onClick={() => showCreateModal()}
             >
               {d.createAss}
@@ -130,7 +130,7 @@ const GradeBoard = ({ lang, classId, students, role }) => {
             <Button
               className={cx('create-ass')}
               type="default"
-              key="console"
+              key="export"
               onClick={handleExportGrades}
             >
               {d.exportGrades}

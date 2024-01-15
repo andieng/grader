@@ -70,35 +70,21 @@ const DetailsTab = ({ lang, classId }) => {
           </Col>
           {currentClass.data?.gradePublications.length > 0 && (
             <Col className={cx('posts')}>
-              {currentClass.data.gradePublications.map((item, index) => {
-                const createdAtDate = new Date(item.createdAt);
-
-                const day = createdAtDate.getDate();
-                const month = createdAtDate.getMonth() + 1;
-                const year = createdAtDate.getFullYear();
-
-                const formattedDate = `${month}/${day}/${year}`;
-                return (
-                  <Row key={index}>
-                    <Card className={cx('card-post')}>
-                      <div className={cx('card-post-info')}>
-                        <Button
-                          type="primary"
-                          shape="circle"
-                          icon={<FileTextOutlined />}
-                        />
-                        <div>
-                          <p>
-                            {d.publicNoti}
-                            {item.assignment.assignmentName}
-                          </p>
-                          <p>{formattedDate}</p>
-                        </div>
+              {currentClass.data.gradePublications.map((item, index) => (
+                <Row key={index}>
+                  <Card className={cx('card-post')}>
+                    <div className={cx('card-post-info')}>
+                      <FileTextOutlined className={cx('post-icon')} />
+                      <div>
+                        <p className={cx('publication')}>
+                          {d.publicNoti} {item.assignment.assignmentName}
+                        </p>
+                        <p className={cx('created-at')}>{new Date(item.createdAt).toLocaleString('en-GB')}</p>
                       </div>
-                    </Card>
-                  </Row>
-                );
-              })}
+                    </div>
+                  </Card>
+                </Row>
+              ))}
             </Col>
           )}
         </div>
