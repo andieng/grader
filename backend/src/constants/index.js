@@ -29,6 +29,11 @@ export const ERROR_USER_ALREADY_JOINED_CLASS =
 export const ERROR_SOMETHING_WENT_WRONG = "Something went wrong";
 export const ERROR_ASSIGNMENT_NOT_FOUND = "Assignment not found";
 export const ERROR_GRADE_REVIEW_NOT_FOUND = "Grade review not found";
+export const ERROR_USER_NOT_FOUND = "User not found";
+export const ERROR_THIS_ACCOUNT_CANT_BE_BANNED = "This account can't be banned";
+export const ERROR_INVALID_ROLE = "Invalid role";
+export const ERROR_THIS_ACCOUNT_HAS_BEEN_BANNED =
+  "This account has been banned";
 
 // Success message
 export const MSG_INVITE_SUCCESSFULLY = "Invite members via email successfully";
