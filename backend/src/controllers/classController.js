@@ -314,7 +314,7 @@ export const getClassDetails = async (req, res) => {
       model: GradePublication,
       as: "gradePublications",
       required: false,
-      order: [["createdAt", "DESC"]],
+      order: [["created_at", "DESC"]],
       include: {
         model: Assignment,
         as: "assignment",
