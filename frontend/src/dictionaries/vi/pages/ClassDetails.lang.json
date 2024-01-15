@@ -62,5 +62,6 @@
   "reasonRequired": "Lý do không được bỏ trống",
   "expectedGradeRequired": "Điểm không được bỏ trống",
   "send": "Gửi",
-  "exportGrades": "Xuất bảng điểm"
+  "exportGrades": "Xuất bảng điểm",
+  "noData": "Không có dữ liệu"
 }

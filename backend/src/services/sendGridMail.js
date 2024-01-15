@@ -18,7 +18,6 @@ export function sendMail(mailContent) {
   sgMail.send(msg).then(
     () => {},
     (error) => {
-      console.log("Error");
       console.error(error);
 
       if (error.response) {

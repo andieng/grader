@@ -29,6 +29,7 @@ import {
   User,
   StudentMapping,
   GradePublication,
+  Assignment,
 } from "../models";
 import { sendMail } from "../services/sendGridMail";
 import {
@@ -225,7 +226,6 @@ export const inviteMember = async (req, res) => {
       message: generateMessage(lang),
     };
     sendMail(mailContent);
-    console.log(mailContent);
   });
 
   res.json({ message: MSG_INVITE_SUCCESSFULLY });
@@ -314,6 +314,11 @@ export const getClassDetails = async (req, res) => {
       model: GradePublication,
       as: "gradePublications",
       required: false,
+      include: {
+        model: Assignment,
+        as: "assignment",
+        required: true,
+      },
     },
   });
 

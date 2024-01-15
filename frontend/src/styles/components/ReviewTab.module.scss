@@ -201,3 +201,16 @@
   font-weight: 600 !important;
   border-radius: 15px;
 }
+
+.no-data {
+  padding-top: 110px;
+  font-family: $font-family-default;
+
+  & > :first-child {
+    margin-bottom: 10px;
+  }
+
+  & > :nth-child(1) {
+    font-size: 2.6rem;
+  }
+}
