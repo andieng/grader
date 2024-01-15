@@ -68,37 +68,39 @@ const DetailsTab = ({ lang, classId }) => {
               </Card>
             </Row>
           </Col>
-          <Col className={cx('posts')}>
-            {currentClass.data.gradePublications.map((item, index) => {
-              const createdAtDate = new Date(item.createdAt);
+          {currentClass.data?.gradePublications.length > 0 && (
+            <Col className={cx('posts')}>
+              {currentClass.data.gradePublications.map((item, index) => {
+                const createdAtDate = new Date(item.createdAt);
 
-              const day = createdAtDate.getDate();
-              const month = createdAtDate.getMonth() + 1;
-              const year = createdAtDate.getFullYear();
+                const day = createdAtDate.getDate();
+                const month = createdAtDate.getMonth() + 1;
+                const year = createdAtDate.getFullYear();
 
-              const formattedDate = `${month}/${day}/${year}`;
-              return (
-                <Row key={index}>
-                  <Card className={cx('card-post')}>
-                    <div className={cx('card-post-info')}>
-                      <Button
-                        type="primary"
-                        shape="circle"
-                        icon={<FileTextOutlined />}
-                      />
-                      <div>
-                        <p>
-                          {d.publicNoti}
-                          {item.assignment.assignmentName}
-                        </p>
-                        <p>{formattedDate}</p>
+                const formattedDate = `${month}/${day}/${year}`;
+                return (
+                  <Row key={index}>
+                    <Card className={cx('card-post')}>
+                      <div className={cx('card-post-info')}>
+                        <Button
+                          type="primary"
+                          shape="circle"
+                          icon={<FileTextOutlined />}
+                        />
+                        <div>
+                          <p>
+                            {d.publicNoti}
+                            {item.assignment.assignmentName}
+                          </p>
+                          <p>{formattedDate}</p>
+                        </div>
                       </div>
-                    </div>
-                  </Card>
-                </Row>
-              );
-            })}
-          </Col>
+                    </Card>
+                  </Row>
+                );
+              })}
+            </Col>
+          )}
         </div>
       </div>
     </div>

@@ -35,6 +35,14 @@ function initModels(sequelize) {
     foreignKey: "memberId",
     otherKey: "classId",
   });
+  GradePublication.belongsTo(Assignment, {
+    as: "assignment",
+    foreignKey: "assignmentId",
+  });
+  Assignment.hasMany(GradePublication, {
+    as: "gradePublications",
+    foreignKey: "assignmentId",
+  });
   GradeReview.belongsTo(Assignment, {
     as: "assignment",
     foreignKey: "assignmentId",

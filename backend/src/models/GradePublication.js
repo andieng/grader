@@ -15,6 +15,10 @@ export default class GradePublication extends Model {
         assignmentId: {
           type: DataTypes.UUID,
           allowNull: true,
+          references: {
+            model: "assignments",
+            key: "assignment_id",
+          },
           field: "assignment_id",
         },
         classId: {
