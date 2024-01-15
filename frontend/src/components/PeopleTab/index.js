@@ -64,8 +64,7 @@ const PeopleTab = ({ lang, classId }) => {
     const email = values.email;
 
     if (showInvitationLink) role = 'student';
-
-    const response = await fetch('/api/classes/invitations', {
+    const response = await fetch(`/api/classes/${classId}/invitations`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

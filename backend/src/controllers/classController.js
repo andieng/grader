@@ -216,7 +216,6 @@ export const inviteMember = async (req, res) => {
     const mailContent = {
       subject: generateSubject(className, role, lang),
       className,
-      name: req.user.name,
       avatar: req.user.avatar,
       description: generateDescription(className, role, lang),
       buttonContent: generateButtonContent(lang),
@@ -226,6 +225,7 @@ export const inviteMember = async (req, res) => {
       message: generateMessage(lang),
     };
     sendMail(mailContent);
+    console.log(mailContent);
   });
 
   res.json({ message: MSG_INVITE_SUCCESSFULLY });
