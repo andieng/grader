@@ -40,11 +40,11 @@ export default function Home({ params: { lang } }) {
   if (data?.user?.isBanned) {
     return (
       <div className={cx('wrapper') + ' overflow-hidden'}>
-        <Header
+        {/* <Header
           lang={lang}
           user={data?.user}
           isBanned
-        />
+        /> */}
         <Result
           status="error"
           title={d.banNoti}

@@ -10,7 +10,7 @@ import {
   CloseCircleFilled,
 } from '@ant-design/icons';
 import classnames from 'classnames/bind';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter, usePathname, redirect } from 'next/navigation';
 import { FlagUSA, FlagVietnam } from '@/assets/icons';
 import getDictionary from '@/utils/language';
 import HomeButton from '@/components/HomeButton';
@@ -181,6 +181,10 @@ export default function Header({ user, lang, isInDashboard, isBanned }) {
   );
 
   const isInHome = pathname === `/${lang}`;
+
+  if (isBanned) {
+    redirect(`/${lang}/`);
+  }
 
   return (
     <header
