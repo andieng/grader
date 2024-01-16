@@ -1,5 +1,5 @@
 import express from "express";
-import { isVerified } from "../middlewares/checkAuth";
+import { isBanned, isVerified } from "../middlewares/checkAuth";
 import { saveUserInfo, saveAssignment } from "../middlewares/saveData";
 import {
   createClass,
@@ -39,7 +39,7 @@ import {
 const classRouter = express.Router();
 
 // Class routes
-classRouter.use(isVerified, saveUserInfo);
+classRouter.use(isVerified, saveUserInfo, isBanned);
 classRouter.get("/", getClasses);
 classRouter.post("/", createClass);
 classRouter.post("/join", joinClassByClassCode);

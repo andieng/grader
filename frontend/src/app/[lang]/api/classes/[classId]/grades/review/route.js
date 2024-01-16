@@ -18,7 +18,7 @@ export const GET = async function getReviews(req) {
     const data = await response.json();
     return NextResponse.json(data);
   } catch (err) {
-    return NextResponse.json({ error: err }, { status: 200 });
+    return NextResponse.json({ error: err });
   }
 };
 
@@ -48,7 +48,7 @@ export const POST = async function sendReview(req) {
     const data = await response.json();
     return NextResponse.json(data);
   } catch (err) {
-    return NextResponse.json({ error: err }, { status: 500 });
+    return NextResponse.json({ error: err });
   }
 };
 
@@ -76,12 +76,9 @@ export const PUT = async function sendReview(req) {
       },
     );
 
-    console.log(reqData);
-
     const data = await response.json();
-    console.log(data);
     return NextResponse.json(data);
   } catch (err) {
-    return NextResponse.json({ error: err }, { status: 500 });
+    return NextResponse.json({ error: err });
   }
 };

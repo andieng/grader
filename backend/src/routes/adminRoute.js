@@ -1,10 +1,17 @@
 import express from "express";
-import { getProfile } from "../controllers/adminController";
-import { isAdmin, isVerified } from "../middlewares/checkAuth";
+import { isAdmin, isBanned, isVerified } from "../middlewares/checkAuth";
+import { saveUserInfo } from "../middlewares/saveData";
+import {
+  getProfile,
+  getAccounts,
+  updateAccount,
+} from "../controllers/adminController";
 
 const adminRouter = express.Router();
 
-adminRouter.use(isAdmin, isVerified);
+adminRouter.use(isVerified, isAdmin, saveUserInfo, isBanned);
 adminRouter.get("/", getProfile);
+adminRouter.get("/accounts", getAccounts);
+adminRouter.put("/accounts/:id", updateAccount);
 
 export default adminRouter;

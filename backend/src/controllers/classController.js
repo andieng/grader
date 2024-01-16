@@ -29,6 +29,7 @@ import {
   User,
   StudentMapping,
   GradePublication,
+  Assignment,
 } from "../models";
 import { sendMail } from "../services/sendGridMail";
 import {
@@ -216,7 +217,6 @@ export const inviteMember = async (req, res) => {
     const mailContent = {
       subject: generateSubject(className, role, lang),
       className,
-      name: req.user.name,
       avatar: req.user.avatar,
       description: generateDescription(className, role, lang),
       buttonContent: generateButtonContent(lang),
@@ -314,6 +314,13 @@ export const getClassDetails = async (req, res) => {
       model: GradePublication,
       as: "gradePublications",
       required: false,
+      separate: true,
+      order: [["createdAt", "DESC"]],
+      include: {
+        model: Assignment,
+        as: "assignment",
+        required: true,
+      },
     },
   });
 

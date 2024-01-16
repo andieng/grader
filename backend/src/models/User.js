@@ -43,6 +43,17 @@ export default class User extends Model {
       allowNull: true,
       unique: "users_student_id_key",
       field: 'student_id'
+    },
+    isBanned: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+      defaultValue: false,
+      field: 'is_banned'
+    },
+    role: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+      defaultValue: "user"
     }
   }, {
     sequelize,

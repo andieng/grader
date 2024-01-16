@@ -30,7 +30,6 @@ const generateSenderHtml = (sender) => {
 
 export const generateInvitationHtml = ({
   subject,
-  name,
   avatar,
   description,
   buttonContent,
@@ -128,22 +127,6 @@ export const generateInvitationHtml = ({
                                                                                         padding-top: 4px;
                                                                                     "
                                                                                 >
-                                                                                    ${name}
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <td
-                                                                                    align="center"
-                                                                                    style="
-                                                                                        font-family: Roboto, Helvetica, Arial, sans-serif;
-                                                                                        font-size: 12px;
-                                                                                        font-weight: 400;
-                                                                                        letter-spacing: 0.3px;
-                                                                                        line-height: 16px;
-                                                                                        color: #5f6368;
-                                                                                        padding-top: 4px;
-                                                                                    "
-                                                                                >
                                                                                     ${senderHtml}
                                                                                 </td>
                                                                             </tr>
@@ -223,7 +206,6 @@ export const generateInvitationHtml = ({
 };
 
 export const generateInvitationPlainText = ({
-  name,
   description,
   buttonContent,
   inviteLink,
@@ -235,7 +217,7 @@ export const generateInvitationPlainText = ({
   Grader
   ******
   
-  ${name} <${sender}>
+  ${sender}
   ${description}
   
   ${buttonContent}: ${inviteLink}

@@ -73,7 +73,6 @@ export default function Header({ user, lang, isInDashboard }) {
 
   const handleJoin = async (values) => {
     setIsJoining(true);
-
     const response = await fetch('/api/classes/join', {
       method: 'POST',
       headers: {

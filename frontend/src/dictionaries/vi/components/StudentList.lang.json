@@ -1,4 +1,6 @@
 {
     "classAverage": "Điểm trung bình",
-    "somethingWentWrong": "Có lỗi xảy ra"
+    "somethingWentWrong": "Có lỗi xảy ra",
+    "totalGradeColumns": "Số cột điểm",
+    "totalStudents": "Số học sinh"
 }
