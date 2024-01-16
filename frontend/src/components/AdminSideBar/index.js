@@ -6,6 +6,7 @@ import getDictionary from '@/utils/language';
 import classnames from 'classnames/bind';
 import styles from '@/styles/components/AdminSideBar.module.scss';
 import { AppstoreOutlined, IdcardOutlined, TeamOutlined } from '@ant-design/icons';
+import Link from 'next/link';
 
 const cx = classnames.bind(styles);
 
@@ -16,17 +17,17 @@ const AdminSideBar = ({ lang, handleClick }) => {
 
   const items = [
     {
-      label: d.dashboard,
+      label: <Link href={`/${lang}/admin/dashboard`}>{d.dashboard}</Link>,
       key: 1,
       icon: <AppstoreOutlined />,
     },
     {
-      label: d.classes,
+      label: <Link href={`/${lang}/admin/classes`}>{d.classes}</Link>,
       key: 2,
       icon: <TeamOutlined />,
     },
     {
-      label: d.accounts,
+      label: <Link href={`/${lang}/admin/accounts`}>{d.accounts}</Link>,
       key: 3,
       icon: <IdcardOutlined />,
     },
