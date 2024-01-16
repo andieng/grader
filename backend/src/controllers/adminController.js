@@ -60,14 +60,16 @@ export const updateAccount = async (req, res) => {
     if (role === "admin") {
       const accessToken = await getAccessToken();
       await assignAdminRole(user.userId, accessToken);
+      await user.update({ role });
     } else if (role === "user") {
       const accessToken = await getAccessToken();
       await removeAdminRole(user.userId, accessToken);
+      await user.update({ role });
     } else {
       res.status(400);
       throw new Error(ERROR_INVALID_ROLE);
     }
   }
 
-  return res.json({ ...user, role: req.user.role });
+  return res.json(user);
 };
