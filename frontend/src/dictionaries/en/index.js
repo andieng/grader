@@ -9,6 +9,7 @@ import Verify from './pages/Verify.lang.json';
 import Admin from './layouts/Admin.lang.json';
 import Invitation from './pages/Invitation.lang.json';
 import AdminSideBar from './components/AdminSideBar.lang.json';
+import Accounts from './pages/Accounts.lang.json';
 
 const dictionary = {
   'components/Header': Header,
@@ -22,6 +23,7 @@ const dictionary = {
   'pages/Invitation': Invitation,
   'layouts/User': User,
   'layouts/Admin': Admin,
+  'pages/Accounts': Accounts,
 };
 
 const mappingDictionaryPath = (path) => {

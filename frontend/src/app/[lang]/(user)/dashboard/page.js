@@ -28,9 +28,11 @@ export default withPageAuthRequired(
     const classes = useSWR('/api/classes', fetcher);
 
     const allClasses = useMemo(() => {
-      const allClasses = classes.data ? [...classes.data.teaching, ...classes.data.enrolled] : [];
-      allClasses.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
-      return allClasses;
+      if (!classes.data.error) {
+        const allClasses = classes.data ? [...classes.data.teaching, ...classes.data.enrolled] : [];
+        allClasses.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+        return allClasses;
+      } else return [];
     }, [classes]);
 
     const handleCopyClassCode = useCallback(

@@ -1,5 +1,8 @@
 {
   "slogan_first_sentence": "The learning journey knows no bound",
   "slogan_second_sentence": "with our grade management app, anything is possible.",
-  "get_started": "Get Started"
+  "get_started": "Get Started",
+  "banNoti": "Your account has been banned. Please contact support for more information.",
+  "support": "Support Email",
+  "logout": "Log out"
 }

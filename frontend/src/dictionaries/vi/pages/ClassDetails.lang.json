@@ -63,5 +63,6 @@
   "expectedGradeRequired": "Điểm không được bỏ trống",
   "send": "Gửi",
   "exportGrades": "Xuất bảng điểm",
+  "mustMappingNoti": "Bạn phải mapping Student Id của mình để xem được tab này",
   "noData": "Không có dữ liệu"
 }

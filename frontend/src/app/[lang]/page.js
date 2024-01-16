@@ -2,7 +2,8 @@
 
 import useSWR from 'swr';
 import { useMemo } from 'react';
-import { Spin, Button, Col, Row } from 'antd';
+import { Spin, Button, Col, Row, Result, Typography } from 'antd';
+import { CloseCircleOutlined } from '@ant-design/icons';
 import { NextResponse } from 'next/server';
 import classnames from 'classnames/bind';
 import Header from '@/components/Header';
@@ -12,6 +13,7 @@ import { ERROR_ROLE_NOT_FOUND } from '@/constants/messages';
 import { Connection } from '@/assets/vectors';
 
 const cx = classnames.bind(styles);
+const { Paragraph, Text } = Typography;
 
 const fetcher = async (url) => {
   const responseRole = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/role`);
@@ -32,6 +34,34 @@ export default function Home({ params: { lang } }) {
   }, [lang]);
   const { data, isLoading } = useSWR('/', fetcher);
   if (isLoading || d === null) return <Spin size="large" />;
+
+  console.log(data);
+
+  if (data?.user?.isBanned) {
+    return (
+      <div className={cx('wrapper') + ' overflow-hidden'}>
+        {/* <Header
+          lang={lang}
+          user={data?.user}
+          isBanned
+        /> */}
+        <Result
+          status="error"
+          title={d.banNoti}
+          subTitle={`${d.support}: admin@grader.com`}
+          extra={[
+            <Button
+              type="primary"
+              key="console"
+              href={`${process.env.NEXT_PUBLIC_BASE_URL}/${lang}/api/auth/logout`}
+            >
+              {d.logout}
+            </Button>,
+          ]}
+        ></Result>
+      </div>
+    );
+  }
 
   if (data?.error) {
     return (
