@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react';
 import useSWR from 'swr';
 import getDictionary from '@/utils/language';
-import { Card, Button, Row, Col, Spin, Modal, Form, Input } from 'antd';
+import { Card, Button, Row, Col, Spin, Modal, Form, Input, Result } from 'antd';
 import { QuestionOutlined } from '@ant-design/icons';
 import classnames from 'classnames/bind';
 import styles from '@/styles/components/ReviewTab.module.scss';
@@ -89,12 +89,24 @@ const ReviewTab = ({ lang, classId, role }) => {
 
   if (reviews.isLoading) return <Spin size="large" />;
 
+  if (reviews?.data.error) {
+    return (
+      <div className={cx('wrap')}>
+        <ClassMenu lang={lang}></ClassMenu>
+        <Result
+          status="warning"
+          title={d.mustMappingNoti}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className={cx('wrap')}>
       <ClassMenu lang={lang}></ClassMenu>
       <div className={cx('container')}>
         <Col className={cx('posts')}>
-          {reviews.data.map((item, index) => (
+          {reviews?.data.map((item, index) => (
             <Row key={index}>
               <Card
                 className={cx('card-post')}

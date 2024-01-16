@@ -48,7 +48,16 @@ export default function Home({ params: { lang } }) {
         <Result
           status="error"
           title={d.banNoti}
-          subTitle={`${d.support}: user@grader.com`}
+          subTitle={`${d.support}: admin@grader.com`}
+          extra={[
+            <Button
+              type="primary"
+              key="console"
+              href={`${process.env.NEXT_PUBLIC_BASE_URL}/${lang}/api/auth/logout`}
+            >
+              {d.logout}
+            </Button>,
+          ]}
         ></Result>
       </div>
     );

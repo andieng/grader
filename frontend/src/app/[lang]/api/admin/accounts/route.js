@@ -21,7 +21,6 @@ export const GET = async function getAccounts(req) {
 export const PUT = async function editUser(req) {
   try {
     const { accessToken } = await getAccessToken();
-    console.log(accessToken);
     const reqData = await req.json();
 
     console.log(reqData);

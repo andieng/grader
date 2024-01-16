@@ -72,7 +72,6 @@ export default withPageAuthRequired(
     };
 
     const handleChange = (value) => {
-      console.log(`selected ${value}`);
       setCurrentValue(value);
     };
 
@@ -137,20 +136,17 @@ export default withPageAuthRequired(
                         <p>{item.id}</p>
                         <p>{item.email}</p>
                       </div>
-                      {!item.isBanned && (
-                        <p
-                          className={
-                            item.role === 'admin'
-                              ? cx('pending-on-row')
-                              : item.role === 'user'
-                              ? cx('finalized-on-row')
-                              : ''
-                          }
-                        >
-                          {item.role}
-                        </p>
-                      )}
-                      {item.isBanned && <p className={cx('banned-on-row')}>{d.banned}</p>}
+                      <p
+                        className={
+                          item.role === 'admin'
+                            ? cx('pending-on-row')
+                            : item.role === 'user'
+                            ? cx('finalized-on-row')
+                            : ''
+                        }
+                      >
+                        {item.role}
+                      </p>
                     </div>
                   </Card>
                 </Row>
@@ -171,22 +167,7 @@ export default withPageAuthRequired(
                         {d.id}: {selectedItem.id}
                       </span>
                     </p>
-                    <p>
-                      {!selectedItem.isBanned && (
-                        <span
-                          className={
-                            selectedItem.role === 'admin' && selectedItem.isBanned === false
-                              ? cx('pending')
-                              : selectedItem.role === 'user' && selectedItem.isBanned === false
-                              ? cx('finalized')
-                              : ''
-                          }
-                        >
-                          {selectedItem.role}
-                        </span>
-                      )}
-                      {selectedItem.isBanned && <span className={cx('banned')}>{d.banned}</span>}
-                    </p>
+                    <p>{selectedItem.isBanned && <span className={cx('banned')}>{d.banned}</span>}</p>
                   </div>
                   <div className={cx('review-header')}>
                     <p>
@@ -219,11 +200,11 @@ export default withPageAuthRequired(
                         onChange={handleChange}
                         options={[
                           {
-                            value: 'Admin',
+                            value: 'admin',
                             label: 'Admin',
                           },
                           {
-                            value: 'User',
+                            value: 'user',
                             label: 'User',
                           },
                         ]}
@@ -233,21 +214,13 @@ export default withPageAuthRequired(
                       {!selectedItem.isBanned && (
                         <Button
                           type="primary"
-                          loading={isSendingFinal}
                           danger
                           onClick={handleBan}
                         >
                           {d.ban}
                         </Button>
                       )}
-                      {selectedItem.isBanned && (
-                        <Button
-                          loading={isSendingFinal}
-                          onClick={handleUnban}
-                        >
-                          {d.unban}
-                        </Button>
-                      )}
+                      {selectedItem.isBanned && <Button onClick={handleUnban}>{d.unban}</Button>}
                       <Button
                         key="submit"
                         htmlType="submit"

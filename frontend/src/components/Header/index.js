@@ -33,7 +33,7 @@ const languageItems = [
   },
 ];
 
-export default function Header({ user, lang, isInDashboard, isBanned }) {
+export default function Header({ user, lang, isInDashboard }) {
   const router = useRouter();
   const pathname = usePathname();
   const [createForm] = Form.useForm();
@@ -182,7 +182,7 @@ export default function Header({ user, lang, isInDashboard, isBanned }) {
 
   const isInHome = pathname === `/${lang}`;
 
-  if (isBanned) {
+  if (user?.isBanned) {
     redirect(`/${lang}/`);
   }
 
@@ -231,7 +231,7 @@ export default function Header({ user, lang, isInDashboard, isBanned }) {
           </>
         )}
 
-        {user && !isInDashboard && isBanned === undefined && (
+        {user && !isInDashboard && (
           <Button
             type="text"
             href={redirectLocale}

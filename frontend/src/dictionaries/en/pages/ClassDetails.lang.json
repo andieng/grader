@@ -62,5 +62,6 @@
   "reasonRequired": "Reason is required",
   "expectedGradeRequired": "Expected grade is required",
   "send": "Send",
-  "exportGrades": "Export grade board"
+  "exportGrades": "Export grade board",
+  "mustMappingNoti": "You must map your Student Id to view this tab"
 }
