@@ -49,7 +49,7 @@ export const updateAccount = async (req, res) => {
       studentId,
     });
   }
-  if (isBanned) {
+  if (isBanned !== null || isBanned !== undefined) {
     if (id === req.user.id && req.user.email === process.env.ADMIN_USERNAME) {
       res.status(400);
       throw new Error(ERROR_THIS_ACCOUNT_CANT_BE_BANNED);
