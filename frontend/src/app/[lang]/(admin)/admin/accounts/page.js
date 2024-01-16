@@ -29,7 +29,6 @@ export default withPageAuthRequired(
     const [userForm] = Form.useForm();
 
     let selectedMenuItem = 1;
-    console.log(users.data);
 
     const d = useMemo(() => {
       return getDictionary(lang, 'pages/Accounts');
@@ -191,7 +190,7 @@ export default withPageAuthRequired(
                     <Form.Item
                       label="Role"
                       name="role"
-                      initialValue={currentValue}
+                      initialValue={selectedItem.role}
                     >
                       <Select
                         style={{

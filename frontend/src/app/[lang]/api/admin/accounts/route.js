@@ -23,8 +23,6 @@ export const PUT = async function editUser(req) {
     const { accessToken } = await getAccessToken();
     const reqData = await req.json();
 
-    console.log(reqData);
-
     const response = await fetch(`${process.env.API_BASE_URL}/api/admin/accounts/${reqData.userId}`, {
       method: 'PUT',
       headers: {
@@ -39,7 +37,6 @@ export const PUT = async function editUser(req) {
     });
 
     const data = await response.json();
-    console.log(data);
     return NextResponse.json(data);
   } catch (err) {
     return NextResponse.json({ error: err }, { status: 200 });

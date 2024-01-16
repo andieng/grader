@@ -35,8 +35,6 @@ export default function Home({ params: { lang } }) {
   const { data, isLoading } = useSWR('/', fetcher);
   if (isLoading || d === null) return <Spin size="large" />;
 
-  console.log(data);
-
   if (data?.user?.isBanned) {
     return (
       <div className={cx('wrapper') + ' overflow-hidden'}>

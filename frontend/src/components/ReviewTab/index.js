@@ -104,21 +104,34 @@ const ReviewTab = ({ lang, classId, role }) => {
       <ClassMenu lang={lang}></ClassMenu>
       <div className={cx('container')}>
         <Col className={cx('posts')}>
-          {reviews?.data.map((item, index) => (
-            <Row key={index}>
-              <Card
-                className={cx('card-post')}
-                onClick={() => handleOpenCard(item)}
-              >
-                <div className={cx('card-post-info')}>
-                  <Button
-                    type="primary"
-                    shape="circle"
-                    icon={<QuestionOutlined />}
-                  />
-                  <div>
-                    <p>{item.assignment.assignmentName}</p>
-                    <p>{item.studentUser.studentId}</p>
+          {reviews.data.length > 0 ? (
+            reviews.data.map((item, index) => (
+              <Row key={index}>
+                <Card
+                  className={cx('card-post')}
+                  onClick={() => handleOpenCard(item)}
+                >
+                  <div className={cx('card-post-info')}>
+                    <Button
+                      type="primary"
+                      shape="circle"
+                      icon={<QuestionOutlined />}
+                    />
+                    <div>
+                      <p>{item.assignment.assignmentName}</p>
+                      <p>{item.studentUser.studentId}</p>
+                    </div>
+                    <p
+                      className={
+                        item.status === 'pending'
+                          ? cx('pending-on-row')
+                          : item.status === 'finalized'
+                          ? cx('finalized-on-row')
+                          : ''
+                      }
+                    >
+                      {item.status}
+                    </p>
                   </div>
                 </Card>
               </Row>
