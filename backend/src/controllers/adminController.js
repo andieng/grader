@@ -33,7 +33,7 @@ export const updateAccount = async (req, res) => {
   const { id } = req.params;
   const { studentId, role, isBanned } = req.body;
 
-  if (!studentId && !role && !isBanned) {
+  if (!studentId && !role && (isBanned === null || isBanned === undefined)) {
     res.status(400);
     throw new Error(ERROR_INPUT_DATA_NOT_FOUND);
   }
@@ -69,5 +69,5 @@ export const updateAccount = async (req, res) => {
     }
   }
 
-  return res.json(user);
+  return res.json({ ...user, role: req.user.role });
 };
